@@ -85,8 +85,8 @@ Route::get('/customer-login', [\App\Http\Controllers\Frontend\HomeController::cl
 Route::get('/shein-login', fn() => redirect()->route('frontend.login'));
 
 // Blog & Contact Pages
-Route::get('/blog', [\\App\\Http\\Controllers\\Frontend\\HomeController::class, 'blog'])->name('frontend.blog');
-Route::get('/contact', [\\App\\Http\\Controllers\\Frontend\\HomeController::class, 'contact'])->name('frontend.contact');
+Route::get('/blog', [\App\Http\Controllers\Frontend\HomeController::class, 'blog'])->name('frontend.blog');
+Route::get('/contact', [\App\Http\Controllers\Frontend\HomeController::class, 'contact'])->name('frontend.contact');
 
 // CLear
 Route::get('/clear', function () {
