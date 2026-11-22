@@ -6,7 +6,7 @@
 <div class="shein-container" style="max-width: 1040px; margin: 0 auto; padding: 36px 20px 80px;">
     
     <!-- Step Indicator (All Steps Completed) -->
-    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 36px; font-size: 13px;">
+    <div class="confirm-steps-bar" style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 36px; font-size: 13px;">
         <div style="display: flex; align-items: center; gap: 8px; color: #888888;">
             <span style="width: 22px; height: 22px; border-radius: 50%; background: #222222; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">✓</span>
             <span style="font-weight: 600;">1. Shopping Bag</span>
@@ -41,7 +41,7 @@
     </div>
 
     <!-- 2. ORDER DETAILS & META SUMMARY CARD -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px;">
+    <div class="order-meta-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px;">
         
         <!-- Order Meta Details -->
         <div style="background: #ffffff; border: 1px solid #e5e5e5; border-radius: 4px; padding: 22px;">
@@ -143,7 +143,7 @@
 
         <!-- Financial Price Breakdown Card -->
         <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #eee; display: flex; justify-content: flex-end;">
-            <div style="width: 320px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #555;">
+            <div class="order-breakdown-box" style="width: 320px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #555;">
                 <div style="display: flex; justify-content: space-between;">
                     <span>Retail Price Subtotal:</span>
                     <span style="font-weight: 700; color: #222;">RM {{ number_format($order['subtotal'] ?? 91.00, 2) }}</span>
@@ -186,7 +186,7 @@
         <h3 style="font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; margin-bottom: 24px;">
             YOU MIGHT ALSO LIKE
         </h3>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+        <div class="order-recommended-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
             @foreach($recommendedProducts as $prod)
                 <div class="product-card" style="cursor: pointer;" onclick="window.location='{{ route('frontend.product', $prod['id'] ?? 101) }}'">
                     <div style="position: relative; padding-bottom: 133%; overflow: hidden; background: #f7f7f7; border-radius: 2px;">
@@ -208,3 +208,31 @@
 
 </div>
 @endsection
+
+@push('styles')
+<style>
+    @media (max-width: 768px) {
+        .order-meta-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+        }
+        .order-recommended-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+        }
+        .confirm-steps-bar {
+            font-size: 11px !important;
+            gap: 8px !important;
+            flex-wrap: wrap !important;
+        }
+        .confirm-steps-bar > div[style*="width: 40px"] {
+            width: 15px !important;
+        }
+    }
+    @media (max-width: 480px) {
+        .order-breakdown-box {
+            width: 100% !important;
+        }
+    }
+</style>
+@endpush

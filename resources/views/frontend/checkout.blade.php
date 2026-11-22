@@ -6,7 +6,7 @@
 <div class="shein-container" style="max-width: 1240px; margin: 0 auto; padding: 24px 20px 80px;">
     
     <!-- Top Step Breadcrumbs Indicator -->
-    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 28px; font-size: 13px;">
+    <div class="checkout-steps-bar" style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 28px; font-size: 13px;">
         <a href="{{ route('frontend.cart') }}" style="display: flex; align-items: center; gap: 8px; color: #888888; text-decoration: none;">
             <span style="width: 22px; height: 22px; border-radius: 50%; background: #222222; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">✓</span>
             <span style="font-weight: 600;">1. Shopping Bag</span>
@@ -64,7 +64,7 @@
                     </div>
 
                     <!-- Customer Names -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div class="checkout-name-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                         <div>
                             <label style="display: block; font-size: 12px; font-weight: 700; color: #222; margin-bottom: 6px;">First Name *</label>
                             <input type="text" name="first_name" required placeholder="e.g. Shakil" style="width: 100%; height: 42px; border: 1px solid #d5d5d5; border-radius: 2px; padding: 0 12px; font-size: 13px; font-family: inherit; outline: none; box-sizing: border-box;">
@@ -76,7 +76,7 @@
                     </div>
 
                     <!-- Phone Number & Email -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div class="checkout-contact-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                         <div>
                             <label style="display: block; font-size: 12px; font-weight: 700; color: #222; margin-bottom: 6px;">Mobile Phone Number *</label>
                             <div style="display: flex;">
@@ -601,4 +601,33 @@
         return true;
     }
 </script>
+@endpush
+
+@push('styles')
+<style>
+    @media (max-width: 900px) {
+        .checkout-grid {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+        }
+    }
+    @media (max-width: 768px) {
+        #bdRegionFields, #myRegionFields {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+        .checkout-name-row, .checkout-contact-row {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+        .checkout-steps-bar {
+            font-size: 11px !important;
+            gap: 8px !important;
+            flex-wrap: wrap !important;
+        }
+        .checkout-steps-bar > div[style*="width: 40px"] {
+            width: 15px !important;
+        }
+    }
+</style>
 @endpush

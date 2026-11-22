@@ -22,7 +22,7 @@
         <div style="display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap;">
             
             <!-- LEFT 4 COLUMNS: NAVIGATION LINKS -->
-            <div style="display: flex; gap: 50px; flex-wrap: wrap; flex: 1; min-width: 300px;">
+            <div class="footer-links-grid" style="display: flex; gap: 40px; flex-wrap: wrap; flex: 1; min-width: 260px;">
                 
                 <!-- 1. CUSTOMER SERVICE -->
                 <div style="min-width: 135px;">
@@ -240,7 +240,7 @@
         </div>
 
         <!-- CONTACT DETAILS STRIP (HOTLINE, WHATSAPP, EMAIL, ADDRESS) -->
-        <div style="margin-top: 40px; padding: 20px 24px; background: #fafafa; border: 1px solid #eeeeee; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px; font-size: 12px; color: #444;">
+        <div class="footer-contact-strip" style="margin-top: 40px; padding: 18px 20px; background: #fafafa; border: 1px solid #eeeeee; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 12px; color: #444;">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-phone" style="color: #000; font-size: 14px;"></i>
                 <span>Hotline: <a href="tel:{{ $sitePhone }}" style="font-weight: 800; color: #111; text-decoration: none;">{{ $sitePhone }}</a></span>
@@ -297,4 +297,27 @@
             <i class="fa-solid fa-arrow-up"></i>
         </button>
     </div>
+
+    <style>
+        @media (max-width: 900px) {
+            .footer-links-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 24px 16px !important;
+                min-width: 100% !important;
+            }
+            .footer-contact-strip {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 12px !important;
+                padding: 16px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-links-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
 </footer>

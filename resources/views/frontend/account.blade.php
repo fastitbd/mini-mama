@@ -67,7 +67,7 @@
     </div>
 
     <!-- Account Main Grid (Sidebar + Content Pane) -->
-    <div style="display: grid; grid-template-columns: 260px 1fr; gap: 32px; align-items: start;">
+    <div class="account-main-grid" style="display: grid; grid-template-columns: 260px 1fr; gap: 32px; align-items: start;">
         
         <!-- SIDEBAR NAVIGATION MENU -->
         <div style="background: #ffffff; border: 1px solid #eeeeee; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
@@ -132,7 +132,7 @@
                 </h2>
 
                 <!-- 4 Stat Badges -->
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px;">
+                <div class="account-stats-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px;">
                     <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 18px; border-radius: 6px; text-align: center;">
                         <i class="fa-solid fa-bag-shopping" style="font-size: 24px; color: #2563EB; margin-bottom: 8px;"></i>
                         <div style="font-size: 22px; font-weight: 900; color: #1E293B;">{{ count($orders) }}</div>
@@ -580,6 +580,45 @@
     .account-nav-item:hover {
         background: #fbfbfb;
         color: #FA2C19 !important;
+    }
+    @media (max-width: 900px) {
+        .account-main-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+        }
+        .account-nav-list {
+            flex-direction: row !important;
+            overflow-x: auto !important;
+            white-space: nowrap !important;
+            -webkit-overflow-scrolling: touch;
+            padding: 8px 10px !important;
+            gap: 6px !important;
+        }
+        .account-nav-item {
+            border-bottom: none !important;
+            border: 1px solid #eee !important;
+            border-radius: 4px !important;
+            padding: 8px 14px !important;
+            flex-shrink: 0 !important;
+        }
+        .account-nav-item.active {
+            border: 1px solid #000 !important;
+            border-left: 1px solid #000 !important;
+            background: #000 !important;
+            color: #fff !important;
+        }
+        .account-nav-item.active span, .account-nav-item.active i {
+            color: #fff !important;
+        }
+        .account-nav-item i.fa-chevron-right {
+            display: none !important;
+        }
+    }
+    @media (max-width: 640px) {
+        .account-stats-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+        }
     }
 </style>
 @endpush

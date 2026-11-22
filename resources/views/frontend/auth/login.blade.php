@@ -16,7 +16,7 @@
     </div>
 
     <!-- Centered Auth Card -->
-    <div style="max-width: 520px; margin: 0 auto; background: #ffffff; border: 1px solid #eeeeee; border-radius: 4px; padding: 36px 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+    <div class="auth-card-box" style="max-width: 520px; margin: 0 auto; background: #ffffff; border: 1px solid #eeeeee; border-radius: 4px; padding: 36px 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
         <!-- Alert Messages -->
         @if(session('success'))
             <div style="background: #E8F5E9; border: 1px solid #C8E6C9; color: #2E7D32; padding: 12px 16px; border-radius: 4px; font-size: 13px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
@@ -189,4 +189,14 @@
         }, 1200);
     }
 </script>
+@endpush
+
+@push('styles')
+<style>
+    @media (max-width: 520px) {
+        .auth-card-box {
+            padding: 24px 16px !important;
+        }
+    }
+</style>
 @endpush

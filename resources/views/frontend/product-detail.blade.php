@@ -17,9 +17,9 @@
     <div style="display: grid; grid-template-columns: 55% 45%; gap: 40px; margin-bottom: 50px;" class="product-detail-grid">
         <!-- Left: Image Gallery -->
         <div>
-            <div style="display: grid; grid-template-columns: 84px 1fr; gap: 16px;">
+            <div class="product-gallery-grid" style="display: grid; grid-template-columns: 84px 1fr; gap: 16px;">
                 <!-- Thumbnail Column -->
-                <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div class="product-gallery-thumbs" style="display: flex; flex-direction: column; gap: 10px;">
                     <img src="{{ $product['image_primary'] }}" alt="Thumb 1" class="p-thumb active" style="width: 84px; height: 112px; object-fit: cover; border: 2px solid #000; cursor: pointer; border-radius: 2px;" onclick="changeMainImg(this.src, this)">
                     <img src="{{ $product['image_hover'] }}" alt="Thumb 2" class="p-thumb" style="width: 84px; height: 112px; object-fit: cover; border: 1px solid #ddd; cursor: pointer; border-radius: 2px;" onclick="changeMainImg(this.src, this)">
                     <img src="{{ $product['image_primary'] }}" alt="Thumb 3" class="p-thumb" style="width: 84px; height: 112px; object-fit: cover; border: 1px solid #ddd; cursor: pointer; border-radius: 2px; filter: brightness(0.95);" onclick="changeMainImg(this.src, this)">
@@ -384,6 +384,24 @@
     </div>
 </div>
 
+<!-- Sticky Mobile Bottom Purchase Action Bar -->
+<div class="mobile-sticky-buy-bar" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; border-top: 1px solid #e0e0e0; padding: 10px 14px; z-index: 1010; box-shadow: 0 -4px 16px rgba(0,0,0,0.08);">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+        <div>
+            <div style="font-size: 16px; font-weight: 900; color: #FA2C19; line-height: 1;">RM {{ number_format($product['price'], 2) }}</div>
+            <div style="font-size: 10px; color: #888;">{{ $product['in_stock'] ? 'In Stock' : 'Out of Stock' }}</div>
+        </div>
+        <div style="display: flex; gap: 8px; flex: 1; max-width: 250px;">
+            <button type="button" onclick="addDetailToBag()" style="flex: 1; height: 42px; background: #000; color: #fff; font-size: 11px; font-weight: 800; border-radius: 3px; text-transform: uppercase; cursor: pointer;">
+                ADD TO BAG
+            </button>
+            <button type="button" onclick="buyNowAction()" style="flex: 1; height: 42px; background: #FA2C19; color: #fff; font-size: 11px; font-weight: 800; border-radius: 3px; text-transform: uppercase; cursor: pointer;">
+                BUY NOW
+            </button>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('styles')
@@ -391,6 +409,7 @@
     @media (max-width: 900px) {
         .product-detail-grid {
             grid-template-columns: 1fr !important;
+            gap: 24px !important;
         }
         .reviews-grid {
             grid-template-columns: 1fr !important;
@@ -399,9 +418,36 @@
             grid-template-columns: repeat(3, 1fr) !important;
         }
     }
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
+        .mobile-sticky-buy-bar {
+            display: block !important;
+        }
+        body {
+            padding-bottom: 72px !important;
+        }
+    }
+    @media (max-width: 640px) {
+        .product-gallery-grid {
+            display: flex !important;
+            flex-direction: column-reverse !important;
+            gap: 12px !important;
+        }
+        .product-gallery-thumbs {
+            flex-direction: row !important;
+            overflow-x: auto !important;
+            padding-bottom: 4px !important;
+        }
+        .product-gallery-thumbs .p-thumb {
+            width: 64px !important;
+            height: 84px !important;
+            flex-shrink: 0 !important;
+        }
+        #detailMainImg {
+            height: 380px !important;
+        }
         .related-grid {
             grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px 8px !important;
         }
     }
 </style>

@@ -301,3 +301,19 @@
         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 </script>
+
+<style>
+    @media (max-width: 600px) {
+        #miniMamaSupportWidget {
+            bottom: 68px !important;
+            right: 12px !important;
+        }
+        #supportChatPopup {
+            width: calc(100vw - 24px) !important;
+            max-width: calc(100vw - 24px) !important;
+            right: 0 !important;
+            height: 480px !important;
+            max-height: calc(100vh - 140px) !important;
+        }
+    }
+</style>

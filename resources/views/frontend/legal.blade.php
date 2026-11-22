@@ -67,7 +67,7 @@
     </div>
 
     <!-- MAIN BODY CONTENT (EDITABLE FROM ADMIN PANEL) -->
-    <div style="background: #ffffff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 36px 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); line-height: 1.8; font-size: 14px; color: #333333;">
+    <div class="legal-content-card" style="background: #ffffff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 36px 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); line-height: 1.8; font-size: 14px; color: #333333;">
 
         @if($pageType === 'privacy')
             <!-- 1. PRIVACY POLICY -->
@@ -317,3 +317,13 @@
 
 </div>
 @endsection
+
+@push('styles')
+<style>
+    @media (max-width: 600px) {
+        .legal-content-card {
+            padding: 20px 16px !important;
+        }
+    }
+</style>
+@endpush

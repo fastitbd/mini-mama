@@ -12,7 +12,7 @@
     </div>
 
     <!-- Wishlist Header -->
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #222; padding-bottom: 16px; margin-bottom: 28px;">
+    <div class="wishlist-header-bar" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #222; padding-bottom: 16px; margin-bottom: 28px; flex-wrap: wrap; gap: 14px;">
         <div>
             <h1 style="font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
                 MY WISHLIST (<span id="wishlistPageCount">0</span>)
@@ -287,4 +287,16 @@
         showToast('🎉 All items moved to your shopping bag!');
     }
 </script>
+@endpush
+
+@push('styles')
+<style>
+    @media (max-width: 600px) {
+        .wishlist-header-bar {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+        }
+    }
+</style>
 @endpush

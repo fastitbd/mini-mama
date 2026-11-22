@@ -190,7 +190,7 @@
             </a>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+        <div class="super-deals-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
             {{-- Left Block: SuperDeals --}}
             <div style="background: #ffffff; border-radius: 6px; padding: 14px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); border: 1px solid #f1f5f9;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
@@ -718,7 +718,7 @@
                 Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.
             </p>
 
-            <form onsubmit="event.preventDefault(); const email = this.querySelector('input').value; if(email){ showToast('🎉 Welcome! Promo code NEW15 applied to your bag!'); this.reset(); }" style="display: flex; max-width: 520px; margin: 0 auto; gap: 8px;">
+            <form class="home-newsletter-form" onsubmit="event.preventDefault(); const email = this.querySelector('input').value; if(email){ showToast('🎉 Welcome! Promo code NEW15 applied to your bag!'); this.reset(); }" style="display: flex; max-width: 520px; margin: 0 auto; gap: 8px;">
                 <input type="email" placeholder="Enter your email address..." required style="flex: 1; height: 46px; border: 1px solid #444; border-radius: 3px; padding: 0 16px; font-size: 14px; background: #1a1a1a; color: #fff; outline: none;">
                 <button type="submit" style="background: #FA2C19; color: #fff; font-weight: 800; font-size: 13px; text-transform: uppercase; padding: 0 24px; border: none; border-radius: 3px; cursor: pointer; letter-spacing: 0.5px;">
                     SUBSCRIBE
@@ -751,6 +751,21 @@
         .gift-grid, .reviews-grid, .blog-grid {
             grid-template-columns: repeat(2, 1fr) !important;
         }
+        .super-deals-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+    @media (max-width: 768px) {
+        .category-swiper-btn-prev, .category-swiper-btn-next {
+            display: none !important;
+        }
+        .new-trends-frame__content {
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+        }
+        .new-trends-frame__content div:nth-child(2) {
+            font-size: 24px !important;
+        }
     }
     @media (max-width: 640px) {
         .shein-card-grid {
@@ -760,6 +775,21 @@
         .gift-grid, .reviews-grid, .blog-grid {
             grid-template-columns: 1fr !important;
         }
+        .home-newsletter-form {
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+        .home-newsletter-form button {
+            height: 44px !important;
+            width: 100% !important;
+        }
+        .hero-graphic-banner {
+            height: 200px !important;
+            min-height: 180px !important;
+        }
+    }
+    .shein-tab-nav-bar {
+        -webkit-overflow-scrolling: touch;
     }
     .shein-tab-nav-bar::-webkit-scrollbar {
         display: none;

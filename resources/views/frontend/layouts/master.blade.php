@@ -853,13 +853,22 @@
             .shein-mobile-bar { display: flex; }
             body { padding-bottom: 56px; }
             .quick-modal-inner { grid-template-columns: 1fr; }
+            .trust-badges-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+            .shein-product-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 12px 10px !important; }
         }
 
         @media (max-width: 640px) {
-            .shein-card-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+            .shein-wrap, .shein-container { padding-left: 12px !important; padding-right: 12px !important; }
+            .shein-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px 8px !important; }
+            .shein-product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px 8px !important; }
+            .trust-badges-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+            .shein-top-ticker { padding: 0 12px !important; font-size: 10px !important; height: 28px !important; }
+            .shein-top-ticker span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90vw; }
+            .j-up-to-top_container { bottom: 64px !important; right: 14px !important; width: 38px !important; height: 38px !important; }
         }
     </style>
     @stack('styles')
+    @stack('css')
 </head>
 <body>
 
@@ -872,32 +881,32 @@
     </main>
 
     <!-- 5. TRUST & SERVICE BADGES -->
-    <section style="background:#ffffff; border-top:1px solid #eee; border-bottom:1px solid #eee; padding:28px 0;">
+    <section style="background:#ffffff; border-top:1px solid #eee; border-bottom:1px solid #eee; padding:24px 0;">
         <div class="shein-wrap">
-            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;">
-                <div style="display:flex; align-items:center; gap:14px;">
-                    <i class="fa-solid fa-truck-fast" style="font-size:26px; color:#000;"></i>
+            <div class="trust-badges-grid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <i class="fa-solid fa-truck-fast" style="font-size:24px; color:#000;"></i>
                     <div>
                         <div style="font-size:12px; font-weight:800; text-transform:uppercase;">FREE SHIPPING</div>
-                        <div style="font-size:11px; color:#666;">On all orders over RM 120.00</div>
+                        <div style="font-size:11px; color:#666;">On all orders over RM 120.00 / ৳1500</div>
                     </div>
                 </div>
-                <div style="display:flex; align-items:center; gap:14px;">
-                    <i class="fa-solid fa-rotate-left" style="font-size:26px; color:#000;"></i>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <i class="fa-solid fa-rotate-left" style="font-size:24px; color:#000;"></i>
                     <div>
                         <div style="font-size:12px; font-weight:800; text-transform:uppercase;">20-DAY RETURN</div>
                         <div style="font-size:11px; color:#666;">Hassle-free online returns</div>
                     </div>
                 </div>
-                <div style="display:flex; align-items:center; gap:14px;">
-                    <i class="fa-solid fa-money-bill-wave" style="font-size:26px; color:#000;"></i>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <i class="fa-solid fa-money-bill-wave" style="font-size:24px; color:#000;"></i>
                     <div>
                         <div style="font-size:12px; font-weight:800; text-transform:uppercase;">CASH ON DELIVERY</div>
                         <div style="font-size:11px; color:#666;">Doorstep payment available</div>
                     </div>
                 </div>
-                <div style="display:flex; align-items:center; gap:14px;">
-                    <i class="fa-solid fa-shield-halved" style="font-size:26px; color:#000;"></i>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <i class="fa-solid fa-shield-halved" style="font-size:24px; color:#000;"></i>
                     <div>
                         <div style="font-size:12px; font-weight:800; text-transform:uppercase;">100% SECURE CHECKOUT</div>
                         <div style="font-size:11px; color:#666;">Encrypted SSL payment security</div>

@@ -55,7 +55,7 @@
     </div>
 
     <!-- 4 SUPPORT INFORMATION PILLARS -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 48px;">
+    <div class="support-pillars-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 48px;">
         
         <!-- 1. ORDER & TRACKING -->
         <div style="background: #ffffff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 24px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='none'">
@@ -117,7 +117,7 @@
     </div>
 
     <!-- 2-COLUMN LAYOUT: CONTACT DETAILS & SEND MESSAGE FORM -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-bottom: 56px; align-items: start;">
+    <div class="contact-channels-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-bottom: 56px; align-items: start;">
         
         <!-- Left: Official Contact Details -->
         <div>
@@ -320,4 +320,25 @@
         }
     }
 </script>
+@endpush
+
+@push('styles')
+<style>
+    @media (max-width: 992px) {
+        .support-pillars-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 16px !important;
+        }
+        .contact-channels-grid {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+        }
+    }
+    @media (max-width: 600px) {
+        .support-pillars-grid {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+        }
+    }
+</style>
 @endpush

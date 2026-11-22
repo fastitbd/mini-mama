@@ -54,7 +54,7 @@
             </div>
 
             <!-- Trust Badges & Guarantee -->
-            <div style="margin-top: 36px; background: #fbfbfb; border: 1px solid #eee; border-radius: 4px; padding: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; font-size: 12px; text-align: center;">
+            <div class="cart-trust-grid" style="margin-top: 36px; background: #fbfbfb; border: 1px solid #eee; border-radius: 4px; padding: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; font-size: 12px; text-align: center;">
                 <div>
                     <i class="fa-solid fa-rotate-left" style="font-size: 20px; color: #222; margin-bottom: 6px;"></i>
                     <div style="font-weight: 700;">20-Day Easy Return</div>
@@ -74,7 +74,7 @@
         </div>
 
         <!-- Right: Order Summary Sidebar -->
-        <div style="position: sticky; top: 90px; background: #ffffff; border: 1px solid #eeeeee; border-radius: 4px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);">
+        <div class="cart-summary-box" style="position: sticky; top: 90px; background: #ffffff; border: 1px solid #eeeeee; border-radius: 4px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);">
             <h3 style="font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 18px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
                 ORDER SUMMARY
             </h3>
@@ -153,6 +153,35 @@
 </div>
 @endsection
 
+@push('styles')
+<style>
+    @media (max-width: 900px) {
+        #cartPageLayout {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+        }
+        .cart-summary-box {
+            position: static !important;
+            padding: 18px !important;
+        }
+    }
+    @media (max-width: 600px) {
+        .cart-trust-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+        .cart-item-row {
+            gap: 12px !important;
+            padding: 14px 0 !important;
+        }
+        .cart-item-img {
+            width: 76px !important;
+            height: 102px !important;
+        }
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script>
     let usePoints = false;
@@ -190,9 +219,9 @@
             subtotal += lineTotal;
 
             html += `
-                <div style="display: flex; gap: 18px; padding: 20px 0; border-bottom: 1px solid #eee; position: relative;">
+                <div class="cart-item-row" style="display: flex; gap: 18px; padding: 20px 0; border-bottom: 1px solid #eee; position: relative;">
                     <a href="{{ url('/product') }}/${item.id}">
-                        <img src="${item.image}" alt="${item.name}" style="width: 100px; height: 133px; object-fit: cover; border-radius: 2px;">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-img" style="width: 100px; height: 133px; object-fit: cover; border-radius: 2px;">
                     </a>
                     <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
                         <div>

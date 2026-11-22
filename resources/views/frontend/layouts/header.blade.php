@@ -52,8 +52,8 @@
                 @endif
             </div>
 
-            <!-- Search Form -->
-            <div style="flex: 1; max-width: 620px; position: relative;">
+            <!-- Search Form (Desktop) -->
+            <div class="desktop-search-container" style="flex: 1; max-width: 620px; position: relative;">
                 <form action="{{ route('frontend.search') }}" method="GET" style="display: flex; align-items: center; border: 1px solid #444444; border-radius: 4px; height: 38px; background: #ffffff; overflow: hidden; width: 100%;">
                     <input type="search" id="headerSearchBox" name="q" value="{{ request('q') }}" placeholder="Search dresses, tops, swimwear, shoes..." autocomplete="off" style="flex: 1; height: 100%; border: none; outline: none; padding: 0 16px; font-size: 13px; font-family: inherit; color: #222222; background: transparent;">
                     
@@ -159,6 +159,16 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Dedicated Mobile Search Bar Row (Visible only on mobile screens <= 900px) -->
+    <div class="mobile-search-row" style="display: none; background: #000000; padding: 8px 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.12);">
+        <form action="{{ route('frontend.search') }}" method="GET" style="display: flex; align-items: center; border: 1px solid #444444; border-radius: 4px; height: 38px; background: #ffffff; overflow: hidden; width: 100%;">
+            <input type="search" name="q" value="{{ request('q') }}" placeholder="Search products, styles, categories..." autocomplete="off" style="flex: 1; height: 100%; border: none; outline: none; padding: 0 14px; font-size: 13px; font-family: inherit; color: #222222; background: transparent;">
+            <button type="submit" style="width: 44px; height: 100%; background: #222222; color: #ffffff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
     </div>
 
     <!-- 3. SECONDARY CATEGORY NAVIGATION STRIP (BLACK BACKGROUND & WHITE FONT) -->
@@ -385,6 +395,9 @@
     /* Mobile hamburger button - only show on mobile */
     @media (max-width: 900px) {
         .mobile-hamburger-btn { display: flex !important; }
+        .desktop-search-container { display: none !important; }
+        .mobile-search-row { display: block !important; }
+        .first-cate { font-size: 12px !important; }
     }
     /* Mobile nav link hover */
     .mobile-nav-link:hover { background: #f7f7f7; color: #FA2C19 !important; }

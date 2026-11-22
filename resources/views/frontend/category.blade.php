@@ -14,16 +14,16 @@
     </div>
 
     <!-- Category Header & Sorting Bar -->
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--shein-border); padding-bottom: 16px; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+    <div class="category-header-wrap" style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--shein-border); padding-bottom: 16px; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
         <div>
             <h1 style="font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">{{ $currentCategory }}</h1>
             <p style="color: #767676; font-size: 12px; margin-top: 4px;">{{ count($products) }} items found • Updated live</p>
         </div>
 
         <!-- Sort & Search Filter Bar -->
-        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+        <div class="category-sort-row" style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
             <!-- Instant Name Filter Search -->
-            <div style="position: relative; width: 220px;">
+            <div class="category-search-box" style="position: relative; width: 220px;">
                 <input type="text" id="categoryKeywordSearch" placeholder="Filter in this page..." onkeyup="filterProductsClientSide()" style="width: 100%; height: 36px; border: 1px solid #ccc; border-radius: 2px; padding: 0 30px 0 10px; font-size: 12px; outline: none; box-sizing: border-box;">
                 <i class="fa-solid fa-magnifying-glass" style="position: absolute; right: 10px; top: 11px; font-size: 12px; color: #999;"></i>
             </div>
@@ -42,10 +42,19 @@
         </div>
     </div>
 
+    <!-- Mobile Filter Toggle Bar -->
+    <div class="mobile-filter-bar" style="display: none; margin-bottom: 16px;">
+        <button type="button" onclick="toggleMobileCategoryFilter()" style="width: 100%; height: 42px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Filters & Categories</span>
+            <i class="fa-solid fa-chevron-down" style="font-size: 11px;"></i>
+        </button>
+    </div>
+
     <!-- Category Content Grid with Sidebar -->
     <div style="display: grid; grid-template-columns: 240px 1fr; gap: 32px;" class="cat-page-grid">
         <!-- Left Filter Sidebar -->
-        <aside style="font-size: 12px;">
+        <aside id="categoryFilterSidebar" class="category-sidebar" style="font-size: 12px;">
             <!-- Categories Accordion -->
             <div style="margin-bottom: 24px;">
                 <h4 style="font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 6px;">
@@ -229,12 +238,44 @@
 @push('styles')
 <style>
     @media (max-width: 900px) {
+        .mobile-filter-bar {
+            display: block !important;
+        }
         .cat-page-grid {
             grid-template-columns: 1fr !important;
+            gap: 16px !important;
+        }
+        .category-sidebar {
+            display: none;
+            background: #fafafa;
+            padding: 16px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        .category-sidebar.open {
+            display: block !important;
         }
         #catProductsGrid {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 12px 8px !important;
+        }
+        .category-sort-row {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+    @media (max-width: 600px) {
+        .category-header-wrap {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+        }
+        .category-search-box {
+            width: 100% !important;
+        }
+        .cat-prod-card .quick-add-trigger {
+            opacity: 1 !important;
+            display: block !important;
         }
     }
 </style>
@@ -242,6 +283,12 @@
 
 @push('scripts')
 <script>
+    function toggleMobileCategoryFilter() {
+        const sidebar = document.getElementById('categoryFilterSidebar');
+        if (sidebar) {
+            sidebar.classList.toggle('open');
+        }
+    }
     function filterProductsClientSide() {
         const query = document.getElementById('categoryKeywordSearch').value.toLowerCase().trim();
         const cards = document.querySelectorAll('.cat-prod-card');

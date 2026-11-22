@@ -91,6 +91,18 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+    .blog-detail-layout {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 32px;
+        align-items: start;
+    }
+    @media (max-width: 900px) {
+        .blog-detail-layout {
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+    }
 </style>
 @endpush
 
@@ -105,9 +117,9 @@
         <span style="color: #1e293b; font-weight: 600;">{{ Str::limit($post->title, 40) }}</span>
     </nav>
 
-    <div class="row g-4">
+    <div class="blog-detail-layout">
         <!-- Main Article Content -->
-        <div class="col-lg-8">
+        <div>
             <header class="article-header">
                 <h1 class="article-title">{{ $post->title }}</h1>
                 <div class="article-meta">
@@ -147,7 +159,7 @@
         </div>
 
         <!-- Sidebar / Recent Posts -->
-        <div class="col-lg-4">
+        <div>
             <div style="background: #ffffff; border: 1px solid #f1f5f9; border-radius: 14px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); position: sticky; top: 100px;">
                 <h4 style="font-size: 15px; font-weight: 800; color: #0f172a; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9;">
                     <i class="fas fa-fire-alt text-danger me-1"></i> Recent Guides & Stories

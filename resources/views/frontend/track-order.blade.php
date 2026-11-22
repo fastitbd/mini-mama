@@ -28,7 +28,7 @@
     <div style="background: #ffffff; border: 1px solid #e5e5e5; border-radius: 6px; padding: 28px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 36px;">
         <form action="{{ route('frontend.track_order_post') }}" method="POST">
             @csrf
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div class="track-input-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
                 <div>
                     <label style="display: block; font-size: 12px; font-weight: 800; color: #222; margin-bottom: 6px; text-transform: uppercase;">
                         Order Number *
@@ -114,7 +114,7 @@
                 </div>
 
                 <!-- Info Grid -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; background: #fafafa; border-radius: 6px; padding: 20px;">
+                <div class="track-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; background: #fafafa; border-radius: 6px; padding: 20px;">
                     <div>
                         <h4 style="font-size: 12px; font-weight: 800; text-transform: uppercase; margin: 0 0 10px; color: #222;">
                             <i class="fa-solid fa-location-dot" style="margin-right: 6px;"></i> Delivery Address
@@ -182,3 +182,19 @@
     @endif
 </div>
 @endsection
+
+@push('styles')
+<style>
+    @media (max-width: 640px) {
+        .track-input-grid, .track-info-grid {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+        }
+    }
+    @media (max-width: 480px) {
+        .track-step-box {
+            width: 60px !important;
+        }
+    }
+</style>
+@endpush
