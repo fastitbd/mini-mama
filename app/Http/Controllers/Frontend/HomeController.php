@@ -51,6 +51,13 @@ class HomeController extends Controller
             $dbProducts = \App\Models\Product::active()->with(['category', 'subCategory'])->orderBy('id', 'asc')->take(50)->get();
         }
 
+        $newArrivals = \App\Models\Product::active()->with(['category'])->orderBy('id', 'desc')->take(10)->get();
+        if ($newArrivals->isEmpty()) {
+            $newArrivals = $dbProducts->take(10);
+        }
+
+        $bestSellers = \App\Models\Product::active()->with(['category'])->orderBy('id', 'asc')->take(10)->get();
+
         return view('frontend.home', compact(
             'categories',
             'circularCategories',
@@ -64,7 +71,9 @@ class HomeController extends Controller
             'superDeals',
             'trends',
             'storeSections',
-            'dbProducts'
+            'dbProducts',
+            'newArrivals',
+            'bestSellers'
         ));
     }
 

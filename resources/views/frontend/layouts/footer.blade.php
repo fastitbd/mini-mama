@@ -14,10 +14,11 @@
                 <div style="min-width: 140px;">
                     <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">COMPANY INFO</h4>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #333333; line-height: 2.15;">
-                        <li><a href="{{ route('frontend.category', 'all') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">About {{ get_setting('com_name') ?: 'FAST IT' }}</a></li>
-                        <li><a href="#" onclick="showToast('{{ get_setting('com_name') ?: 'FAST IT' }} Fashion Blogger Program: Earn rewards by sharing outfits')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Fashion Blogger</a></li>
-                        <li><a href="#" onclick="showToast('{{ get_setting('com_name') ?: 'FAST IT' }} Social Responsibility: Committed to green supply chain & sustainability')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Social Responsibility</a></li>
-                        <li><a href="#" onclick="showToast('Careers at {{ get_setting('com_name') ?: 'FAST IT' }}: Join our global team')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Careers</a></li>
+                        <li><a href="{{ route('frontend.category', 'all') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">About {{ get_setting('com_name') ?: 'Mini Mama' }}</a></li>
+                        <li><a href="{{ route('frontend.blog') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Blog & Style Guides</a></li>
+                        <li><a href="#" onclick="showToast('Fashion Blogger Program: Earn rewards by sharing outfits')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Fashion Blogger</a></li>
+                        <li><a href="#" onclick="showToast('Social Responsibility: Committed to green supply chain & sustainability')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Social Responsibility</a></li>
+                        <li><a href="{{ route('frontend.contact') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Contact Us</a></li>
                     </ul>
                 </div>
 
@@ -25,13 +26,12 @@
                 <div style="min-width: 140px;">
                     <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">HELP & SUPPORT</h4>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #333333; line-height: 2.15;">
-                        <li><a href="#" onclick="showToast('Free Express Shipping across Malaysia on orders RM120+')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shipping Info</a></li>
-                        <li><a href="#" onclick="showToast('20-Day Easy Returns policy for Malaysia')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Returns</a></li>
+                        <li><a href="#" onclick="showToast('Free Express Shipping across Malaysia & Bangladesh on orders over threshold')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shipping Info</a></li>
+                        <li><a href="#" onclick="showToast('20-Day Easy Returns policy')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Returns</a></li>
                         <li><a href="#" onclick="showToast('Fast refund directly to your original payment method')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Refund</a></li>
                         <li><a href="#" onclick="showToast('How To Order: Choose style, pick size, and checkout securely')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">How To Order</a></li>
                         <li><a href="#" onclick="showToast('Track your package with real-time tracking updates')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">How To Track</a></li>
                         <li><a href="#" onclick="showToast('Size Guide: Find your perfect fit with our body measurement chart')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Size Guide</a></li>
-                        <li><a href="#" onclick="showToast('{{ get_setting('com_name') ?: 'FAST IT' }} VIP: Earn tiered points and exclusive VIP discounts')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">{{ get_setting('com_name') ?: 'FAST IT' }} VIP</a></li>
                     </ul>
                 </div>
 
@@ -39,10 +39,11 @@
                 <div style="min-width: 140px;">
                     <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">CUSTOMER CARE</h4>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #333333; line-height: 2.15;">
-                        <li><a href="#" onclick="showToast('Contact Us: 24/7 Virtual Assistant & Customer Support')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Contact us</a></li>
-                        <li><a href="#" onclick="showToast('Payment Methods: Credit Cards, Online Banking (FPX), GrabPay, Touch n Go, Cash on Delivery')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Payment Method</a></li>
-                        <li><a href="#" onclick="showToast('Bonus Points: 100 Points = RM 4.50 off your order')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Bonus Point</a></li>
-                        <li><a href="#" onclick="showToast('FAQ: Frequently Asked Questions & Delivery info')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">FAQ</a></li>
+                        <li><a href="{{ route('frontend.contact') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Contact Us</a></li>
+                        <li><a href="{{ route('frontend.wishlist') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">My Wishlist</a></li>
+                        <li><a href="{{ route('frontend.cart') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shopping Cart</a></li>
+                        <li><a href="{{ route('frontend.login') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">My Account</a></li>
+                        <li><a href="#" onclick="showToast('Payment Methods: Credit Cards, Online Banking (FPX), Cash on Delivery, Mobile Banking')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Payment Methods</a></li>
                     </ul>
                 </div>
 
