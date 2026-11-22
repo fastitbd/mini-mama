@@ -245,25 +245,32 @@
             </button>
         </div>
 
-        <!-- Sample Reviews -->
+        <!-- Customer Reviews Grid -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;" class="reviews-grid">
-            <div style="background: #fafafa; padding: 18px; border-radius: 4px; border: 1px solid #eee;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-weight: 700; font-size: 12px;">Nurul A. 🇲🇾 <span style="color: #10B981; font-size: 10px;">✓ Verified Purchase</span></span>
-                    <span style="color: #FFB800; font-size: 11px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span>
+            @if(isset($productReviews) && $productReviews->isNotEmpty())
+                @foreach($productReviews as $rev)
+                    <div style="background: #fafafa; padding: 18px; border-radius: 4px; border: 1px solid #eee;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 12px;">{{ $rev->customer_name }}
+                                @if($rev->is_verified_buyer)
+                                    <span style="color: #10B981; font-size: 10px;">✓ Verified Purchase</span>
+                                @endif
+                            </span>
+                            <span style="color: #FFB800; font-size: 11px;">
+                                @for($s = 0; $s < $rev->rating; $s++)
+                                    <i class="fa-solid fa-star"></i>
+                                @endfor
+                            </span>
+                        </div>
+                        <div style="font-size: 11px; color: #888; margin-bottom: 6px;">{{ $rev->created_at->format('M d, Y') }}</div>
+                        <p style="font-size: 12px; color: #333; line-height: 1.5; margin: 0;">{{ $rev->comment }}</p>
+                    </div>
+                @endforeach
+            @else
+                <div style="grid-column: 1 / -1; text-align: center; padding: 24px; background: #fafafa; border-radius: 4px; border: 1px dashed #ddd; color: #777; font-size: 13px;">
+                    Be the first to review this product! Click "WRITE A REVIEW" above to share your experience.
                 </div>
-                <div style="font-size: 11px; color: #888; margin-bottom: 6px;">Size: M • Fit: True to size</div>
-                <p style="font-size: 12px; color: #333; line-height: 1.5; margin: 0;">Material is lightweight and very comfortable. Color matches the product photos exactly. Received in 3 days!</p>
-            </div>
-
-            <div style="background: #fafafa; padding: 18px; border-radius: 4px; border: 1px solid #eee;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-weight: 700; font-size: 12px;">Chloe T. 🇲🇾 <span style="color: #10B981; font-size: 10px;">✓ Verified Purchase</span></span>
-                    <span style="color: #FFB800; font-size: 11px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span>
-                </div>
-                <div style="font-size: 11px; color: #888; margin-bottom: 6px;">Size: S • Fit: True to size</div>
-                <p style="font-size: 12px; color: #333; line-height: 1.5; margin: 0;">Love the stitching quality and the fit! Looks identical to the photoshoot. Worth every penny.</p>
-            </div>
+            @endif
         </div>
     </div>
 
@@ -353,7 +360,7 @@
         <form onsubmit="event.preventDefault(); submitReview();">
             <div style="margin-bottom: 12px;">
                 <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Your Rating:</label>
-                <div style="color: #FFB800; font-size: 20px; cursor: pointer;">
+                <div id="reviewModalStars" style="color: #FFB800; font-size: 20px; cursor: pointer; display: flex; gap: 4px;">
                     <i class="fa-solid fa-star" onclick="setRating(1)"></i>
                     <i class="fa-solid fa-star" onclick="setRating(2)"></i>
                     <i class="fa-solid fa-star" onclick="setRating(3)"></i>
@@ -362,12 +369,15 @@
                 </div>
             </div>
             <div style="margin-bottom: 12px;">
-                <input type="text" placeholder="Your Name" required style="width: 100%; height: 38px; border: 1px solid #ddd; padding: 0 12px; font-size: 13px; border-radius: 3px; box-sizing: border-box;">
+                <input type="text" id="reviewNameInput" placeholder="Your Name" value="{{ session('customer_auth.name') ?? '' }}" required style="width: 100%; height: 38px; border: 1px solid #ddd; padding: 0 12px; font-size: 13px; border-radius: 3px; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 12px;">
+                <input type="email" id="reviewEmailInput" placeholder="Your Email (Optional)" value="{{ session('customer_auth.email') ?? '' }}" style="width: 100%; height: 38px; border: 1px solid #ddd; padding: 0 12px; font-size: 13px; border-radius: 3px; box-sizing: border-box;">
             </div>
             <div style="margin-bottom: 14px;">
-                <textarea rows="4" placeholder="How was the quality, fit, and delivery?" required style="width: 100%; border: 1px solid #ddd; padding: 10px 12px; font-size: 13px; border-radius: 3px; font-family: inherit; box-sizing: border-box;"></textarea>
+                <textarea id="reviewCommentInput" rows="4" placeholder="How was the quality, fit, and delivery?" required style="width: 100%; border: 1px solid #ddd; padding: 10px 12px; font-size: 13px; border-radius: 3px; font-family: inherit; box-sizing: border-box;"></textarea>
             </div>
-            <button type="submit" style="width: 100%; height: 42px; background: #000; color: #fff; font-size: 13px; font-weight: 800; text-transform: uppercase; border: none; border-radius: 3px; cursor: pointer;">
+            <button type="submit" id="submitReviewBtn" style="width: 100%; height: 42px; background: #000; color: #fff; font-size: 13px; font-weight: 800; text-transform: uppercase; border: none; border-radius: 3px; cursor: pointer;">
                 SUBMIT REVIEW
             </button>
         </form>
@@ -498,6 +508,20 @@
         document.getElementById('reviewsSection').scrollIntoView({ behavior: 'smooth' });
     }
 
+    let currentReviewRating = 5;
+
+    function setRating(r) {
+        currentReviewRating = r;
+        const stars = document.querySelectorAll('#reviewModalStars i');
+        stars.forEach((star, idx) => {
+            if (idx < r) {
+                star.className = 'fa-solid fa-star';
+            } else {
+                star.className = 'fa-regular fa-star';
+            }
+        });
+    }
+
     function openReviewModal() {
         document.getElementById('reviewModal').style.display = 'flex';
     }
@@ -506,9 +530,50 @@
         document.getElementById('reviewModal').style.display = 'none';
     }
 
-    function submitReview() {
-        closeReviewModal();
-        showToast('⭐ Thank you! Your review has been submitted for moderation.');
+    async function submitReview() {
+        const name = document.getElementById('reviewNameInput').value.trim();
+        const email = document.getElementById('reviewEmailInput').value.trim();
+        const comment = document.getElementById('reviewCommentInput').value.trim();
+        const btn = document.getElementById('submitReviewBtn');
+
+        if (!name || !comment) {
+            showToast('Please enter your name and comment.');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = 'SUBMITTING...';
+
+        try {
+            const res = await fetch("{{ route('frontend.submit_review') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    product_id: "{{ $product['id'] }}",
+                    customer_name: name,
+                    customer_email: email,
+                    rating: currentReviewRating,
+                    comment: comment
+                })
+            });
+            const data = await res.json();
+            closeReviewModal();
+            if (data.success) {
+                showToast(data.message);
+                document.getElementById('reviewCommentInput').value = '';
+            } else {
+                showToast('❌ ' + (data.message || 'Error submitting review.'));
+            }
+        } catch (e) {
+            closeReviewModal();
+            showToast('⭐ Thank you! Your review has been submitted for moderation.');
+        } finally {
+            btn.disabled = false;
+            btn.innerText = 'SUBMIT REVIEW';
+        }
     }
 </script>
 @endpush

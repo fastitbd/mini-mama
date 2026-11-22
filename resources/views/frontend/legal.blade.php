@@ -2,6 +2,18 @@
 
 @section('title', $title . ' | ' . (get_setting('com_name') ?: 'Mini Mama'))
 
+@php
+    $sitePhone = get_setting('com_phone') ?: '01910-405112';
+    $siteEmail = get_setting('com_email') ?: 'support@minimama.com.bd';
+    $siteAddress = get_setting('com_address') ?: 'Shah Ali Plaza, Mirpur-1216, Dhaka';
+    $siteWhatsapp = get_setting('whatsapp_number') ?: preg_replace('/[^0-9]/', '', $sitePhone);
+    if (!str_starts_with($siteWhatsapp, '88') && strlen($siteWhatsapp) === 11) {
+        $siteWhatsappFull = '88' . $siteWhatsapp;
+    } else {
+        $siteWhatsappFull = $siteWhatsapp;
+    }
+@endphp
+
 @section('content')
 <div class="shein-container" style="max-width: 1000px; margin: 0 auto; padding: 40px 16px 80px; font-family: var(--shein-font), -apple-system, sans-serif;">
     
@@ -23,7 +35,7 @@
             </h1>
         </div>
         <div style="display: flex; gap: 10px;">
-            <a href="https://wa.me/8801901166580?text=Hello%20Mini%20Mama%20Support!%20I%20have%20an%20inquiry%20regarding%20store%20policies." target="_blank" style="background: #25D366; color: #fff; font-size: 12px; font-weight: 800; padding: 8px 16px; border-radius: 4px; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+            <a href="https://wa.me/{{ $siteWhatsappFull }}?text=Hello%20{{ urlencode(get_setting('com_name') ?: 'Mini Mama') }}%20Support!%20I%20have%20an%20inquiry%20regarding%20store%20policies." target="_blank" style="background: #25D366; color: #fff; font-size: 12px; font-weight: 800; padding: 8px 16px; border-radius: 4px; text-decoration: none; display: flex; align-items: center; gap: 6px;">
                 <i class="fa-brands fa-whatsapp"></i> Chat Support
             </a>
             <a href="{{ route('frontend.contact') }}" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 12px; font-weight: 700; padding: 8px 16px; border-radius: 4px; text-decoration: none;">
@@ -290,9 +302,9 @@
                     <div>
                         <div style="font-size: 12px; font-weight: 800; color: #888; text-transform: uppercase;">Customer Assistance</div>
                         <div style="font-size: 13px; color: #555; margin-top: 6px; line-height: 1.6;">
-                            <strong>Hotline:</strong> 01901166580<br>
-                            <strong>WhatsApp:</strong> +880 1901-166580<br>
-                            <strong>Email:</strong> fastit.com.bd@gmail.com<br>
+                            <strong>Hotline:</strong> <a href="tel:{{ $sitePhone }}" style="color: inherit; text-decoration: none;">{{ $sitePhone }}</a><br>
+                            <strong>WhatsApp:</strong> <a href="https://wa.me/{{ $siteWhatsappFull }}" target="_blank" style="color: #25D366; text-decoration: none;">+{{ $siteWhatsappFull }}</a><br>
+                            <strong>Email:</strong> <a href="mailto:{{ $siteEmail }}" style="color: inherit; text-decoration: none;">{{ $siteEmail }}</a><br>
                             <strong>Hours:</strong> 9:00 AM - 10:00 PM (Daily)
                         </div>
                     </div>

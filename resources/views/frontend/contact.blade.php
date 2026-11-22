@@ -2,6 +2,19 @@
 
 @section('title', 'Help Center & Contact Us | ' . (get_setting('com_name') ?: 'Mini Mama'))
 
+@php
+    $sitePhone = get_setting('com_phone') ?: '01910-405112';
+    $siteEmail = get_setting('com_email') ?: 'support@minimama.com.bd';
+    $siteAddress = get_setting('com_address') ?: 'Shah Ali Plaza, Mirpur-1216, Dhaka';
+    $siteWhatsapp = get_setting('whatsapp_number') ?: preg_replace('/[^0-9]/', '', $sitePhone);
+    if (!str_starts_with($siteWhatsapp, '88') && strlen($siteWhatsapp) === 11) {
+        $siteWhatsappFull = '88' . $siteWhatsapp;
+    } else {
+        $siteWhatsappFull = $siteWhatsapp;
+    }
+    $siteMessenger = get_setting('messenger_url') ?: 'https://m.me/minimama.com.bd';
+@endphp
+
 @section('content')
 <div class="shein-container" style="max-width: 1200px; margin: 0 auto; padding: 36px 16px 80px;">
     
@@ -29,10 +42,10 @@
 
         <!-- Direct Instant Action Buttons -->
         <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
-            <a href="https://wa.me/8801901166580?text=Hello%20Mini%20Mama%20Support!%20I%20have%20an%20inquiry." target="_blank" style="background: #25D366; color: #ffffff; font-size: 13px; font-weight: 800; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35);">
+            <a href="https://wa.me/{{ $siteWhatsappFull }}?text=Hello%20{{ urlencode(get_setting('com_name') ?: 'Mini Mama') }}%20Support!%20I%20have%20an%20inquiry." target="_blank" style="background: #25D366; color: #ffffff; font-size: 13px; font-weight: 800; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35);">
                 <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Chat on WhatsApp (Fastest)
             </a>
-            <a href="https://m.me/minimama.com.bd" target="_blank" style="background: #0084FF; color: #ffffff; font-size: 13px; font-weight: 800; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0, 132, 255, 0.35);">
+            <a href="{{ $siteMessenger }}" target="_blank" style="background: #0084FF; color: #ffffff; font-size: 13px; font-weight: 800; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0, 132, 255, 0.35);">
                 <i class="fa-brands fa-facebook-messenger" style="font-size: 18px;"></i> Facebook Messenger
             </a>
             <a href="{{ route('frontend.track_order') }}" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; font-size: 13px; font-weight: 700; padding: 12px 22px; border-radius: 6px; text-decoration: none; display: flex; align-items: center; gap: 8px;">
@@ -123,7 +136,7 @@
                     </div>
                     <div>
                         <div style="font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase;">Customer Service Hotline</div>
-                        <a href="tel:01901166580" style="font-size: 15px; font-weight: 800; color: #111; text-decoration: none;">01901166580</a>
+                        <a href="tel:{{ $sitePhone }}" style="font-size: 15px; font-weight: 800; color: #111; text-decoration: none;">{{ $sitePhone }}</a>
                     </div>
                 </div>
 
@@ -134,7 +147,7 @@
                     </div>
                     <div>
                         <div style="font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase;">WhatsApp Support</div>
-                        <a href="https://wa.me/8801901166580?text=Hello%20Mini%20Mama%20Support" target="_blank" style="font-size: 15px; font-weight: 800; color: #25D366; text-decoration: none;">+880 1901-166580 (Click to Chat)</a>
+                        <a href="https://wa.me/{{ $siteWhatsappFull }}?text=Hello%20{{ urlencode(get_setting('com_name') ?: 'Mini Mama') }}%20Support" target="_blank" style="font-size: 15px; font-weight: 800; color: #25D366; text-decoration: none;">+{{ $siteWhatsappFull }} (Click to Chat)</a>
                     </div>
                 </div>
 
@@ -145,7 +158,7 @@
                     </div>
                     <div>
                         <div style="font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase;">Email Inquiries</div>
-                        <a href="mailto:fastit.com.bd@gmail.com" style="font-size: 14px; font-weight: 800; color: #111; text-decoration: none;">fastit.com.bd@gmail.com</a>
+                        <a href="mailto:{{ $siteEmail }}" style="font-size: 14px; font-weight: 800; color: #111; text-decoration: none;">{{ $siteEmail }}</a>
                     </div>
                 </div>
 
@@ -157,7 +170,7 @@
                     <div>
                         <div style="font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase;">Corporate Office</div>
                         <div style="font-size: 13px; font-weight: 700; color: #333; line-height: 1.4;">
-                            Suite-807, Floor-7th, Shah Ali Plaza, Mirpur-1216, Dhaka, Bangladesh
+                            {{ $siteAddress }}
                         </div>
                     </div>
                 </div>

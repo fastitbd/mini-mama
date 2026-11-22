@@ -352,7 +352,9 @@
 <script>
     let checkoutCart = [];
     let checkoutDiscountRate = 0;
+    let checkoutDiscountAmount = 0;
     let checkoutCouponCode = '';
+    let isFreeShippingCoupon = false;
     let selectedCountry = 'Bangladesh';
     let baseDeliveryFee = 8.00;
     let shippingTier = 'standard'; // 'standard' or 'express'
@@ -462,12 +464,12 @@
             actualFee = baseDeliveryFee + 8.00;
         }
 
-        // Free delivery threshold: RM 120
-        if (subtotal >= 120.00 || checkoutCouponCode === 'FREESHIP') {
+        // Free delivery threshold: RM 120 or coupon
+        if (subtotal >= 120.00 || checkoutCouponCode === 'FREESHIP' || isFreeShippingCoupon) {
             actualFee = 0.00;
         }
 
-        document.getElementById('shipCostLabel').innerText = (subtotal >= 120.00 || checkoutCouponCode === 'FREESHIP') ? 'FREE (Orders > RM120)' : `RM ${baseDeliveryFee.toFixed(2)}`;
+        document.getElementById('shipCostLabel').innerText = (subtotal >= 120.00 || checkoutCouponCode === 'FREESHIP' || isFreeShippingCoupon) ? 'FREE' : `RM ${baseDeliveryFee.toFixed(2)}`;
         return actualFee;
     }
 
@@ -496,17 +498,17 @@
         box.innerHTML = html;
 
         const actualShipping = calculateDeliveryFee();
-        const discVal = subtotal * checkoutDiscountRate;
+        const discVal = checkoutDiscountAmount > 0 ? checkoutDiscountAmount : (subtotal * checkoutDiscountRate);
         const grandTotal = Math.max(0, subtotal - discVal + actualShipping);
 
         // Update UI
         document.getElementById('coSubtotalText').innerText = `RM ${subtotal.toFixed(2)}`;
         
         const cpRow = document.getElementById('coCouponRow');
-        if (checkoutDiscountRate > 0) {
+        if (discVal > 0 || isFreeShippingCoupon) {
             cpRow.style.display = 'flex';
             document.getElementById('coCouponCodeName').innerText = checkoutCouponCode;
-            document.getElementById('coCouponDiscountText').innerText = `-RM ${discVal.toFixed(2)}`;
+            document.getElementById('coCouponDiscountText').innerText = discVal > 0 ? `-RM ${discVal.toFixed(2)}` : 'FREE SHIPPING';
         } else {
             cpRow.style.display = 'none';
         }
@@ -522,27 +524,57 @@
         document.getElementById('inputOrderTotal').value = grandTotal.toFixed(2);
     }
 
-    function applyCheckoutCoupon() {
+    async function applyCheckoutCoupon() {
         const code = document.getElementById('checkoutCouponInput').value.trim().toUpperCase();
-        if (!code) return;
-
-        if (code === 'NEW15') {
-            checkoutDiscountRate = 0.15;
-            checkoutCouponCode = 'NEW15';
-            showToast('🎉 15% OFF Coupon Applied!');
-        } else if (code === 'NEW20') {
-            checkoutDiscountRate = 0.20;
-            checkoutCouponCode = 'NEW20';
-            showToast('🎉 20% OFF Coupon Applied!');
-        } else if (code === 'FREESHIP') {
-            checkoutDiscountRate = 0;
-            checkoutCouponCode = 'FREESHIP';
-            showToast('🚚 Free Shipping Coupon Applied!');
-        } else {
-            showToast(`❌ Coupon "${code}" is invalid or expired.`);
+        if (!code) {
+            showToast('Please enter a coupon code.');
             return;
         }
-        renderCheckoutPreview();
+
+        let subtotal = checkoutCart.reduce((sum, it) => sum + (it.price * it.qty), 0);
+
+        try {
+            const res = await fetch("{{ route('frontend.apply_coupon') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ code: code, subtotal: subtotal })
+            });
+            const data = await res.json();
+            if (data.success) {
+                checkoutCouponCode = data.code;
+                if (data.discount_type === 'percentage') {
+                    checkoutDiscountRate = data.discount_value / 100;
+                    checkoutDiscountAmount = 0;
+                } else {
+                    checkoutDiscountRate = 0;
+                    checkoutDiscountAmount = data.discount_amount;
+                }
+                isFreeShippingCoupon = data.free_shipping;
+                showToast('🎉 ' + data.message);
+                renderCheckoutPreview();
+            } else {
+                showToast('❌ ' + data.message);
+            }
+        } catch (e) {
+            // Fallback for static codes if network fails
+            if (code === 'NEW15') {
+                checkoutDiscountRate = 0.15;
+                checkoutDiscountAmount = 0;
+                checkoutCouponCode = 'NEW15';
+                showToast('🎉 15% OFF Coupon Applied!');
+            } else if (code === 'FREESHIP') {
+                isFreeShippingCoupon = true;
+                checkoutCouponCode = 'FREESHIP';
+                showToast('🚚 Free Shipping Applied!');
+            } else {
+                showToast(`❌ Coupon "${code}" is invalid or expired.`);
+                return;
+            }
+            renderCheckoutPreview();
+        }
     }
 
     function toggleAccountPassword(cb) {

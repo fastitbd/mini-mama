@@ -1,6 +1,20 @@
 <!-- ==========================================
      OFFICIAL FOOTER
      ========================================== -->
+@php
+    $sitePhone = get_setting('com_phone') ?: '01910-405112';
+    $siteEmail = get_setting('com_email') ?: 'support@minimama.com.bd';
+    $siteAddress = get_setting('com_address') ?: 'Shah Ali Plaza, Mirpur-1216, Dhaka';
+    $siteWhatsapp = get_setting('whatsapp_number') ?: preg_replace('/[^0-9]/', '', $sitePhone);
+    if (!str_starts_with($siteWhatsapp, '88') && strlen($siteWhatsapp) === 11) {
+        $siteWhatsappFull = '88' . $siteWhatsapp;
+    } else {
+        $siteWhatsappFull = $siteWhatsapp;
+    }
+    $fbUrl = get_setting('facebook_url') ?: 'https://facebook.com';
+    $igUrl = get_setting('instagram_url') ?: 'https://instagram.com';
+    $ytUrl = get_setting('youtube_url') ?: 'https://youtube.com';
+@endphp
 <footer class="shein-official-footer" style="background: #ffffff; padding: 48px 0 32px; border-top: 1px solid #eeeeee; font-family: var(--shein-font), -apple-system, sans-serif; position: relative;">
     <div class="shein-wrap" style="max-width: 1440px; margin: 0 auto; padding: 0 24px;">
         
@@ -71,15 +85,15 @@
                         <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 12px; letter-spacing: 0.3px;">FOLLOW US</h4>
                         <div style="display: flex; align-items: center; gap: 14px; font-size: 19px; color: #000000;">
                             <!-- Facebook -->
-                            <a href="https://facebook.com" target="_blank" title="Facebook" style="color: #1877F2; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                            <a href="{{ $fbUrl }}" target="_blank" title="Facebook" style="color: #1877F2; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
                                 <i class="fa-brands fa-facebook"></i>
                             </a>
                             <!-- Instagram -->
-                            <a href="https://instagram.com" target="_blank" title="Instagram" style="color: #E4405F; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                            <a href="{{ $igUrl }}" target="_blank" title="Instagram" style="color: #E4405F; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
                                 <i class="fa-brands fa-instagram"></i>
                             </a>
                             <!-- WhatsApp -->
-                            <a href="https://wa.me/8801901166580?text=Hello%20Mini%20Mama%20Support" target="_blank" title="WhatsApp" style="color: #25D366; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                            <a href="https://wa.me/{{ $siteWhatsappFull }}?text=Hello%20{{ urlencode(get_setting('com_name') ?: 'Mini Mama') }}%20Support" target="_blank" title="WhatsApp" style="color: #25D366; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </a>
                             <!-- TikTok -->
@@ -87,7 +101,7 @@
                                 <i class="fa-brands fa-tiktok"></i>
                             </a>
                             <!-- YouTube -->
-                            <a href="https://youtube.com" target="_blank" title="YouTube" style="color: #FF0000; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                            <a href="{{ $ytUrl }}" target="_blank" title="YouTube" style="color: #FF0000; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
                                 <i class="fa-brands fa-youtube"></i>
                             </a>
                             <!-- Twitter / X -->
@@ -229,19 +243,19 @@
         <div style="margin-top: 40px; padding: 20px 24px; background: #fafafa; border: 1px solid #eeeeee; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px; font-size: 12px; color: #444;">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-phone" style="color: #000; font-size: 14px;"></i>
-                <span>Hotline: <a href="tel:01901166580" style="font-weight: 800; color: #111; text-decoration: none;">01901166580</a></span>
+                <span>Hotline: <a href="tel:{{ $sitePhone }}" style="font-weight: 800; color: #111; text-decoration: none;">{{ $sitePhone }}</a></span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 16px;"></i>
-                <span>WhatsApp: <a href="https://wa.me/8801901166580" target="_blank" style="font-weight: 800; color: #25D366; text-decoration: none;">+880 1901-166580</a></span>
+                <span>WhatsApp: <a href="https://wa.me/{{ $siteWhatsappFull }}?text=Hello%20{{ urlencode(get_setting('com_name') ?: 'Mini Mama') }}%20Support" target="_blank" style="font-weight: 800; color: #25D366; text-decoration: none;">{{ $siteWhatsapp }}</a></span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="fa-regular fa-envelope" style="color: #000; font-size: 14px;"></i>
-                <span>Email: <a href="mailto:fastit.com.bd@gmail.com" style="font-weight: 700; color: #111; text-decoration: none;">fastit.com.bd@gmail.com</a></span>
+                <span>Email: <a href="mailto:{{ $siteEmail }}" style="font-weight: 700; color: #111; text-decoration: none;">{{ $siteEmail }}</a></span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-location-dot" style="color: #FA2C19; font-size: 14px;"></i>
-                <span>Store: <strong>Shah Ali Plaza, Mirpur-1216, Dhaka</strong></span>
+                <span>Store: <strong>{{ $siteAddress }}</strong></span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="fa-regular fa-clock" style="color: #666; font-size: 14px;"></i>

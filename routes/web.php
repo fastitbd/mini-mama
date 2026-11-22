@@ -79,7 +79,9 @@ Route::get('/search', [\App\Http\Controllers\Frontend\HomeController::class, 'se
 Route::get('/cart', [\App\Http\Controllers\Frontend\HomeController::class, 'cart'])->name('frontend.cart');
 Route::get('/wishlist', [\App\Http\Controllers\Frontend\HomeController::class, 'wishlist'])->name('frontend.wishlist');
 Route::get('/checkout', [\App\Http\Controllers\Frontend\HomeController::class, 'checkout'])->name('frontend.checkout');
+Route::post('/checkout/apply-coupon', [\App\Http\Controllers\Frontend\HomeController::class, 'applyCoupon'])->name('frontend.apply_coupon');
 Route::post('/checkout/place-order', [\App\Http\Controllers\Frontend\HomeController::class, 'placeOrder'])->name('frontend.place_order');
+Route::post('/product/review/submit', [\App\Http\Controllers\Frontend\HomeController::class, 'submitProductReview'])->name('frontend.submit_review');
 Route::get('/order-confirmation/{order_number?}', [\App\Http\Controllers\Frontend\HomeController::class, 'orderConfirmation'])->name('frontend.order_confirmation');
 Route::get('/customer-login', [\App\Http\Controllers\Frontend\HomeController::class, 'authPage'])->name('frontend.login');
 Route::get('/shein-login', fn() => redirect()->route('frontend.login'));

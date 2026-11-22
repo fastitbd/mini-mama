@@ -527,42 +527,78 @@
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" class="reviews-grid">
             @php
-                $reviews = [
+                $dbReviews = \App\Models\ProductReview::with('product')->approved()->latest()->take(6)->get();
+                $fallbackReviews = [
                     ['name' => 'Sarah M.', 'rating' => 5, 'text' => 'The fabric quality exceeded my expectations! Delivered within 3 days and fits perfectly. Will definitely order again.', 'product' => 'Summer Floral Maxi Dress', 'verified' => true],
                     ['name' => 'Aisyah K.', 'rating' => 5, 'text' => 'Super fast delivery and cash on delivery made it completely worry-free. Customer support was also very helpful!', 'product' => 'Ribbed Knit Casual Top', 'verified' => true],
                     ['name' => 'Farhana Z.', 'rating' => 5, 'text' => 'Great value for money! I got the 15% discount on my first order. 10/10 recommend to all fashion lovers.', 'product' => 'High Waist Wide Leg Pants', 'verified' => true],
                 ];
             @endphp
-            @foreach($reviews as $rev)
-                <div style="background: #ffffff; border: 1px solid #eeeeee; border-radius: 6px; padding: 22px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <div style="width: 38px; height: 38px; border-radius: 50%; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">
-                                {{ substr($rev['name'], 0, 1) }}
+            @if($dbReviews->isNotEmpty())
+                @foreach($dbReviews as $rev)
+                    <div style="background: #ffffff; border: 1px solid #eeeeee; border-radius: 6px; padding: 22px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 38px; height: 38px; border-radius: 50%; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">
+                                    {{ substr($rev->customer_name, 0, 1) }}
+                                </div>
+                                <div>
+                                    <div style="font-size: 13px; font-weight: 800; color: #111;">{{ $rev->customer_name }}</div>
+                                    @if($rev->is_verified_buyer)
+                                        <div style="font-size: 10px; color: #10B981; font-weight: 700;">
+                                            <i class="fa-solid fa-circle-check"></i> Verified Buyer
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
-                            <div>
-                                <div style="font-size: 13px; font-weight: 800; color: #111;">{{ $rev['name'] }}</div>
-                                @if($rev['verified'])
-                                    <div style="font-size: 10px; color: #10B981; font-weight: 700;">
-                                        <i class="fa-solid fa-circle-check"></i> Verified Buyer
-                                    </div>
-                                @endif
+                            <div style="color: #FFB800; font-size: 12px;">
+                                @for($s = 0; $s < $rev->rating; $s++)
+                                    <i class="fa-solid fa-star"></i>
+                                @endfor
                             </div>
                         </div>
-                        <div style="color: #FFB800; font-size: 12px;">
-                            @for($s = 0; $s < $rev['rating']; $s++)
-                                <i class="fa-solid fa-star"></i>
-                            @endfor
+                        <p style="font-size: 13px; color: #444; line-height: 1.5; margin: 0 0 14px; font-style: italic;">
+                            "{{ $rev->comment }}"
+                        </p>
+                        @if($rev->product)
+                            <div style="border-top: 1px solid #f5f5f5; padding-top: 10px; font-size: 11px; color: #888;">
+                                <i class="fa-solid fa-tag" style="margin-right: 4px;"></i> Purchased: <strong>{{ $rev->product->name }}</strong>
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            @else
+                @foreach($fallbackReviews as $rev)
+                    <div style="background: #ffffff; border: 1px solid #eeeeee; border-radius: 6px; padding: 22px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 38px; height: 38px; border-radius: 50%; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">
+                                    {{ substr($rev['name'], 0, 1) }}
+                                </div>
+                                <div>
+                                    <div style="font-size: 13px; font-weight: 800; color: #111;">{{ $rev['name'] }}</div>
+                                    @if($rev['verified'])
+                                        <div style="font-size: 10px; color: #10B981; font-weight: 700;">
+                                            <i class="fa-solid fa-circle-check"></i> Verified Buyer
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div style="color: #FFB800; font-size: 12px;">
+                                @for($s = 0; $s < $rev['rating']; $s++)
+                                    <i class="fa-solid fa-star"></i>
+                                @endfor
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: #444; line-height: 1.5; margin: 0 0 14px; font-style: italic;">
+                            "{{ $rev['text'] }}"
+                        </p>
+                        <div style="border-top: 1px solid #f5f5f5; padding-top: 10px; font-size: 11px; color: #888;">
+                            <i class="fa-solid fa-tag" style="margin-right: 4px;"></i> Purchased: <strong>{{ $rev['product'] }}</strong>
                         </div>
                     </div>
-                    <p style="font-size: 13px; color: #444; line-height: 1.5; margin: 0 0 14px; font-style: italic;">
-                        "{{ $rev['text'] }}"
-                    </p>
-                    <div style="border-top: 1px solid #f5f5f5; padding-top: 10px; font-size: 11px; color: #888;">
-                        <i class="fa-solid fa-tag" style="margin-right: 4px;"></i> Purchased: <strong>{{ $rev['product'] }}</strong>
-                    </div>
-                </div>
-            @endforeach
+                @endforeach
+            @endif
         </div>
     </section>
 
@@ -584,54 +620,87 @@
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" class="blog-grid">
             @php
-                $blogPosts = [
+                $dbBlogPosts = \App\Models\BlogPost::published()->latest()->take(3)->get();
+                $fallbackBlogPosts = [
                     [
                         'title' => 'Top 10 Fashion Trends You Need to Try This Season',
                         'desc' => 'Discover the essential pieces making waves in global fashion runways and street style.',
                         'tag' => 'TRENDS',
                         'date' => 'Oct 2026',
-                        'img' => 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&auto=format&fit=crop&q=60'
+                        'img' => 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&auto=format&fit=crop&q=60',
+                        'url' => route('frontend.blog')
                     ],
                     [
                         'title' => 'The Ultimate Gift Guide: Fashion Finds Under RM100',
                         'desc' => 'Stuck on gift ideas? Check out our budget-friendly yet chic fashion gift recommendations.',
                         'tag' => 'GIFT GUIDE',
                         'date' => 'Oct 2026',
-                        'img' => 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=500&auto=format&fit=crop&q=60'
+                        'img' => 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=500&auto=format&fit=crop&q=60',
+                        'url' => route('frontend.blog')
                     ],
                     [
                         'title' => 'How to Build an Effortless Capsule Wardrobe in 5 Steps',
                         'desc' => 'Simplify your morning routine with versatile essentials that mix and match effortlessly.',
                         'tag' => 'STYLE TIPS',
                         'date' => 'Oct 2026',
-                        'img' => 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&auto=format&fit=crop&q=60'
+                        'img' => 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&auto=format&fit=crop&q=60',
+                        'url' => route('frontend.blog')
                     ],
                 ];
             @endphp
-            @foreach($blogPosts as $post)
-                <div style="background: #ffffff; border: 1px solid #eee; border-radius: 6px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
-                    <div style="height: 180px; overflow: hidden; position: relative; background: #222;">
-                        <img src="{{ $post['img'] }}" alt="{{ $post['title'] }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        <span style="position: absolute; top: 10px; left: 10px; background: #000; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 2px;">
-                            {{ $post['tag'] }}
-                        </span>
-                    </div>
-                    <div style="padding: 16px;">
-                        <div style="font-size: 11px; color: #999; margin-bottom: 6px;">
-                            <i class="fa-regular fa-calendar" style="margin-right: 4px;"></i> {{ $post['date'] }}
+            @if($dbBlogPosts->isNotEmpty())
+                @foreach($dbBlogPosts as $post)
+                    <div style="background: #ffffff; border: 1px solid #eee; border-radius: 6px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+                        <div style="height: 180px; overflow: hidden; position: relative; background: #222;">
+                            <img src="{{ Str::startsWith($post->image, ['http://', 'https://']) ? $post->image : asset($post->image) }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            <span style="position: absolute; top: 10px; left: 10px; background: #000; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 2px;">
+                                {{ $post->tags ? trim(explode(',', $post->tags)[0]) : 'GUIDE' }}
+                            </span>
                         </div>
-                        <h3 style="font-size: 15px; font-weight: 800; color: #111; margin: 0 0 8px; line-height: 1.35;">
-                            {{ $post['title'] }}
-                        </h3>
-                        <p style="font-size: 12px; color: #666; line-height: 1.5; margin: 0 0 14px;">
-                            {{ $post['desc'] }}
-                        </p>
-                        <a href="{{ route('frontend.blog') }}" style="font-size: 12px; font-weight: 800; color: #FA2C19; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                            Read Guide <i class="fa-solid fa-arrow-right" style="font-size: 10px;"></i>
-                        </a>
+                        <div style="padding: 16px;">
+                            <div style="font-size: 11px; color: #999; margin-bottom: 6px;">
+                                <i class="fa-regular fa-calendar" style="margin-right: 4px;"></i> {{ $post->created_at->format('M Y') }}
+                            </div>
+                            <h3 style="font-size: 15px; font-weight: 800; color: #111; margin: 0 0 8px; line-height: 1.35;">
+                                <a href="{{ route('frontend.blog.detail', $post->slug) }}" style="color: inherit; text-decoration: none;">
+                                    {{ $post->title }}
+                                </a>
+                            </h3>
+                            <p style="font-size: 12px; color: #666; line-height: 1.5; margin: 0 0 14px;">
+                                {{ $post->excerpt ?: Str::limit(strip_tags($post->content), 90) }}
+                            </p>
+                            <a href="{{ route('frontend.blog.detail', $post->slug) }}" style="font-size: 12px; font-weight: 800; color: #FA2C19; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                Read Guide <i class="fa-solid fa-arrow-right" style="font-size: 10px;"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            @else
+                @foreach($fallbackBlogPosts as $post)
+                    <div style="background: #ffffff; border: 1px solid #eee; border-radius: 6px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+                        <div style="height: 180px; overflow: hidden; position: relative; background: #222;">
+                            <img src="{{ $post['img'] }}" alt="{{ $post['title'] }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            <span style="position: absolute; top: 10px; left: 10px; background: #000; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 2px;">
+                                {{ $post['tag'] }}
+                            </span>
+                        </div>
+                        <div style="padding: 16px;">
+                            <div style="font-size: 11px; color: #999; margin-bottom: 6px;">
+                                <i class="fa-regular fa-calendar" style="margin-right: 4px;"></i> {{ $post['date'] }}
+                            </div>
+                            <h3 style="font-size: 15px; font-weight: 800; color: #111; margin: 0 0 8px; line-height: 1.35;">
+                                {{ $post['title'] }}
+                            </h3>
+                            <p style="font-size: 12px; color: #666; line-height: 1.5; margin: 0 0 14px;">
+                                {{ $post['desc'] }}
+                            </p>
+                            <a href="{{ $post['url'] }}" style="font-size: 12px; font-weight: 800; color: #FA2C19; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                Read Guide <i class="fa-solid fa-arrow-right" style="font-size: 10px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </section>
 

@@ -208,7 +208,95 @@ class HomeController extends Controller
             $relatedProducts = collect($allProducts)->where('id', '!=', $product['id'])->take(6)->values()->all();
         }
 
-        return view('frontend.product-detail', compact('categories', 'product', 'relatedProducts'));
+        // Fetch dynamic reviews for this product (or latest approved reviews)
+        $productReviews = \App\Models\ProductReview::where('product_id', $id)
+            ->approved()
+            ->latest()
+            ->get();
+        if ($productReviews->isEmpty()) {
+            $productReviews = \App\Models\ProductReview::approved()->latest()->take(4)->get();
+        }
+
+        return view('frontend.product-detail', compact('categories', 'product', 'relatedProducts', 'productReviews'));
+    }
+
+    /**
+     * Submit a customer product review (ajax)
+     */
+    public function submitProductReview(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required',
+            'customer_name' => 'required|string|max:100',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+            'customer_email' => 'nullable|email|max:150',
+        ]);
+
+        \App\Models\ProductReview::create([
+            'product_id' => $request->product_id,
+            'customer_name' => $request->customer_name,
+            'customer_email' => $request->customer_email,
+            'rating' => (int)$request->rating,
+            'comment' => $request->comment,
+            'status' => 'pending',
+            'is_verified_buyer' => session()->has('customer_auth'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => '⭐ Thank you! Your review has been submitted and is pending admin approval.'
+        ]);
+    }
+
+    /**
+     * Validate & Apply Coupon Code via AJAX
+     */
+    public function applyCoupon(Request $request)
+    {
+        $code = trim(strtoupper($request->input('code', '')));
+        $subtotal = (float)$request->input('subtotal', 0);
+
+        if (empty($code)) {
+            return response()->json(['success' => false, 'message' => 'Please enter a coupon code.']);
+        }
+
+        $coupon = \App\Models\Coupon::where('code', $code)->first();
+
+        if (!$coupon) {
+            return response()->json(['success' => false, 'message' => "Coupon '{$code}' is invalid or does not exist."]);
+        }
+
+        if (!$coupon->is_active) {
+            return response()->json(['success' => false, 'message' => "Coupon '{$code}' is currently inactive."]);
+        }
+
+        if ($coupon->start_date && now()->lt($coupon->start_date)) {
+            return response()->json(['success' => false, 'message' => "Coupon '{$code}' starts on " . $coupon->start_date->format('d M, Y')]);
+        }
+
+        if ($coupon->end_date && now()->gt($coupon->end_date)) {
+            return response()->json(['success' => false, 'message' => "Coupon '{$code}' has expired on " . $coupon->end_date->format('d M, Y')]);
+        }
+
+        if ($coupon->min_spend > 0 && $subtotal < (float)$coupon->min_spend) {
+            return response()->json([
+                'success' => false, 
+                'message' => "Minimum purchase of ৳" . number_format($coupon->min_spend, 2) . " is required for coupon '{$coupon->code}'."
+            ]);
+        }
+
+        $discount = $coupon->calculateDiscount($subtotal);
+
+        return response()->json([
+            'success' => true,
+            'code' => $coupon->code,
+            'discount_type' => $coupon->discount_type,
+            'discount_value' => (float)$coupon->discount_value,
+            'discount_amount' => $discount,
+            'free_shipping' => (bool)$coupon->free_shipping,
+            'message' => "Coupon '{$coupon->code}' applied successfully!"
+        ]);
     }
 
     /**

@@ -1,6 +1,16 @@
 <!-- ==========================================
      PREMIUM & CUTE FLOATING SUPPORT & CHAT WIDGET
      ========================================== -->
+@php
+    $siteHotline = get_setting('com_phone') ?: '01910-405112';
+    $siteWhatsapp = get_setting('whatsapp_number') ?: preg_replace('/[^0-9]/', '', $siteHotline);
+    if (!str_starts_with($siteWhatsapp, '88') && strlen($siteWhatsapp) === 11) {
+        $siteWhatsappFull = '88' . $siteWhatsapp;
+    } else {
+        $siteWhatsappFull = $siteWhatsapp;
+    }
+    $siteMessenger = get_setting('messenger_url') ?: 'https://m.me/minimama.com.bd';
+@endphp
 <div id="miniMamaSupportWidget" style="position: fixed; bottom: 24px; right: 24px; z-index: 9995; font-family: var(--shein-font), -apple-system, sans-serif;">
 
     <!-- FLOATING EXPANDED CHAT POPUP WINDOW -->
@@ -50,14 +60,14 @@
             </div>
 
             <!-- WHATSAPP INTEGRATION BUTTON -->
-            <a href="https://wa.me/8801901166580?text=Hello%20Mini%20Mama%20Support!%20I%20have%20an%20inquiry%20regarding%20products%20or%20an%20order." target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1.5px solid #25D366; padding: 12px 16px; border-radius: 12px; margin-bottom: 12px; text-decoration: none; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.12); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(37,211,102,0.22)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(37,211,102,0.12)'">
+            <a href="https://wa.me/{{ $siteWhatsappFull }}?text=Hello%20{{ urlencode(get_setting('com_name') ?: 'Mini Mama') }}%20Support!%20I%20have%20an%20inquiry%20regarding%20products%20or%20an%20order." target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1.5px solid #25D366; padding: 12px 16px; border-radius: 12px; margin-bottom: 12px; text-decoration: none; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.12); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(37,211,102,0.22)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(37,211,102,0.12)'">
                 <div style="display: flex; align-items: center; gap: 14px;">
                     <div style="width: 42px; height: 42px; border-radius: 50%; background: #25D366; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
                         <i class="fa-brands fa-whatsapp"></i>
                     </div>
                     <div>
                         <div style="font-size: 14px; font-weight: 800; color: #111;">Chat on WhatsApp</div>
-                        <div style="font-size: 11px; color: #666;">Instant reply on 01901166580</div>
+                        <div style="font-size: 11px; color: #666;">Instant reply on {{ $siteWhatsapp }}</div>
                     </div>
                 </div>
                 <span style="background: #E8F5E9; color: #2E7D32; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 10px;">
@@ -66,7 +76,7 @@
             </a>
 
             <!-- FACEBOOK MESSENGER INTEGRATION BUTTON -->
-            <a href="https://m.me/minimama.com.bd" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1.5px solid #0084FF; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 132, 255, 0.12); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(0,132,255,0.22)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(0,132,255,0.12)'">
+            <a href="{{ $siteMessenger }}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1.5px solid #0084FF; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 132, 255, 0.12); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(0,132,255,0.22)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(0,132,255,0.12)'">
                 <div style="display: flex; align-items: center; gap: 14px;">
                     <div style="width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #00B2FF, #006AFF); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
                         <i class="fa-brands fa-facebook-messenger"></i>
@@ -269,9 +279,9 @@
             } else if (lower.includes('delivery') || lower.includes('shipping') || lower.includes('charge')) {
                 reply = `Standard delivery fee is <strong>৳ 60</strong> inside Dhaka (24-48 hours) and <strong>৳ 120</strong> outside Dhaka (2-4 days). Free Delivery on orders over threshold!`;
             } else if (lower.includes('return') || lower.includes('refund')) {
-                reply = `We provide a <strong>7-Day Easy Return & Exchange policy</strong> for damaged, incorrect or size-fitting issues. You can initiate a return on WhatsApp at 01901166580.`;
+                reply = `We provide a <strong>7-Day Easy Return & Exchange policy</strong> for damaged, incorrect or size-fitting issues. You can initiate a return on WhatsApp at {{ $siteWhatsapp }}.`;
             } else if (lower.includes('whatsapp') || lower.includes('agent') || lower.includes('human')) {
-                reply = `Sure thing! You can chat directly with a live human representative on WhatsApp: <br><a href="https://wa.me/8801901166580?text=Hello%20Mini%20Mama%20Support" target="_blank" style="display:inline-block; margin-top:6px; background:#25D366; color:#fff; font-weight:800; padding:6px 12px; border-radius:4px; font-size:11px; text-decoration:none;"><i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp Now</a>`;
+                reply = `Sure thing! You can chat directly with a live human representative on WhatsApp: <br><a href="https://wa.me/{{ $siteWhatsappFull }}?text=Hello%20{{ urlencode(get_setting('com_name') ?: 'Mini Mama') }}%20Support" target="_blank" style="display:inline-block; margin-top:6px; background:#25D366; color:#fff; font-weight:800; padding:6px 12px; border-radius:4px; font-size:11px; text-decoration:none;"><i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp Now</a>`;
             }
 
             const botDiv = document.createElement('div');
