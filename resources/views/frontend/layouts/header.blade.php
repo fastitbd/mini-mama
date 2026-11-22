@@ -87,18 +87,48 @@
             <div style="display: flex; align-items: center; gap: 20px; color: #ffffff;">
                 <!-- User Account -->
                 <div class="bsc-user-container" style="position: relative; cursor: pointer;">
-                    <a href="{{ route('frontend.login') }}" style="color: #ffffff; display: flex; align-items: center; font-size: 22px;" title="Account">
+                    @php
+                        $isCustomerLoggedIn = session()->has('customer_auth');
+                        $cust = session('customer_auth');
+                    @endphp
+                    <a href="{{ $isCustomerLoggedIn ? route('frontend.account') : route('frontend.login') }}" style="color: #ffffff; display: flex; align-items: center; gap: 6px; font-size: 20px;" title="Account">
                         <i class="fa-regular fa-user"></i>
+                        @if($isCustomerLoggedIn)
+                            <span style="font-size: 11px; font-weight: 800; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ explode(' ', $cust['name'] ?? 'User')[0] }}</span>
+                        @endif
                     </a>
                     <!-- Flyout Dropdown -->
-                    <div class="bsc-user-container__dropdown" id="sheinUserDropdown" style="display: none; position: absolute; top: 100%; right: 0; width: 230px; background: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.25); border: 1px solid #eeeeee; padding: 16px; z-index: 1003; margin-top: 10px; border-radius: 2px;">
-                        <a href="{{ route('frontend.login') }}" style="display: block; background: #000000; color: #ffffff; text-align: center; padding: 10px 0; font-weight: 800; font-size: 12px; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">SIGN IN / REGISTER</a>
+                    <div class="bsc-user-container__dropdown" id="sheinUserDropdown" style="display: none; position: absolute; top: 100%; right: 0; width: 240px; background: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.25); border: 1px solid #eeeeee; padding: 16px; z-index: 1003; margin-top: 10px; border-radius: 4px;">
+                        @if($isCustomerLoggedIn)
+                            <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #f2f2f2;">
+                                <div style="font-size: 13px; font-weight: 800; color: #111;">{{ $cust['name'] ?? 'Customer' }}</div>
+                                <div style="font-size: 11px; color: #777;">{{ $cust['email'] ?? '' }}</div>
+                                <div style="margin-top: 6px;">
+                                    <span style="background: #FFF0ED; color: #FA2C19; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">{{ $cust['tier'] ?? 'VIP Member' }}</span>
+                                </div>
+                            </div>
+                            <a href="{{ route('frontend.account') }}" style="display: block; background: #000000; color: #ffffff; text-align: center; padding: 9px 0; font-weight: 800; font-size: 11px; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px; border-radius: 2px;">
+                                <i class="fa-solid fa-chart-pie" style="margin-right: 4px;"></i> MY ACCOUNT DASHBOARD
+                            </a>
+                        @else
+                            <a href="{{ route('frontend.login') }}" style="display: block; background: #000000; color: #ffffff; text-align: center; padding: 10px 0; font-weight: 800; font-size: 12px; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">SIGN IN / REGISTER</a>
+                        @endif
+
                         <div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #333333;">
-                            <a href="{{ route('frontend.track_order') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5; color: #0284c7; font-weight: 700;"><span><i class="fa-solid fa-truck-fast" style="margin-right: 8px;"></i> Track My Order</span> <i class="fa-solid fa-angle-right"></i></a>
+                            @if($isCustomerLoggedIn)
+                                <a href="{{ route('frontend.account', ['tab' => 'orders']) }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-solid fa-box" style="margin-right: 8px;"></i> My Orders</span> <i class="fa-solid fa-angle-right"></i></a>
+                                <a href="{{ route('frontend.account', ['tab' => 'profile']) }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-regular fa-id-card" style="margin-right: 8px;"></i> My Profile</span> <i class="fa-solid fa-angle-right"></i></a>
+                                <a href="{{ route('frontend.account', ['tab' => 'addresses']) }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-solid fa-location-dot" style="margin-right: 8px;"></i> My Addresses</span> <i class="fa-solid fa-angle-right"></i></a>
+                            @endif
+                            <a href="{{ route('frontend.track_order') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5; color: #0284c7; font-weight: 700;"><span><i class="fa-solid fa-truck-fast" style="margin-right: 8px;"></i> Track Order</span> <i class="fa-solid fa-angle-right"></i></a>
                             <a href="{{ route('frontend.wishlist') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-regular fa-heart" style="margin-right: 8px;"></i> My Wishlist</span> <span style="color: #FA2C19; font-weight: 700;">❤️</span></a>
                             <a href="{{ route('frontend.cart') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-solid fa-bag-shopping" style="margin-right: 8px;"></i> Shopping Bag</span></a>
-                            <a href="{{ route('frontend.category', 'sale') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5; color: #FA2C19; font-weight: 700;"><span><i class="fa-solid fa-fire" style="margin-right: 8px;"></i> Flash Sale</span></a>
-                            <a href="{{ route('frontend.login') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-solid fa-ticket" style="margin-right: 8px;"></i> My Coupons</span></a>
+                            @if($isCustomerLoggedIn)
+                                <a href="{{ route('frontend.account', ['tab' => 'password']) }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-solid fa-lock" style="margin-right: 8px;"></i> Change Password</span> <i class="fa-solid fa-angle-right"></i></a>
+                                <a href="{{ route('frontend.customer_logout') }}" style="padding: 7px 0; display: flex; justify-content: space-between; align-items: center; color: #FA2C19; font-weight: 700; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 8px;"></i> Logout</span></a>
+                            @else
+                                <a href="{{ route('frontend.account', ['tab' => 'guest']) }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5; color: #0284C7; font-weight: 700;"><span><i class="fa-solid fa-magnifying-glass" style="margin-right: 8px;"></i> Guest Order Lookup</span></a>
+                            @endif
                             <a href="{{ url('/login') }}" style="padding: 8px 0; display: flex; justify-content: space-between; align-items: center; color: #666666; font-size: 11px; font-weight: 700;"><span><i class="fa-solid fa-lock" style="margin-right: 8px;"></i> Staff ERP Portal</span> <i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                     </div>
@@ -281,8 +311,13 @@
         <div style="display: flex; align-items: center; gap: 10px;">
             <i class="fa-regular fa-user" style="font-size: 28px;"></i>
             <div>
-                <div style="font-size: 14px; font-weight: 800;">Welcome!</div>
-                <a href="{{ route('frontend.login') }}" style="font-size: 11px; color: #cccccc; text-decoration: underline;">Sign In / Register</a>
+                @if(session()->has('customer_auth'))
+                    <div style="font-size: 14px; font-weight: 800;">Hi, {{ explode(' ', session('customer_auth.name'))[0] }}</div>
+                    <a href="{{ route('frontend.account') }}" style="font-size: 11px; color: #4ADE80; text-decoration: underline;">View Account Dashboard</a>
+                @else
+                    <div style="font-size: 14px; font-weight: 800;">Welcome!</div>
+                    <a href="{{ route('frontend.login') }}" style="font-size: 11px; color: #cccccc; text-decoration: underline;">Sign In / Register</a>
+                @endif
             </div>
         </div>
         <button onclick="toggleMobileMenu()" style="background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer;">

@@ -1474,6 +1474,7 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
     </script>
+    @include('frontend.partials.floating-chat')
     @stack('scripts')
 </body>
 </html>

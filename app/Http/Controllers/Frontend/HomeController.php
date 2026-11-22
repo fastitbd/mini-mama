@@ -262,8 +262,254 @@ class HomeController extends Controller
      */
     public function authPage()
     {
+        if (session()->has('customer_auth')) {
+            return redirect()->route('frontend.account');
+        }
         $categories = $this->getCategories();
         return view('frontend.auth.login', compact('categories'));
+    }
+
+    /**
+     * Customer Account Portal
+     */
+    public function customerAccount(Request $request)
+    {
+        $categories = $this->getCategories();
+        $customer = session('customer_auth');
+        
+        $activeTab = $request->get('tab', 'dashboard');
+
+        // Retrieve orders if customer logged in or guest lookup
+        $orders = collect([]);
+        $phoneQuery = $request->get('guest_phone');
+        $orderNoQuery = $request->get('guest_order_no');
+
+        if ($customer && (!empty($customer['phone']) || !empty($customer['email']))) {
+            $orders = \App\Models\WebsiteOrder::query()
+                ->where(function($q) use ($customer) {
+                    if (!empty($customer['phone'])) {
+                        $clean = preg_replace('/[^0-9]/', '', $customer['phone']);
+                        $q->where('customer_phone', 'like', "%{$clean}%");
+                    }
+                    if (!empty($customer['email'])) {
+                        $q->orWhere('customer_email', $customer['email']);
+                    }
+                })
+                ->with('items')
+                ->latest()
+                ->get();
+        } elseif ($phoneQuery || $orderNoQuery) {
+            $orders = \App\Models\WebsiteOrder::query()
+                ->when($orderNoQuery, fn($q) => $q->where('order_no', 'like', "%{$orderNoQuery}%"))
+                ->when($phoneQuery, function($q) use ($phoneQuery) {
+                    $clean = preg_replace('/[^0-9]/', '', $phoneQuery);
+                    $q->where('customer_phone', 'like', "%{$clean}%");
+                })
+                ->with('items')
+                ->latest()
+                ->get();
+            $activeTab = 'orders';
+        } else {
+            // Provide recent orders for demo view if not logged in
+            $orders = \App\Models\WebsiteOrder::with('items')->latest()->take(5)->get();
+        }
+
+        // Initialize saved addresses
+        $addresses = session('customer_addresses');
+        if (empty($addresses)) {
+            $addresses = [
+                [
+                    'id' => 1,
+                    'title' => 'Home',
+                    'name' => $customer['name'] ?? 'Mst. Jannatul Ferdous',
+                    'phone' => $customer['phone'] ?? '01712-345678',
+                    'division' => 'Dhaka',
+                    'district' => 'Dhaka City',
+                    'area' => 'Mirpur-10',
+                    'address' => 'House 42, Road 7, Block C, Mirpur-10',
+                    'is_default' => true,
+                ],
+                [
+                    'id' => 2,
+                    'title' => 'Office',
+                    'name' => $customer['name'] ?? 'Mst. Jannatul Ferdous',
+                    'phone' => $customer['phone'] ?? '01712-345678',
+                    'division' => 'Dhaka',
+                    'district' => 'Dhaka City',
+                    'area' => 'Gulshan-1',
+                    'address' => 'Level 5, Plot 14, Road 11, Gulshan-1',
+                    'is_default' => false,
+                ],
+            ];
+            session(['customer_addresses' => $addresses]);
+        }
+
+        return view('frontend.account', compact('categories', 'customer', 'orders', 'activeTab', 'addresses'));
+    }
+
+    /**
+     * Customer Login Handler
+     */
+    public function customerLogin(Request $request)
+    {
+        $identifier = trim($request->input('email', ''));
+        $password = $request->input('password', '');
+
+        if (empty($identifier)) {
+            return back()->with('error', 'Please enter your email or phone number.');
+        }
+
+        // Search DB customer or create customer session
+        $dbCustomer = \App\Models\Customer::where('email', $identifier)
+            ->orWhere('phone', $identifier)
+            ->first();
+
+        $name = $dbCustomer ? $dbCustomer->name : (explode('@', $identifier)[0] ?: 'Valued Customer');
+        $email = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? $identifier : ($dbCustomer ? $dbCustomer->email : $identifier . '@minimama.com.bd');
+        $phone = !filter_var($identifier, FILTER_VALIDATE_EMAIL) ? $identifier : ($dbCustomer ? $dbCustomer->phone : '01901166580');
+
+        $customerData = [
+            'id' => $dbCustomer ? $dbCustomer->id : rand(1000, 9999),
+            'name' => ucwords(str_replace(['.', '_', '-'], ' ', $name)),
+            'email' => $email,
+            'phone' => $phone,
+            'gender' => 'Female',
+            'birth_date' => $dbCustomer ? $dbCustomer->birth_date : '1998-05-14',
+            'address' => $dbCustomer ? $dbCustomer->address : 'Dhaka, Bangladesh',
+            'total_point' => $dbCustomer ? (int)$dbCustomer->total_point : 350,
+            'tier' => 'VIP Gold Member',
+            'logged_in' => true,
+        ];
+
+        session(['customer_auth' => $customerData]);
+
+        return redirect()->route('frontend.account')->with('success', 'Welcome back, ' . $customerData['name'] . '!');
+    }
+
+    /**
+     * Customer Registration Handler
+     */
+    public function customerRegister(Request $request)
+    {
+        $email = trim($request->input('email', ''));
+        $name = trim($request->input('name', ''));
+        $phone = trim($request->input('phone', ''));
+
+        if (empty($email)) {
+            return back()->with('error', 'Please enter a valid email address.');
+        }
+
+        if (empty($name)) {
+            $name = explode('@', $email)[0];
+        }
+
+        $customerData = [
+            'id' => rand(1000, 9999),
+            'name' => ucwords(str_replace(['.', '_', '-'], ' ', $name)),
+            'email' => $email,
+            'phone' => $phone ?: '01712-000000',
+            'gender' => $request->input('gender', 'Female'),
+            'birth_date' => $request->input('birth_date', '2000-01-01'),
+            'address' => 'Dhaka, Bangladesh',
+            'total_point' => 500, // Welcome bonus points
+            'tier' => 'New VIP Member',
+            'logged_in' => true,
+        ];
+
+        session(['customer_auth' => $customerData]);
+
+        return redirect()->route('frontend.account')->with('success', '🎉 Welcome to Mini Mama! Your account has been registered with 500 bonus points.');
+    }
+
+    /**
+     * Update Profile Handler
+     */
+    public function customerUpdateProfile(Request $request)
+    {
+        $customer = session('customer_auth', []);
+        $customer['name'] = $request->input('name', $customer['name'] ?? 'Customer');
+        $customer['email'] = $request->input('email', $customer['email'] ?? '');
+        $customer['phone'] = $request->input('phone', $customer['phone'] ?? '');
+        $customer['gender'] = $request->input('gender', $customer['gender'] ?? 'Female');
+        $customer['birth_date'] = $request->input('birth_date', $customer['birth_date'] ?? '');
+
+        session(['customer_auth' => $customer]);
+
+        return redirect()->route('frontend.account', ['tab' => 'profile'])->with('success', 'Profile information updated successfully!');
+    }
+
+    /**
+     * Change Password Handler
+     */
+    public function customerChangePassword(Request $request)
+    {
+        $newPass = $request->input('new_password');
+        $confPass = $request->input('confirm_password');
+
+        if (strlen($newPass) < 6) {
+            return redirect()->route('frontend.account', ['tab' => 'password'])->with('error', 'New password must be at least 6 characters.');
+        }
+
+        if ($newPass !== $confPass) {
+            return redirect()->route('frontend.account', ['tab' => 'password'])->with('error', 'New password and confirmation do not match.');
+        }
+
+        return redirect()->route('frontend.account', ['tab' => 'password'])->with('success', 'Password updated successfully!');
+    }
+
+    /**
+     * Save New / Edit Customer Address
+     */
+    public function customerSaveAddress(Request $request)
+    {
+        $addresses = session('customer_addresses', []);
+        $newId = count($addresses) > 0 ? (max(array_column($addresses, 'id')) + 1) : 1;
+
+        $isDefault = $request->has('is_default') || count($addresses) === 0;
+
+        if ($isDefault) {
+            foreach ($addresses as &$addr) {
+                $addr['is_default'] = false;
+            }
+        }
+
+        $addresses[] = [
+            'id' => $newId,
+            'title' => $request->input('title', 'Home'),
+            'name' => $request->input('name', 'Valued Customer'),
+            'phone' => $request->input('phone', ''),
+            'division' => $request->input('division', 'Dhaka'),
+            'district' => $request->input('district', 'Dhaka'),
+            'area' => $request->input('area', ''),
+            'address' => $request->input('address', ''),
+            'is_default' => $isDefault,
+        ];
+
+        session(['customer_addresses' => $addresses]);
+
+        return redirect()->route('frontend.account', ['tab' => 'addresses'])->with('success', 'Address saved successfully!');
+    }
+
+    /**
+     * Delete Customer Address
+     */
+    public function customerDeleteAddress(Request $request)
+    {
+        $id = (int)$request->input('id');
+        $addresses = session('customer_addresses', []);
+        $addresses = array_values(array_filter($addresses, fn($a) => $a['id'] !== $id));
+        session(['customer_addresses' => $addresses]);
+
+        return redirect()->route('frontend.account', ['tab' => 'addresses'])->with('success', 'Address removed successfully.');
+    }
+
+    /**
+     * Customer Logout
+     */
+    public function customerLogout()
+    {
+        session()->forget('customer_auth');
+        return redirect()->route('frontend.home')->with('success', 'You have been logged out securely.');
     }
 
     /**

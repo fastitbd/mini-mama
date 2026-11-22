@@ -17,6 +17,18 @@
 
     <!-- Centered Auth Card -->
     <div style="max-width: 520px; margin: 0 auto; background: #ffffff; border: 1px solid #eeeeee; border-radius: 4px; padding: 36px 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+        <!-- Alert Messages -->
+        @if(session('success'))
+            <div style="background: #E8F5E9; border: 1px solid #C8E6C9; color: #2E7D32; padding: 12px 16px; border-radius: 4px; font-size: 13px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+            </div>
+        @endif
+        @if(session('error'))
+            <div style="background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 12px 16px; border-radius: 4px; font-size: 13px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-triangle-exclamation"></i> {{ session('error') }}
+            </div>
+        @endif
+
         <!-- Tabs Header -->
         <div style="display: flex; border-bottom: 2px solid #f2f2f2; margin-bottom: 28px;">
             <button type="button" id="tabBtnSignIn" onclick="switchAuthTab('signin')" style="flex: 1; padding: 12px 0; font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #000; margin-bottom: -2px; color: #000;">
@@ -28,12 +40,13 @@
         </div>
 
         <!-- SIGN IN FORM -->
-        <form id="signInForm" onsubmit="event.preventDefault(); handleCustomerAuth('signin');">
+        <form id="signInForm" action="{{ route('frontend.customer_login') }}" method="POST">
+            @csrf
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; color: #333;">
                     Email Address or Mobile Number
                 </label>
-                <input type="text" id="loginEmail" required placeholder="name@example.com / +60123456789" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
+                <input type="text" name="email" id="loginEmail" required placeholder="name@example.com / 017XXXXXXXX" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
             </div>
 
             <div style="margin-bottom: 14px; position: relative;">
@@ -41,11 +54,11 @@
                     <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #333;">
                         Password
                     </label>
-                    <a href="javascript:void(0)" onclick="showToast('Password reset link sent if account exists.');" style="font-size: 11px; color: #666; text-decoration: underline;">
+                    <a href="javascript:void(0)" onclick="showToast('Password reset instructions will be sent to your email.');" style="font-size: 11px; color: #666; text-decoration: underline;">
                         Forgot Password?
                     </a>
                 </div>
-                <input type="password" id="loginPassword" required placeholder="Enter your password" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
+                <input type="password" name="password" id="loginPassword" required placeholder="Enter your password" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
             </div>
 
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 22px; font-size: 12px; color: #555;">
@@ -59,29 +72,55 @@
         </form>
 
         <!-- REGISTER FORM -->
-        <form id="registerForm" style="display: none;" onsubmit="event.preventDefault(); handleCustomerAuth('register');">
+        <form id="registerForm" action="{{ route('frontend.customer_register') }}" method="POST" style="display: none;">
+            @csrf
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; color: #333;">
+                    Full Name
+                </label>
+                <input type="text" name="name" required placeholder="e.g. Jannatul Ferdous" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
+            </div>
+
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; color: #333;">
                     Email Address
                 </label>
-                <input type="email" id="regEmail" required placeholder="name@example.com" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
+                <input type="email" name="email" id="regEmail" required placeholder="name@example.com" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; color: #333;">
+                    Mobile Phone Number
+                </label>
+                <input type="tel" name="phone" placeholder="017XXXXXXXX" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
             </div>
 
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; color: #333;">
                     Create Password
                 </label>
-                <input type="password" id="regPassword" required placeholder="At least 8 characters (letters & numbers)" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
+                <input type="password" name="password" id="regPassword" required placeholder="At least 6 characters" style="width: 100%; height: 44px; border: 1px solid #ccc; padding: 0 14px; font-size: 13px; box-sizing: border-box; outline: none; border-radius: 2px;">
             </div>
 
             <div style="margin-bottom: 18px; font-size: 11px; color: #666; line-height: 1.5;">
-                By clicking "REGISTER", you agree to {{ get_setting('com_name') ?: 'FAST IT' }}'s <a href="#" style="text-decoration: underline;">Terms & Conditions</a> and acknowledge our <a href="#" style="text-decoration: underline;">Privacy Policy</a>.
+                By clicking "REGISTER", you agree to {{ get_setting('com_name') ?: 'Mini Mama' }}'s <a href="#" style="text-decoration: underline;">Terms & Conditions</a> and acknowledge our <a href="#" style="text-decoration: underline;">Privacy Policy</a>.
             </div>
 
             <button type="submit" class="shein-btn-primary" style="width: 100%; height: 46px; font-size: 13px; letter-spacing: 1px; background: #FA2C19;">
-                REGISTER & CLAIM RM15 VOUCHER
+                REGISTER & CLAIM BONUS POINTS
             </button>
         </form>
+
+        <!-- Guest Checkout & Track Notice -->
+        <div style="background: #F0F9FF; border: 1px solid #BAE6FD; padding: 14px; border-radius: 4px; margin-top: 24px; text-align: center;">
+            <div style="font-size: 12px; font-weight: 800; color: #0284C7; margin-bottom: 4px;">
+                <i class="fa-solid fa-truck-fast"></i> Placed an order as a Guest?
+            </div>
+            <p style="font-size: 11px; color: #555; margin: 0 0 8px;">You don't need to log in to check your order status or download invoices.</p>
+            <a href="{{ route('frontend.track_order') }}" style="display: inline-block; background: #0284C7; color: #fff; font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 3px; text-decoration: none;">
+                Track Guest Order Now
+            </a>
+        </div>
 
         <!-- Social Separator -->
         <div style="display: flex; align-items: center; margin: 26px 0 20px;">

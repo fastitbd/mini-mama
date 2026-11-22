@@ -84,6 +84,16 @@ Route::get('/order-confirmation/{order_number?}', [\App\Http\Controllers\Fronten
 Route::get('/customer-login', [\App\Http\Controllers\Frontend\HomeController::class, 'authPage'])->name('frontend.login');
 Route::get('/shein-login', fn() => redirect()->route('frontend.login'));
 
+// Customer Account & Portal Routes
+Route::get('/account', [\App\Http\Controllers\Frontend\HomeController::class, 'customerAccount'])->name('frontend.account');
+Route::post('/customer/login', [\App\Http\Controllers\Frontend\HomeController::class, 'customerLogin'])->name('frontend.customer_login');
+Route::post('/customer/register', [\App\Http\Controllers\Frontend\HomeController::class, 'customerRegister'])->name('frontend.customer_register');
+Route::post('/customer/profile-update', [\App\Http\Controllers\Frontend\HomeController::class, 'customerUpdateProfile'])->name('frontend.customer_update_profile');
+Route::post('/customer/change-password', [\App\Http\Controllers\Frontend\HomeController::class, 'customerChangePassword'])->name('frontend.customer_change_password');
+Route::post('/customer/save-address', [\App\Http\Controllers\Frontend\HomeController::class, 'customerSaveAddress'])->name('frontend.customer_save_address');
+Route::post('/customer/delete-address', [\App\Http\Controllers\Frontend\HomeController::class, 'customerDeleteAddress'])->name('frontend.customer_delete_address');
+Route::get('/customer/logout', [\App\Http\Controllers\Frontend\HomeController::class, 'customerLogout'])->name('frontend.customer_logout');
+
 // Blog & Contact Pages
 Route::get('/blog', [\App\Http\Controllers\Frontend\HomeController::class, 'blog'])->name('frontend.blog');
 Route::get('/contact', [\App\Http\Controllers\Frontend\HomeController::class, 'contact'])->name('frontend.contact');
