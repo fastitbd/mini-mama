@@ -517,7 +517,21 @@ class HomeController extends Controller
      */
     public function blog()
     {
-        return view('frontend.blog');
+        $categories = $this->getCategories();
+        $posts = \App\Models\BlogPost::published()->latest()->paginate(9);
+        return view('frontend.blog', compact('categories', 'posts'));
+    }
+
+    /**
+     * Blog Detail Page
+     */
+    public function blogDetail($slug)
+    {
+        $categories = $this->getCategories();
+        $post = \App\Models\BlogPost::published()->where('slug', $slug)->firstOrFail();
+        $post->increment('views_count');
+        $recentPosts = \App\Models\BlogPost::published()->where('id', '!=', $post->id)->latest()->limit(5)->get();
+        return view('frontend.blog_detail', compact('categories', 'post', 'recentPosts'));
     }
 
     /**

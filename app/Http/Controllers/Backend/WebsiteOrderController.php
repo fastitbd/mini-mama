@@ -505,4 +505,75 @@ class WebsiteOrderController extends Controller
             'errors' => $errors,
         ]);
     }
+
+    /**
+     * E-Commerce Website Sales & Order Reports
+     */
+    public function report(Request $request)
+    {
+        $range = $request->get('range', '30_days');
+
+        $query = WebsiteOrder::query();
+
+        if ($range === 'today') {
+            $query->whereDate('created_at', Carbon::today());
+        } elseif ($range === '7_days') {
+            $query->where('created_at', '>=', Carbon::now()->subDays(7));
+        } elseif ($range === '30_days') {
+            $query->where('created_at', '>=', Carbon::now()->subDays(30));
+        } elseif ($range === 'this_month') {
+            $query->whereMonth('created_at', Carbon::now()->month)
+                  ->whereYear('created_at', Carbon::now()->year);
+        }
+
+        $allOrders = $query->with('items')->get();
+
+        $totalOrders = $allOrders->count();
+        $totalRevenue = (float)$allOrders->sum('total_amount');
+        
+        $deliveredOrders = $allOrders->whereIn('status', ['delivered', 'completed', 'approved']);
+        $deliveredCount = $deliveredOrders->count();
+        $deliveredRevenue = (float)$deliveredOrders->sum('total_amount');
+
+        $processingCount = $allOrders->whereIn('status', ['processing', 'pending'])->count();
+        $cancelledCount = $allOrders->whereIn('status', ['cancelled', 'returned'])->count();
+
+        // Daily Trend (Last 14 days)
+        $dailyTrend = WebsiteOrder::where('created_at', '>=', Carbon::now()->subDays(14))
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count, SUM(total_amount) as total')
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get();
+
+        // Top Selling Products
+        $topProducts = WebsiteOrderItem::selectRaw('product_name, product_code, SUM(quantity) as total_qty, SUM(subtotal) as total_amount')
+            ->groupBy('product_name', 'product_code')
+            ->orderBy('total_qty', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Status Breakdown
+        $statusBreakdown = WebsiteOrder::selectRaw('status, COUNT(*) as count, SUM(total_amount) as total')
+            ->groupBy('status')
+            ->get();
+
+        // Courier Breakdown
+        $courierBreakdown = WebsiteOrder::selectRaw('courier_service, COUNT(*) as count')
+            ->groupBy('courier_service')
+            ->get();
+
+        return view('backend.pages.website_orders.report', compact(
+            'range',
+            'totalOrders',
+            'totalRevenue',
+            'deliveredCount',
+            'deliveredRevenue',
+            'processingCount',
+            'cancelledCount',
+            'dailyTrend',
+            'topProducts',
+            'statusBreakdown',
+            'courierBreakdown'
+        ));
+    }
 }

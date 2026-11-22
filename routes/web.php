@@ -96,6 +96,7 @@ Route::get('/customer/logout', [\App\Http\Controllers\Frontend\HomeController::c
 
 // Blog & Contact Pages
 Route::get('/blog', [\App\Http\Controllers\Frontend\HomeController::class, 'blog'])->name('frontend.blog');
+Route::get('/blog/{slug}', [\App\Http\Controllers\Frontend\HomeController::class, 'blogDetail'])->name('frontend.blog.detail');
 Route::get('/contact', [\App\Http\Controllers\Frontend\HomeController::class, 'contact'])->name('frontend.contact');
 
 // About Us, Policies & Legal Pages
@@ -187,11 +188,39 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     // --------------------> Website Orders System -------------------->
     Route::controller(WebsiteOrderController::class)->group(function () {
         Route::get('/website-orders', 'index')->name('website-orders.index');
+        Route::get('/website-orders/report', 'report')->name('website-orders.report');
         Route::post('/website-orders/{id}/status', 'updateStatus')->name('website-orders.status');
         Route::post('/website-orders/{id}/note', 'updateNote')->name('website-orders.note');
         Route::post('/website-orders/bulk-action', 'bulkAction')->name('website-orders.bulk-action');
         Route::post('/website-orders/dispatch-courier', 'dispatchCourier')->name('website-orders.dispatch-courier');
         Route::get('/website-orders/{id}/check-stock', 'checkStock')->name('website-orders.check-stock');
+    });
+
+    // --------------------> Coupons & Offers Management -------------------->
+    Route::controller(\App\Http\Controllers\Backend\CouponController::class)->prefix('coupons')->name('coupons.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::post('/{id}/toggle-status', 'toggleStatus')->name('toggle-status');
+    });
+
+    // --------------------> Blog Posts Management -------------------->
+    Route::controller(\App\Http\Controllers\Backend\BlogPostController::class)->prefix('blog-posts')->name('blog-posts.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+    // --------------------> Customer Reviews Management -------------------->
+    Route::controller(\App\Http\Controllers\Backend\ProductReviewController::class)->prefix('reviews')->name('reviews.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::post('/{id}/status', 'updateStatus')->name('status');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
     // --------------------> Pre-Order System (APP_ONLINE == 'yes') <--------------------

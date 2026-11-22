@@ -414,9 +414,15 @@
         @endif
         @endif
 
+        {{-- ===== E-COMMERCE & WEBSITE MANAGEMENT ===== --}}
+        <div class="px-3 pt-3 pb-1 mt-2 border-t border-slate-700/50">
+            <p class="sidebar-label text-xs font-bold uppercase tracking-wider text-orange-400/80">{{ __('Website & E-Commerce') }}</p>
+        </div>
+
         {{-- Website Orders --}}
         @php
             $websiteOrdersProcessingCount = \App\Models\WebsiteOrder::where('status', 'processing')->count();
+            $pendingReviewsCount = \App\Models\ProductReview::where('status', 'pending')->count();
         @endphp
         <a href="{{ route('website-orders.index') }}"
             class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ $currentRoute === 'website-orders.index' ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
@@ -431,6 +437,77 @@
             @if($websiteOrdersProcessingCount > 0)
                 <span class="sidebar-label px-2 py-0.5 text-xs font-bold text-white bg-orange-500 rounded-full shadow-sm">{{ $websiteOrdersProcessingCount }}</span>
             @endif
+        </a>
+
+        {{-- Sales & Orders Report --}}
+        <a href="{{ route('website-orders.report') }}"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ $currentRoute === 'website-orders.report' ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+            <span class="flex-shrink-0 w-[22px] h-[22px] text-indigo-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                </svg>
+            </span>
+            <span class="sidebar-label">{{ __('Sales & Orders Report') }}</span>
+        </a>
+
+        {{-- Coupons & Offers --}}
+        <a href="{{ route('coupons.index') }}"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ str_starts_with($currentRoute, 'coupons.') ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+            <span class="flex-shrink-0 w-[22px] h-[22px] text-pink-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                </svg>
+            </span>
+            <span class="sidebar-label">{{ __('Coupons & Offers') }}</span>
+        </a>
+
+        {{-- Homepage Banners --}}
+        <a href="{{ route('banner.index') }}"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ str_starts_with($currentRoute, 'banner.') ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+            <span class="flex-shrink-0 w-[22px] h-[22px] text-teal-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+            </span>
+            <span class="sidebar-label">{{ __('Homepage Banners') }}</span>
+        </a>
+
+        {{-- Blog Articles --}}
+        <a href="{{ route('blog-posts.index') }}"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ str_starts_with($currentRoute, 'blog-posts.') ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+            <span class="flex-shrink-0 w-[22px] h-[22px] text-emerald-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
+                </svg>
+            </span>
+            <span class="sidebar-label">{{ __('Blog Articles') }}</span>
+        </a>
+
+        {{-- Customer Reviews --}}
+        <a href="{{ route('reviews.index') }}"
+            class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ str_starts_with($currentRoute, 'reviews.') ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+            <div class="flex items-center gap-3">
+                <span class="flex-shrink-0 w-[22px] h-[22px] text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                    </svg>
+                </span>
+                <span class="sidebar-label">{{ __('Customer Reviews') }}</span>
+            </div>
+            @if($pendingReviewsCount > 0)
+                <span class="sidebar-label px-2 py-0.5 text-xs font-bold text-white bg-amber-500 rounded-full shadow-sm">{{ $pendingReviewsCount }}</span>
+            @endif
+        </a>
+
+        {{-- Policy Pages --}}
+        <a href="{{ route('setting.policies') }}"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ $currentRoute === 'setting.policies' ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+            <span class="flex-shrink-0 w-[22px] h-[22px] text-blue-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+            </span>
+            <span class="sidebar-label">{{ __('Policy Pages') }}</span>
         </a>
 
         {{-- Online Sale List --}}
