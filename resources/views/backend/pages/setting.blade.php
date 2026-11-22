@@ -11,6 +11,10 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
             {{ __('Operational') }}
         </button>
+        <button onclick="switchTab('policies')" id="tab-btn-policies" class="tab-btn inactive-tab">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            {{ __('Website Policies') }}
+        </button>
     </div> 
 
     <div class="setting-card">
@@ -314,6 +318,63 @@
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
                         </span>
+                    </button>
+                </div>
+            </form>
+        {{-- Website Policies Tab --}}
+        <div id="tab-policies" class="tab-content hidden">
+            <form method="POST" action="{{ route('setting.policies.update') }}">
+                @csrf
+                <p class="section-label">{{ __('Customer Policy Pages (Editable Content)') }}</p>
+
+                <!-- Privacy Policy -->
+                <div class="field-group mb-6">
+                    <label class="field-label flex justify-between items-center mb-1.5">
+                        <span class="font-bold text-slate-800">{{ __('Privacy Policy') }}</span>
+                        <a href="{{ route('frontend.privacy') }}" target="_blank" class="text-xs text-blue-600 underline">{{ __('Preview') }} &rarr;</a>
+                    </label>
+                    <textarea name="policy_privacy" rows="7" class="field-input w-full font-mono text-xs leading-relaxed" placeholder="Enter privacy policy text or HTML...">{{ get_setting('policy_privacy') }}</textarea>
+                </div>
+
+                <!-- Return & Refund Policy -->
+                <div class="field-group mb-6">
+                    <label class="field-label flex justify-between items-center mb-1.5">
+                        <span class="font-bold text-slate-800">{{ __('Return & Refund Policy') }}</span>
+                        <a href="{{ route('frontend.returns') }}" target="_blank" class="text-xs text-blue-600 underline">{{ __('Preview') }} &rarr;</a>
+                    </label>
+                    <textarea name="policy_returns" rows="7" class="field-input w-full font-mono text-xs leading-relaxed" placeholder="Enter return & refund policy text or HTML...">{{ get_setting('policy_returns') }}</textarea>
+                </div>
+
+                <!-- Shipping & Delivery Policy -->
+                <div class="field-group mb-6">
+                    <label class="field-label flex justify-between items-center mb-1.5">
+                        <span class="font-bold text-slate-800">{{ __('Shipping & Delivery Policy') }}</span>
+                        <a href="{{ route('frontend.shipping') }}" target="_blank" class="text-xs text-blue-600 underline">{{ __('Preview') }} &rarr;</a>
+                    </label>
+                    <textarea name="policy_shipping" rows="7" class="field-input w-full font-mono text-xs leading-relaxed" placeholder="Enter shipping & delivery policy text or HTML...">{{ get_setting('policy_shipping') }}</textarea>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="field-group mb-6">
+                    <label class="field-label flex justify-between items-center mb-1.5">
+                        <span class="font-bold text-slate-800">{{ __('Terms & Conditions') }}</span>
+                        <a href="{{ route('frontend.terms') }}" target="_blank" class="text-xs text-blue-600 underline">{{ __('Preview') }} &rarr;</a>
+                    </label>
+                    <textarea name="policy_terms" rows="7" class="field-input w-full font-mono text-xs leading-relaxed" placeholder="Enter terms & conditions text or HTML...">{{ get_setting('policy_terms') }}</textarea>
+                </div>
+
+                <!-- Payment Policy -->
+                <div class="field-group mb-6">
+                    <label class="field-label flex justify-between items-center mb-1.5">
+                        <span class="font-bold text-slate-800">{{ __('Payment Policy') }}</span>
+                        <a href="{{ route('frontend.payment_policy') }}" target="_blank" class="text-xs text-blue-600 underline">{{ __('Preview') }} &rarr;</a>
+                    </label>
+                    <textarea name="policy_payment" rows="7" class="field-input w-full font-mono text-xs leading-relaxed" placeholder="Enter payment policy text or HTML...">{{ get_setting('policy_payment') }}</textarea>
+                </div>
+
+                <div class="form-actions mt-6">
+                    <button type="submit" class="save-btn">
+                        <span class="btn-text">{{ __('Save Policy Changes') }}</span>
                     </button>
                 </div>
             </form>

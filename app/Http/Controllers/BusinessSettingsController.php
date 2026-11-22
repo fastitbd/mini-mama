@@ -14,6 +14,49 @@ class BusinessSettingsController extends Controller
         return view('backend.pages.setting');
     }
 
+    /**
+     * Dedicated Policy Pages Editor
+     */
+    public function policySettings()
+    {
+        return view('backend.pages.policies');
+    }
+
+    /**
+     * Update Website Policy Pages
+     */
+    public function updatePolicies(Request $request)
+    {
+        $policyKeys = [
+            'policy_privacy',
+            'policy_returns',
+            'policy_shipping',
+            'policy_terms',
+            'policy_payment',
+        ];
+
+        foreach ($policyKeys as $key) {
+            if ($request->has($key)) {
+                $setting = BusinessSetting::where('type', $key)->first();
+                $val = $request->input($key, '');
+                if ($setting) {
+                    $setting->value = $val;
+                    $setting->save();
+                } else {
+                    BusinessSetting::create([
+                        'type' => $key,
+                        'value' => $val,
+                    ]);
+                }
+            }
+        }
+
+        Artisan::call('cache:clear');
+
+        session()->flash('success', 'Successfully Updated Website Policy Pages!');
+        return redirect()->back();
+    }
+
     public function update(Request $request)
     {
         foreach ($request->types as $key => $type) {

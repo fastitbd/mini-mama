@@ -102,6 +102,7 @@ Route::get('/contact', [\App\Http\Controllers\Frontend\HomeController::class, 'c
 Route::get('/about', [\App\Http\Controllers\Frontend\HomeController::class, 'aboutPage'])->name('frontend.about');
 Route::get('/privacy-policy', [\App\Http\Controllers\Frontend\HomeController::class, 'privacyPolicy'])->name('frontend.privacy');
 Route::get('/return-policy', [\App\Http\Controllers\Frontend\HomeController::class, 'returnPolicy'])->name('frontend.returns');
+Route::get('/shipping-policy', [\App\Http\Controllers\Frontend\HomeController::class, 'shippingPolicy'])->name('frontend.shipping');
 Route::get('/terms', [\App\Http\Controllers\Frontend\HomeController::class, 'termsPage'])->name('frontend.terms');
 Route::get('/payment-policy', [\App\Http\Controllers\Frontend\HomeController::class, 'paymentPolicy'])->name('frontend.payment_policy');
 
@@ -543,6 +544,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::controller(BusinessSettingsController::class)->prefix('setting')->name('setting.')->group(function () {
         Route::get('/index', 'index')->name('index');
         Route::post('/update', 'update')->name('update');
+        Route::get('/policies', 'policySettings')->name('policies');
+        Route::post('/policies', 'updatePolicies')->name('policies.update');
     });
 
     // Super Admin Settings

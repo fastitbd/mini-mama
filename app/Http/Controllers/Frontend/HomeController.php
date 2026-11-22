@@ -568,6 +568,19 @@ class HomeController extends Controller
     }
 
     /**
+     * Shipping & Delivery Policy Page
+     */
+    public function shippingPolicy()
+    {
+        $categories = $this->getCategories();
+        return view('frontend.legal', [
+            'categories' => $categories,
+            'pageType' => 'shipping',
+            'title' => 'Shipping & Delivery Policy',
+        ]);
+    }
+
+    /**
      * Terms & Conditions Page
      */
     public function termsPage()

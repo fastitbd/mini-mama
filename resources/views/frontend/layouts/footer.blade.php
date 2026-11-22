@@ -17,7 +17,7 @@
                         <li><a href="{{ route('frontend.contact') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Contact Us</a></li>
                         <li><a href="{{ route('frontend.contact') }}#faq" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">FAQ</a></li>
                         <li><a href="{{ route('frontend.track_order') }}" style="color: #0284c7; font-weight: 700; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#0284c7'"><i class="fa-solid fa-truck-fast" style="margin-right: 4px;"></i> Track Order</a></li>
-                        <li><a href="{{ route('frontend.contact') }}#faq" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shipping & Delivery</a></li>
+                        <li><a href="{{ route('frontend.shipping') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shipping & Delivery</a></li>
                         <li><a href="#" onclick="showToast('How To Order: Choose style, pick size, and checkout securely')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">How To Order</a></li>
                         <li><a href="#" onclick="showToast('Size Guide: Find your perfect fit with our measurement chart')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Size Guide</a></li>
                     </ul>
@@ -29,9 +29,9 @@
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #333333; line-height: 2.15;">
                         <li><a href="{{ route('frontend.privacy') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Privacy Policy</a></li>
                         <li><a href="{{ route('frontend.returns') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Return & Refund Policy</a></li>
+                        <li><a href="{{ route('frontend.shipping') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shipping & Delivery Policy</a></li>
                         <li><a href="{{ route('frontend.terms') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Terms & Conditions</a></li>
                         <li><a href="{{ route('frontend.payment_policy') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Payment Policy</a></li>
-                        <li><a href="{{ route('frontend.privacy') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Cookie Policy</a></li>
                     </ul>
                 </div>
 
