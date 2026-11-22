@@ -17,6 +17,11 @@
     <!-- 2. MAIN HEADER BAR (BLACK BACKGROUND & WHITE ICONS/LOGO) -->
     <div style="background: #000000; border-bottom: 1px solid rgba(255,255,255,0.12);">
         <div class="shein-wrap" style="max-width: 1440px; margin: 0 auto; padding: 0 20px; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
+            <!-- Mobile Hamburger Menu Button -->
+            <button type="button" class="mobile-hamburger-btn" onclick="toggleMobileMenu()" style="display: none; background: transparent; border: none; color: #ffffff; font-size: 22px; cursor: pointer; padding: 4px; flex-shrink: 0;">
+                <i class="fa-solid fa-bars" id="hamburgerIcon"></i>
+            </button>
+
             <!-- Brand Logo (Dynamic System Logo) -->
             <div style="display: flex; align-items: center; flex-shrink: 0;">
                 @php
@@ -210,6 +215,26 @@
             <!-- Horizontal Scrollable Navigation Strip (White Links) -->
             <div style="flex: 1; overflow: hidden; display: flex; align-items: center; position: relative; margin: 0 10px;">
                 <div class="bs-nav__content-inner" id="categoryNavInner" style="display: flex; align-items: center; gap: 20px; overflow-x: auto; scrollbar-width: none; white-space: nowrap; scroll-behavior: smooth;">
+                    <!-- Fixed Navigation Links -->
+                    <a href="{{ route('frontend.home') }}" style="font-size: 12px; font-weight: 900; color: #ffffff; text-decoration: none; padding: 4px 0; flex-shrink: 0; border-bottom: 2px solid #FA2C19;">
+                        <i class="fa-solid fa-house" style="margin-right: 3px; font-size: 10px;"></i> Home
+                    </a>
+                    <a href="{{ route('frontend.category', 'all') }}" style="font-size: 12px; font-weight: 700; color: #ffffff; text-decoration: none; padding: 4px 0; flex-shrink: 0;">
+                        Shop All
+                    </a>
+                    <a href="{{ route('frontend.category', 'new-in') }}" style="font-size: 12px; font-weight: 900; color: #4ADE80; text-decoration: none; padding: 4px 0; flex-shrink: 0;">
+                        🆕 New Arrivals
+                    </a>
+                    <a href="{{ route('frontend.category', 'best-sellers') }}" style="font-size: 12px; font-weight: 700; color: #FFB800; text-decoration: none; padding: 4px 0; flex-shrink: 0;">
+                        🔥 Best Sellers
+                    </a>
+                    <a href="{{ route('frontend.category', 'sale') }}" style="font-size: 12px; font-weight: 900; color: #FA2C19; text-decoration: none; padding: 4px 0; flex-shrink: 0; animation: salePulse 1.5s ease-in-out infinite;">
+                        💥 Offers / Sale
+                    </a>
+
+                    <span style="color: rgba(255,255,255,0.3); font-size: 10px; flex-shrink: 0;">|</span>
+
+                    <!-- Dynamic Category Links -->
                     @foreach($navCategories as $cat)
                         @php
                             $isHot = ($cat->badge || \Illuminate\Support\Str::contains(strtolower($cat->name), 'sale'));
@@ -218,6 +243,16 @@
                             {{ $cat->name }}
                         </a>
                     @endforeach
+
+                    <span style="color: rgba(255,255,255,0.3); font-size: 10px; flex-shrink: 0;">|</span>
+
+                    <!-- Blog & Contact Links -->
+                    <a href="{{ url('/blog') }}" style="font-size: 12px; font-weight: 700; color: #ffffff; text-decoration: none; padding: 4px 0; flex-shrink: 0;">
+                        <i class="fa-regular fa-newspaper" style="margin-right: 3px; font-size: 10px;"></i> Blog
+                    </a>
+                    <a href="{{ url('/contact') }}" style="font-size: 12px; font-weight: 700; color: #ffffff; text-decoration: none; padding: 4px 0; flex-shrink: 0;">
+                        <i class="fa-regular fa-envelope" style="margin-right: 3px; font-size: 10px;"></i> Contact Us
+                    </a>
                 </div>
             </div>
 
@@ -233,3 +268,106 @@
         </div>
     </div>
 </header>
+
+<!-- MOBILE SLIDE-OUT NAVIGATION MENU -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="toggleMobileMenu()" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 2000;"></div>
+<div class="mobile-nav-drawer" id="mobileNavDrawer" style="position: fixed; top: 0; left: -320px; width: 300px; max-width: 85vw; height: 100vh; background: #ffffff; z-index: 2001; transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; box-shadow: 5px 0 25px rgba(0,0,0,0.15);">
+    <!-- Mobile Menu Header -->
+    <div style="background: #000000; color: #ffffff; padding: 20px 16px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-regular fa-user" style="font-size: 28px;"></i>
+            <div>
+                <div style="font-size: 14px; font-weight: 800;">Welcome!</div>
+                <a href="{{ route('frontend.login') }}" style="font-size: 11px; color: #cccccc; text-decoration: underline;">Sign In / Register</a>
+            </div>
+        </div>
+        <button onclick="toggleMobileMenu()" style="background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer;">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Nav Links -->
+    <div style="padding: 8px 0;">
+        <a href="{{ route('frontend.home') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: #222222; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-solid fa-house" style="width: 20px; text-align: center; color: #666;"></i> Home
+        </a>
+        <a href="{{ route('frontend.category', 'all') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: #222222; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-solid fa-store" style="width: 20px; text-align: center; color: #666;"></i> Shop All
+        </a>
+        <a href="{{ route('frontend.category', 'new-in') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 700; color: #4ADE80; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-solid fa-sparkles" style="width: 20px; text-align: center;"></i> 🆕 New Arrivals
+        </a>
+        <a href="{{ route('frontend.category', 'best-sellers') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 700; color: #FFB800; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-solid fa-fire" style="width: 20px; text-align: center;"></i> 🔥 Best Sellers
+        </a>
+        <a href="{{ route('frontend.category', 'sale') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 800; color: #FA2C19; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-solid fa-tags" style="width: 20px; text-align: center;"></i> 💥 Offers / Sale
+        </a>
+
+        <!-- Divider -->
+        <div style="padding: 8px 20px; font-size: 10px; font-weight: 800; color: #999999; text-transform: uppercase; letter-spacing: 1px; background: #f7f7f7;">Categories</div>
+
+        @foreach($navCategories as $cat)
+            <a href="{{ route('frontend.category', $cat->slug ?: $cat->id) }}" class="mobile-nav-link" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; font-size: 13px; font-weight: 500; color: #333333; border-bottom: 1px solid #f5f5f5; text-decoration: none;">
+                <span>{{ $cat->name }}</span>
+                @if($cat->badge)
+                    <span style="font-size: 9px; font-weight: 800; background: #FA2C19; color: #fff; padding: 1px 5px; border-radius: 2px;">{{ $cat->badge }}</span>
+                @else
+                    <i class="fa-solid fa-chevron-right" style="font-size: 10px; color: #ccc;"></i>
+                @endif
+            </a>
+        @endforeach
+
+        <!-- Divider -->
+        <div style="padding: 8px 20px; font-size: 10px; font-weight: 800; color: #999999; text-transform: uppercase; letter-spacing: 1px; background: #f7f7f7;">More</div>
+
+        <a href="{{ url('/blog') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: #222222; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-regular fa-newspaper" style="width: 20px; text-align: center; color: #666;"></i> Blog
+        </a>
+        <a href="{{ url('/contact') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: #222222; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-regular fa-envelope" style="width: 20px; text-align: center; color: #666;"></i> Contact Us
+        </a>
+        <a href="{{ route('frontend.wishlist') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: #222222; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-regular fa-heart" style="width: 20px; text-align: center; color: #FA2C19;"></i> My Wishlist
+        </a>
+        <a href="{{ route('frontend.login') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: #222222; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-regular fa-user" style="width: 20px; text-align: center; color: #666;"></i> My Account
+        </a>
+        <div class="mobile-nav-link" onclick="openCartDrawer(); toggleMobileMenu();" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: #222222; border-bottom: 1px solid #f2f2f2; cursor: pointer;">
+            <i class="fa-solid fa-bag-shopping" style="width: 20px; text-align: center; color: #666;"></i> Shopping Cart
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Mobile hamburger button - only show on mobile */
+    @media (max-width: 900px) {
+        .mobile-hamburger-btn { display: flex !important; }
+    }
+    /* Mobile nav link hover */
+    .mobile-nav-link:hover { background: #f7f7f7; color: #FA2C19 !important; }
+    /* Sale pulse animation */
+    @keyframes salePulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+</style>
+
+<script>
+function toggleMobileMenu() {
+    const drawer = document.getElementById('mobileNavDrawer');
+    const overlay = document.getElementById('mobileNavOverlay');
+    const icon = document.getElementById('hamburgerIcon');
+    const isOpen = drawer.style.left === '0px';
+
+    if (isOpen) {
+        drawer.style.left = '-320px';
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+    } else {
+        drawer.style.left = '0px';
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+</script>

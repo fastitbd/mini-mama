@@ -234,6 +234,22 @@ class HomeController extends Controller
     }
 
     /**
+     * Blog Page
+     */
+    public function blog()
+    {
+        return view('frontend.blog');
+    }
+
+    /**
+     * Contact Us Page
+     */
+    public function contact()
+    {
+        return view('frontend.contact');
+    }
+
+    /**
      * SHEIN Malaysia 1:1 Checkout Page
      */
     public function checkout()
