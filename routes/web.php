@@ -88,6 +88,10 @@ Route::get('/shein-login', fn() => redirect()->route('frontend.login'));
 Route::get('/blog', [\App\Http\Controllers\Frontend\HomeController::class, 'blog'])->name('frontend.blog');
 Route::get('/contact', [\App\Http\Controllers\Frontend\HomeController::class, 'contact'])->name('frontend.contact');
 
+// Order Tracking
+Route::get('/track-order', [\App\Http\Controllers\Frontend\HomeController::class, 'trackOrder'])->name('frontend.track_order');
+Route::post('/track-order', [\App\Http\Controllers\Frontend\HomeController::class, 'trackOrderPost'])->name('frontend.track_order_post');
+
 // CLear
 Route::get('/clear', function () {
     Artisan::call('cache:clear');

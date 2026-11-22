@@ -30,7 +30,7 @@
                         <li><a href="#" onclick="showToast('20-Day Easy Returns policy')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Returns</a></li>
                         <li><a href="#" onclick="showToast('Fast refund directly to your original payment method')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Refund</a></li>
                         <li><a href="#" onclick="showToast('How To Order: Choose style, pick size, and checkout securely')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">How To Order</a></li>
-                        <li><a href="#" onclick="showToast('Track your package with real-time tracking updates')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">How To Track</a></li>
+                        <li><a href="{{ route('frontend.track_order') }}" style="color: #0284c7; font-weight: 700; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#0284c7'"><i class="fa-solid fa-truck-fast" style="margin-right: 5px;"></i> Track My Order</a></li>
                         <li><a href="#" onclick="showToast('Size Guide: Find your perfect fit with our body measurement chart')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Size Guide</a></li>
                     </ul>
                 </div>

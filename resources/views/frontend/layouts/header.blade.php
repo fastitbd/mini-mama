@@ -9,8 +9,11 @@
             <span>FREE SHIPPING ON ORDERS OVER RM120 • 20-DAY EASY RETURNS • CASH ON DELIVERY</span>
         </div>
         <div style="display: flex; align-items: center; gap: 20px; font-size: 11px; color: #cccccc;">
-            <span style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #ffffff;" onclick="showToast('🇲🇾 Shipping to: Malaysia | Currency: RM / MYR')">🇲🇾 MY / RM</span>
-            <span style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #cccccc;" onclick="showToast('24/7 ' + {!! json_encode(get_setting('com_name') ?: 'FAST IT') !!} + ' Customer Help Center')"><i class="fa-regular fa-circle-question"></i> Help</span>
+            <a href="{{ route('frontend.track_order') }}" style="display: flex; align-items: center; gap: 4px; color: #ffffff; text-decoration: none;">
+                <i class="fa-solid fa-truck-fast" style="color: #FA2C19;"></i> Track Order
+            </a>
+            <span style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #ffffff;" onclick="showToast('Shipping to: Bangladesh & Malaysia')">🇧🇩 BD / 🇲🇾 MY</span>
+            <span style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #cccccc;" onclick="showToast('24/7 Customer Help Center')"><i class="fa-regular fa-circle-question"></i> Help</span>
         </div>
     </div>
 
@@ -91,6 +94,7 @@
                     <div class="bsc-user-container__dropdown" id="sheinUserDropdown" style="display: none; position: absolute; top: 100%; right: 0; width: 230px; background: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.25); border: 1px solid #eeeeee; padding: 16px; z-index: 1003; margin-top: 10px; border-radius: 2px;">
                         <a href="{{ route('frontend.login') }}" style="display: block; background: #000000; color: #ffffff; text-align: center; padding: 10px 0; font-weight: 800; font-size: 12px; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">SIGN IN / REGISTER</a>
                         <div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #333333;">
+                            <a href="{{ route('frontend.track_order') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5; color: #0284c7; font-weight: 700;"><span><i class="fa-solid fa-truck-fast" style="margin-right: 8px;"></i> Track My Order</span> <i class="fa-solid fa-angle-right"></i></a>
                             <a href="{{ route('frontend.wishlist') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-regular fa-heart" style="margin-right: 8px;"></i> My Wishlist</span> <span style="color: #FA2C19; font-weight: 700;">❤️</span></a>
                             <a href="{{ route('frontend.cart') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5;"><span><i class="fa-solid fa-bag-shopping" style="margin-right: 8px;"></i> Shopping Bag</span></a>
                             <a href="{{ route('frontend.category', 'sale') }}" style="padding: 6px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5; color: #FA2C19; font-weight: 700;"><span><i class="fa-solid fa-fire" style="margin-right: 8px;"></i> Flash Sale</span></a>
@@ -326,6 +330,9 @@
         </a>
         <a href="{{ url('/contact') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: #222222; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
             <i class="fa-regular fa-envelope" style="width: 20px; text-align: center; color: #666;"></i> Contact Us
+        </a>
+        <a href="{{ route('frontend.track_order') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 700; color: #0284c7; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
+            <i class="fa-solid fa-truck-fast" style="width: 20px; text-align: center; color: #0284c7;"></i> Track Order
         </a>
         <a href="{{ route('frontend.wishlist') }}" class="mobile-nav-link" style="display: flex; align-items: center; gap: 12px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: #222222; border-bottom: 1px solid #f2f2f2; text-decoration: none;">
             <i class="fa-regular fa-heart" style="width: 20px; text-align: center; color: #FA2C19;"></i> My Wishlist

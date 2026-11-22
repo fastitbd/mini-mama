@@ -170,10 +170,10 @@
             <i class="fa-solid fa-print"></i>
             <span>PRINT RECEIPT</span>
         </button>
-        <button type="button" onclick="showToast('Tracking updates will be sent to your phone via SMS')" style="padding: 14px 28px; background: #ffffff; border: 1px solid #000000; color: #000000; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; border-radius: 2px;">
+        <a href="{{ route('frontend.track_order', ['order_number' => $order['order_number'] ?? '', 'phone' => $order['phone'] ?? '']) }}" style="padding: 14px 28px; background: #ffffff; border: 1px solid #000000; color: #000000; font-weight: 800; font-size: 13px; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 8px; border-radius: 2px;">
             <i class="fa-solid fa-location-crosshairs"></i>
             <span>TRACK PACKAGE</span>
-        </button>
+        </a>
         <a href="{{ route('frontend.home') }}" style="padding: 14px 32px; background: #000000; color: #ffffff; font-weight: 800; font-size: 13px; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 8px; border-radius: 2px; transition: background 0.2s;" onmouseover="this.style.background='#222'" onmouseout="this.style.background='#000'">
             <i class="fa-solid fa-bag-shopping"></i>
             <span>CONTINUE SHOPPING</span>

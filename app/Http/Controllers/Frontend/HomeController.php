@@ -283,6 +283,47 @@ class HomeController extends Controller
     }
 
     /**
+     * Order Tracking Page
+     */
+    public function trackOrder(Request $request)
+    {
+        $categories = $this->getCategories();
+        $orderNumber = $request->get('order_number', '');
+        $phone = $request->get('phone', '');
+        $foundOrder = null;
+        $searched = false;
+
+        if ($orderNumber || $phone) {
+            $searched = true;
+            $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
+            $query = \App\Models\WebsiteOrder::query();
+
+            if ($orderNumber && $phone) {
+                $query->where('order_no', trim($orderNumber))
+                      ->where(function($q) use ($phone, $cleanPhone) {
+                          $q->where('customer_phone', 'like', "%{$cleanPhone}%")
+                            ->orWhere('customer_phone', 'like', "%{$phone}%");
+                      });
+            } elseif ($orderNumber) {
+                $query->where('order_no', trim($orderNumber));
+            } elseif ($phone) {
+                $query->where('customer_phone', 'like', "%{$cleanPhone}%");
+            }
+
+            $foundOrder = $query->with('items')->latest()->first();
+        }
+
+        return view('frontend.track-order', compact('categories', 'orderNumber', 'phone', 'foundOrder', 'searched'));
+    }
+
+    public function trackOrderPost(Request $request)
+    {
+        $orderNumber = $request->input('order_number', '');
+        $phone = $request->input('phone', '');
+        return redirect()->route('frontend.track_order', ['order_number' => $orderNumber, 'phone' => $phone]);
+    }
+
+    /**
      * SHEIN Malaysia 1:1 Checkout Page
      */
     public function checkout()
@@ -406,7 +447,40 @@ class HomeController extends Controller
         $categories = $this->getCategories();
         $order = session('latest_order');
 
-        if (!$order || ($order_number && $order['order_number'] !== $order_number)) {
+        if ($order_number) {
+            $dbOrder = \App\Models\WebsiteOrder::where('order_no', $order_number)->with('items')->first();
+            if ($dbOrder) {
+                $order = [
+                    'order_number' => $dbOrder->order_no,
+                    'name' => $dbOrder->customer_name,
+                    'email' => $dbOrder->customer_email,
+                    'phone' => $dbOrder->customer_phone,
+                    'address' => $dbOrder->customer_address,
+                    'city' => $dbOrder->customer_city,
+                    'state' => $dbOrder->customer_state,
+                    'postcode' => $dbOrder->customer_postcode,
+                    'country' => $dbOrder->customer_country,
+                    'shipping_method' => $dbOrder->courier_service ?: 'Standard Delivery',
+                    'shipping_fee' => (float)$dbOrder->shipping_fee,
+                    'payment_method' => $dbOrder->payment_method,
+                    'items' => $dbOrder->items->map(fn($it) => [
+                        'id' => $it->product_id,
+                        'name' => $it->product_name,
+                        'price' => (float)$it->unit_price,
+                        'size' => $it->size,
+                        'qty' => $it->quantity,
+                        'image' => $it->product_image,
+                    ])->toArray(),
+                    'subtotal' => (float)$dbOrder->subtotal,
+                    'discount' => (float)$dbOrder->discount,
+                    'total' => (float)$dbOrder->total_amount,
+                    'created_at' => $dbOrder->created_at->format('d M Y, h:i A'),
+                    'est_delivery' => $dbOrder->created_at->addDays(3)->format('d M') . ' - ' . $dbOrder->created_at->addDays(6)->format('d M Y'),
+                ];
+            }
+        }
+
+        if (!$order) {
             // Default sample order data for preview or direct navigation
             $order = [
                 'order_number' => $order_number ?: ('MY-SH' . date('Ymd') . '-89412'),
