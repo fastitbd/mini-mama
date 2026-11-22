@@ -98,6 +98,13 @@ Route::get('/customer/logout', [\App\Http\Controllers\Frontend\HomeController::c
 Route::get('/blog', [\App\Http\Controllers\Frontend\HomeController::class, 'blog'])->name('frontend.blog');
 Route::get('/contact', [\App\Http\Controllers\Frontend\HomeController::class, 'contact'])->name('frontend.contact');
 
+// About Us, Policies & Legal Pages
+Route::get('/about', [\App\Http\Controllers\Frontend\HomeController::class, 'aboutPage'])->name('frontend.about');
+Route::get('/privacy-policy', [\App\Http\Controllers\Frontend\HomeController::class, 'privacyPolicy'])->name('frontend.privacy');
+Route::get('/return-policy', [\App\Http\Controllers\Frontend\HomeController::class, 'returnPolicy'])->name('frontend.returns');
+Route::get('/terms', [\App\Http\Controllers\Frontend\HomeController::class, 'termsPage'])->name('frontend.terms');
+Route::get('/payment-policy', [\App\Http\Controllers\Frontend\HomeController::class, 'paymentPolicy'])->name('frontend.payment_policy');
+
 // Order Tracking
 Route::get('/track-order', [\App\Http\Controllers\Frontend\HomeController::class, 'trackOrder'])->name('frontend.track_order');
 Route::post('/track-order', [\App\Http\Controllers\Frontend\HomeController::class, 'trackOrderPost'])->name('frontend.track_order_post');

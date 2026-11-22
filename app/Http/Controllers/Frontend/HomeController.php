@@ -529,6 +529,71 @@ class HomeController extends Controller
     }
 
     /**
+     * About Us & Store Location Page
+     */
+    public function aboutPage()
+    {
+        $categories = $this->getCategories();
+        return view('frontend.legal', [
+            'categories' => $categories,
+            'pageType' => 'about',
+            'title' => 'About Us & Our Story',
+        ]);
+    }
+
+    /**
+     * Privacy Policy Page
+     */
+    public function privacyPolicy()
+    {
+        $categories = $this->getCategories();
+        return view('frontend.legal', [
+            'categories' => $categories,
+            'pageType' => 'privacy',
+            'title' => 'Privacy & Cookie Policy',
+        ]);
+    }
+
+    /**
+     * Return & Refund Policy Page
+     */
+    public function returnPolicy()
+    {
+        $categories = $this->getCategories();
+        return view('frontend.legal', [
+            'categories' => $categories,
+            'pageType' => 'returns',
+            'title' => '7-Day Return & Refund Policy',
+        ]);
+    }
+
+    /**
+     * Terms & Conditions Page
+     */
+    public function termsPage()
+    {
+        $categories = $this->getCategories();
+        return view('frontend.legal', [
+            'categories' => $categories,
+            'pageType' => 'terms',
+            'title' => 'Terms & Conditions',
+        ]);
+    }
+
+    /**
+     * Payment Policy Page
+     */
+    public function paymentPolicy()
+    {
+        $categories = $this->getCategories();
+        return view('frontend.legal', [
+            'categories' => $categories,
+            'pageType' => 'payment',
+            'title' => 'Payment & Billing Policy',
+        ]);
+    }
+
+    /**
      * Order Tracking Page
      */
     public function trackOrder(Request $request)

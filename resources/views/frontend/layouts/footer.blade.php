@@ -4,68 +4,96 @@
 <footer class="shein-official-footer" style="background: #ffffff; padding: 48px 0 32px; border-top: 1px solid #eeeeee; font-family: var(--shein-font), -apple-system, sans-serif; position: relative;">
     <div class="shein-wrap" style="max-width: 1440px; margin: 0 auto; padding: 0 24px;">
         
-        <!-- MAIN FOOTER TOP ROW (LEFT 3 COLUMNS + RIGHT FORMS & SOCIALS) -->
+        <!-- MAIN FOOTER TOP ROW (LEFT 4 COLUMNS + RIGHT FORMS & SOCIALS) -->
         <div style="display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap;">
             
-            <!-- LEFT 3 COLUMNS: NAVIGATION LINKS -->
-            <div style="display: flex; gap: 75px; flex-wrap: wrap;">
+            <!-- LEFT 4 COLUMNS: NAVIGATION LINKS -->
+            <div style="display: flex; gap: 50px; flex-wrap: wrap; flex: 1; min-width: 300px;">
                 
-                <!-- 1. COMPANY INFO -->
-                <div style="min-width: 140px;">
-                    <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">COMPANY INFO</h4>
+                <!-- 1. CUSTOMER SERVICE -->
+                <div style="min-width: 135px;">
+                    <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">CUSTOMER SERVICE</h4>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #333333; line-height: 2.15;">
-                        <li><a href="{{ route('frontend.category', 'all') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">About {{ get_setting('com_name') ?: 'Mini Mama' }}</a></li>
-                        <li><a href="{{ route('frontend.blog') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Blog & Style Guides</a></li>
+                        <li><a href="{{ route('frontend.contact') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Contact Us</a></li>
+                        <li><a href="{{ route('frontend.contact') }}#faq" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">FAQ</a></li>
+                        <li><a href="{{ route('frontend.track_order') }}" style="color: #0284c7; font-weight: 700; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#0284c7'"><i class="fa-solid fa-truck-fast" style="margin-right: 4px;"></i> Track Order</a></li>
+                        <li><a href="{{ route('frontend.contact') }}#faq" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shipping & Delivery</a></li>
+                        <li><a href="#" onclick="showToast('How To Order: Choose style, pick size, and checkout securely')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">How To Order</a></li>
+                        <li><a href="#" onclick="showToast('Size Guide: Find your perfect fit with our measurement chart')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Size Guide</a></li>
+                    </ul>
+                </div>
+
+                <!-- 2. POLICIES -->
+                <div style="min-width: 135px;">
+                    <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">POLICIES</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #333333; line-height: 2.15;">
+                        <li><a href="{{ route('frontend.privacy') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Privacy Policy</a></li>
+                        <li><a href="{{ route('frontend.returns') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Return & Refund Policy</a></li>
+                        <li><a href="{{ route('frontend.terms') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Terms & Conditions</a></li>
+                        <li><a href="{{ route('frontend.payment_policy') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Payment Policy</a></li>
+                        <li><a href="{{ route('frontend.privacy') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Cookie Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- 3. ABOUT US -->
+                <div style="min-width: 135px;">
+                    <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">ABOUT US</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #333333; line-height: 2.15;">
+                        <li><a href="{{ route('frontend.about') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">About the Shop</a></li>
+                        <li><a href="{{ route('frontend.about') }}#our-story" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Our Story</a></li>
+                        <li><a href="{{ route('frontend.about') }}#store-location" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Store Location</a></li>
                         <li><a href="#" onclick="showToast('Fashion Blogger Program: Earn rewards by sharing outfits')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Fashion Blogger</a></li>
                         <li><a href="#" onclick="showToast('Social Responsibility: Committed to green supply chain & sustainability')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Social Responsibility</a></li>
-                        <li><a href="{{ route('frontend.contact') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Contact Us</a></li>
                     </ul>
                 </div>
 
-                <!-- 2. HELP & SUPPORT -->
-                <div style="min-width: 140px;">
-                    <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">HELP & SUPPORT</h4>
+                <!-- 4. EXPLORE -->
+                <div style="min-width: 135px;">
+                    <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">EXPLORE</h4>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #333333; line-height: 2.15;">
-                        <li><a href="#" onclick="showToast('Free Express Shipping across Malaysia & Bangladesh on orders over threshold')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shipping Info</a></li>
-                        <li><a href="#" onclick="showToast('20-Day Easy Returns policy')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Returns</a></li>
-                        <li><a href="#" onclick="showToast('Fast refund directly to your original payment method')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Refund</a></li>
-                        <li><a href="#" onclick="showToast('How To Order: Choose style, pick size, and checkout securely')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">How To Order</a></li>
-                        <li><a href="{{ route('frontend.track_order') }}" style="color: #0284c7; font-weight: 700; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#0284c7'"><i class="fa-solid fa-truck-fast" style="margin-right: 5px;"></i> Track My Order</a></li>
-                        <li><a href="#" onclick="showToast('Size Guide: Find your perfect fit with our body measurement chart')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Size Guide</a></li>
-                    </ul>
-                </div>
-
-                <!-- 3. CUSTOMER CARE -->
-                <div style="min-width: 140px;">
-                    <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 16px; letter-spacing: 0.3px;">CUSTOMER CARE</h4>
-                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #333333; line-height: 2.15;">
-                        <li><a href="{{ route('frontend.contact') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Contact Us</a></li>
-                        <li><a href="{{ route('frontend.wishlist') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">My Wishlist</a></li>
-                        <li><a href="{{ route('frontend.cart') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shopping Cart</a></li>
-                        <li><a href="{{ route('frontend.login') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">My Account</a></li>
-                        <li><a href="#" onclick="showToast('Payment Methods: Credit Cards, Online Banking (FPX), Cash on Delivery, Mobile Banking')" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Payment Methods</a></li>
+                        <li><a href="{{ route('frontend.blog') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Blog</a></li>
+                        <li><a href="{{ route('frontend.category', 'all') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Gift Guides</a></li>
+                        <li><a href="{{ route('frontend.blog') }}" style="color: #333333; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#333333'">Shopping Tips</a></li>
+                        <li><a href="{{ route('frontend.category', 'new-in') }}" style="color: #4ADE80; font-weight: 700; text-decoration: none;" onmouseover="this.style.color='#FA2C19'" onmouseout="this.style.color='#4ADE80'">New Arrivals</a></li>
+                        <li><a href="{{ route('frontend.category', 'sale') }}" style="color: #FA2C19; font-weight: 800; text-decoration: none;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#FA2C19'">Flash Sale</a></li>
                     </ul>
                 </div>
 
             </div>
 
             <!-- RIGHT SECTION: SOCIALS, APP, NEWSLETTER, PAYMENTS -->
-            <div style="flex: 1; min-width: 320px; max-width: 580px;">
+            <div style="flex: 1; min-width: 320px; max-width: 540px;">
                 
-                <!-- TOP ROW: FIND US ON & APP -->
+                <!-- TOP ROW: FOLLOW US & APP -->
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; flex-wrap: wrap; gap: 20px;">
-                    <!-- FIND US ON -->
+                    <!-- FOLLOW US -->
                     <div>
-                        <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 12px; letter-spacing: 0.3px;">FIND US ON</h4>
-                        <div style="display: flex; align-items: center; gap: 16px; font-size: 18px; color: #000000;">
-                            <a href="https://facebook.com" target="_blank" title="Facebook" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="https://instagram.com" target="_blank" title="Instagram" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="https://x.com" target="_blank" title="Twitter / X" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-x-twitter"></i></a>
-                            <a href="https://youtube.com" target="_blank" title="YouTube" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-youtube"></i></a>
-                            <a href="https://pinterest.com" target="_blank" title="Pinterest" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-pinterest-p"></i></a>
-                            <a href="https://snapchat.com" target="_blank" title="Snapchat" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-snapchat"></i></a>
-                            <a href="https://tiktok.com" target="_blank" title="TikTok" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-tiktok"></i></a>
-                            <a href="https://linkedin.com" target="_blank" title="LinkedIn" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 12px; letter-spacing: 0.3px;">FOLLOW US</h4>
+                        <div style="display: flex; align-items: center; gap: 14px; font-size: 19px; color: #000000;">
+                            <!-- Facebook -->
+                            <a href="https://facebook.com" target="_blank" title="Facebook" style="color: #1877F2; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                                <i class="fa-brands fa-facebook"></i>
+                            </a>
+                            <!-- Instagram -->
+                            <a href="https://instagram.com" target="_blank" title="Instagram" style="color: #E4405F; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <!-- WhatsApp -->
+                            <a href="https://wa.me/8801901166580?text=Hello%20Mini%20Mama%20Support" target="_blank" title="WhatsApp" style="color: #25D366; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
+                            <!-- TikTok -->
+                            <a href="https://tiktok.com" target="_blank" title="TikTok" style="color: #000000; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </a>
+                            <!-- YouTube -->
+                            <a href="https://youtube.com" target="_blank" title="YouTube" style="color: #FF0000; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                            <!-- Twitter / X -->
+                            <a href="https://x.com" target="_blank" title="Twitter / X" style="color: #000000; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
                         </div>
                     </div>
 
@@ -73,26 +101,26 @@
                     <div>
                         <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 12px; letter-spacing: 0.3px;">APP</h4>
                         <div style="display: flex; align-items: center; gap: 14px; font-size: 20px; color: #000000;">
-                            <a href="#" onclick="showToast('{{ get_setting('com_name') ?: 'FAST IT' }} App on iOS App Store')" title="Download iOS App" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-apple"></i></a>
-                            <a href="#" onclick="showToast('{{ get_setting('com_name') ?: 'FAST IT' }} App on Google Play Store')" title="Download Android App" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-android"></i></a>
+                            <a href="#" onclick="showToast('{{ get_setting('com_name') ?: 'Mini Mama' }} App on iOS App Store')" title="Download iOS App" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-apple"></i></a>
+                            <a href="#" onclick="showToast('{{ get_setting('com_name') ?: 'Mini Mama' }} App on Google Play Store')" title="Download Android App" style="color: #000000; text-decoration: none;"><i class="fa-brands fa-android"></i></a>
                         </div>
                     </div>
                 </div>
 
                 <!-- SIGN UP FOR STYLE NEWS -->
                 <div style="margin-bottom: 24px;">
-                    <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 12px; letter-spacing: 0.3px;">SIGN UP FOR {{ strtoupper(get_setting('com_name') ?: 'FAST IT') }} STYLE NEWS</h4>
+                    <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 12px; letter-spacing: 0.3px;">SIGN UP FOR {{ strtoupper(get_setting('com_name') ?: 'MINI MAMA') }} STYLE NEWS</h4>
                     
                     <!-- Form 1: Email Address -->
-                    <form onsubmit="event.preventDefault(); showToast('Thank you for subscribing to {{ get_setting('com_name') ?: 'FAST IT' }} Style News!'); this.reset();" style="display: flex; height: 38px; margin-bottom: 10px; width: 100%;">
+                    <form onsubmit="event.preventDefault(); showToast('Thank you for subscribing to {{ get_setting('com_name') ?: 'Mini Mama' }} Style News!'); this.reset();" style="display: flex; height: 38px; margin-bottom: 10px; width: 100%;">
                         <input type="email" placeholder="Your Email Address" required style="flex: 1; height: 100%; border: 1px solid #e0e0e0; border-right: none; padding: 0 14px; font-size: 13px; font-family: inherit; color: #222222; outline: none; background: #ffffff;">
                         <button type="submit" style="width: 125px; height: 100%; background: #000000; color: #ffffff; font-weight: 800; font-size: 13px; border: none; cursor: pointer; text-transform: capitalize; letter-spacing: 0.2px; transition: background 0.2s;" onmouseover="this.style.background='#222'" onmouseout="this.style.background='#000'">Subscribe</button>
                     </form>
 
                     <!-- Form 2: Phone number for SMS -->
-                    <form onsubmit="event.preventDefault(); showToast('Thank you for subscribing to {{ get_setting('com_name') ?: 'FAST IT' }} SMS Alerts!'); this.reset();" style="display: flex; height: 38px; margin-bottom: 10px; width: 100%;">
+                    <form onsubmit="event.preventDefault(); showToast('Thank you for subscribing to {{ get_setting('com_name') ?: 'Mini Mama' }} SMS Alerts!'); this.reset();" style="display: flex; height: 38px; margin-bottom: 10px; width: 100%;">
                         <div style="display: flex; align-items: center; gap: 6px; padding: 0 12px; background: #ffffff; border: 1px solid #e0e0e0; border-right: none; font-size: 12px; font-weight: 600; color: #222222; cursor: pointer;">
-                            <span>MY + 60</span>
+                            <span>BD +880</span>
                             <i class="fa-solid fa-caret-down" style="font-size: 10px; color: #666666;"></i>
                         </div>
                         <input type="tel" placeholder="Your phone number for SMS" required style="flex: 1; height: 100%; border: 1px solid #e0e0e0; border-right: none; border-left: none; padding: 0 14px; font-size: 13px; font-family: inherit; color: #222222; outline: none; background: #ffffff;">
@@ -100,9 +128,9 @@
                     </form>
 
                     <!-- Form 3: WhatsApp Account -->
-                    <form onsubmit="event.preventDefault(); showToast('Thank you for subscribing to {{ get_setting('com_name') ?: 'FAST IT' }} WhatsApp Updates!'); this.reset();" style="display: flex; height: 38px; width: 100%;">
+                    <form onsubmit="event.preventDefault(); showToast('Thank you for subscribing to {{ get_setting('com_name') ?: 'Mini Mama' }} WhatsApp Updates!'); this.reset();" style="display: flex; height: 38px; width: 100%;">
                         <div style="display: flex; align-items: center; gap: 6px; padding: 0 12px; background: #ffffff; border: 1px solid #e0e0e0; border-right: none; font-size: 12px; font-weight: 600; color: #222222; cursor: pointer;">
-                            <span>MY + 60</span>
+                            <span>BD +880</span>
                             <i class="fa-solid fa-caret-down" style="font-size: 10px; color: #666666;"></i>
                         </div>
                         <input type="tel" placeholder="WhatsApp Account" required style="flex: 1; height: 100%; border: 1px solid #e0e0e0; border-right: none; border-left: none; padding: 0 14px; font-size: 13px; font-family: inherit; color: #222222; outline: none; background: #ffffff;">
@@ -114,13 +142,13 @@
                 <div>
                     <h4 style="font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; margin: 0 0 12px; letter-spacing: 0.3px;">WE ACCEPT</h4>
                     
-                    <!-- Row of 15 Official Payment Badges -->
+                    <!-- Row of Payment Badges -->
                     <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-bottom: 12px;">
                         
                         <!-- 1. CASH ON DELIVERY -->
-                        <div title="Cash On Delivery" style="height: 24px; padding: 0 6px; background: #4DB6AC; color: #ffffff; border-radius: 2px; display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 800; letter-spacing: -0.2px;">
+                        <div title="Cash On Delivery" style="height: 24px; padding: 0 6px; background: #10B981; color: #ffffff; border-radius: 2px; display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 800;">
                             <i class="fa-solid fa-money-bill-wave" style="font-size: 11px;"></i>
-                            <span>CASH</span>
+                            <span>COD CASH</span>
                         </div>
 
                         <!-- 2. VISA -->
@@ -150,54 +178,29 @@
                             AMERICAN<br>EXPRESS
                         </div>
 
-                        <!-- 6. DINERS CLUB -->
-                        <div title="Diners Club" style="height: 24px; width: 42px; background: #004A97; color: #ffffff; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; letter-spacing: -0.2px;">
-                            Diners Club
+                        <!-- 6. BKASH / MOBILE BANKING -->
+                        <div title="bKash Mobile Banking" style="height: 24px; padding: 0 7px; background: #E2136E; color: #ffffff; border-radius: 2px; display: inline-flex; align-items: center; font-size: 10px; font-weight: 900;">
+                            bKash
                         </div>
 
-                        <!-- 7. DISCOVER -->
-                        <div title="Discover" style="height: 24px; width: 44px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #FF6600;">
-                            DISCOVER
+                        <!-- 7. NAGAD -->
+                        <div title="Nagad" style="height: 24px; padding: 0 7px; background: #F7941D; color: #ffffff; border-radius: 2px; display: inline-flex; align-items: center; font-size: 10px; font-weight: 900;">
+                            Nagad
                         </div>
 
-                        <!-- 8. UNIONPAY -->
-                        <div title="UnionPay" style="height: 24px; width: 38px; background: #D91D2A; color: #ffffff; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800;">
-                            UnionPay
-                        </div>
-
-                        <!-- 9. PAYPAL -->
+                        <!-- 8. PAYPAL -->
                         <div title="PayPal" style="height: 24px; width: 40px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; color: #003087; font-size: 13px; font-weight: 800;">
                             <i class="fa-brands fa-paypal"></i>
                         </div>
 
-                        <!-- 10. GrabPay -->
-                        <div title="GrabPay Malaysia" style="height: 24px; padding: 0 6px; background: #ffffff; border: 1px solid #e0e0e0; color: #00B14F; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">
-                            GrabPay
-                        </div>
-
-                        <!-- 11. FPX (Online Banking Malaysia) -->
-                        <div title="FPX Online Banking" style="height: 24px; padding: 0 6px; background: #ffffff; border: 1px solid #e0e0e0; color: #002244; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; letter-spacing: 0.5px;">
-                            FPX
-                        </div>
-
-                        <!-- 12. atome -->
-                        <div title="Atome Buy Now Pay Later" style="height: 24px; padding: 0 6px; background: #F8E71C; color: #000000; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">
-                            atome
-                        </div>
-
-                        <!-- 13. Touch 'n Go eWallet -->
-                        <div title="Touch 'n Go eWallet" style="height: 24px; padding: 0 6px; background: #005BAA; color: #ffffff; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800;">
-                            Touch 'n Go
-                        </div>
-
-                        <!-- 14. Google Pay -->
-                        <div title="Google Pay" style="height: 24px; padding: 0 6px; background: #ffffff; border: 1px solid #e0e0e0; color: #333333; border-radius: 2px; display: inline-flex; align-items: center; gap: 2px; font-size: 10px; font-weight: 700;">
-                            <i class="fa-brands fa-google-pay" style="font-size: 17px;"></i>
-                        </div>
-
-                        <!-- 15. Apple Pay -->
+                        <!-- 9. Apple Pay -->
                         <div title="Apple Pay" style="height: 24px; padding: 0 6px; background: #ffffff; border: 1px solid #e0e0e0; color: #000000; border-radius: 2px; display: inline-flex; align-items: center; gap: 2px; font-size: 10px; font-weight: 700;">
                             <i class="fa-brands fa-apple-pay" style="font-size: 18px;"></i>
+                        </div>
+
+                        <!-- 10. Google Pay -->
+                        <div title="Google Pay" style="height: 24px; padding: 0 6px; background: #ffffff; border: 1px solid #e0e0e0; color: #333333; border-radius: 2px; display: inline-flex; align-items: center; gap: 2px; font-size: 10px; font-weight: 700;">
+                            <i class="fa-brands fa-google-pay" style="font-size: 17px;"></i>
                         </div>
 
                     </div>
@@ -222,38 +225,61 @@
 
         </div>
 
+        <!-- CONTACT DETAILS STRIP (HOTLINE, WHATSAPP, EMAIL, ADDRESS) -->
+        <div style="margin-top: 40px; padding: 20px 24px; background: #fafafa; border: 1px solid #eeeeee; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px; font-size: 12px; color: #444;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-phone" style="color: #000; font-size: 14px;"></i>
+                <span>Hotline: <a href="tel:01901166580" style="font-weight: 800; color: #111; text-decoration: none;">01901166580</a></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 16px;"></i>
+                <span>WhatsApp: <a href="https://wa.me/8801901166580" target="_blank" style="font-weight: 800; color: #25D366; text-decoration: none;">+880 1901-166580</a></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fa-regular fa-envelope" style="color: #000; font-size: 14px;"></i>
+                <span>Email: <a href="mailto:fastit.com.bd@gmail.com" style="font-weight: 700; color: #111; text-decoration: none;">fastit.com.bd@gmail.com</a></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-location-dot" style="color: #FA2C19; font-size: 14px;"></i>
+                <span>Store: <strong>Shah Ali Plaza, Mirpur-1216, Dhaka</strong></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fa-regular fa-clock" style="color: #666; font-size: 14px;"></i>
+                <span>Hours: <strong>9:00 AM - 10:00 PM (Daily)</strong></span>
+            </div>
+        </div>
+
         <!-- BOTTOM LEGAL & COPYRIGHT ROW -->
-        <div style="margin-top: 45px; font-size: 11px; color: #666666; line-height: 1.8;">
-            <div>©2009-{{ date('Y') }} {{ get_setting('com_name') ?: 'FAST IT' }} All Rights Reserved</div>
-            <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
-                <a href="#" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Privacy Center</a>
+        <div style="margin-top: 30px; font-size: 11px; color: #666666; line-height: 1.8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; border-top: 1px solid #f2f2f2; padding-top: 20px;">
+            <div>
+                ©2009-{{ date('Y') }} {{ get_setting('com_name') ?: 'Mini Mama' }}. All Rights Reserved.
+            </div>
+            <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <a href="{{ route('frontend.privacy') }}" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Privacy Policy</a>
                 <span style="color: #cccccc;">|</span>
-                <a href="#" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Privacy & Cookie Policy</a>
+                <a href="{{ route('frontend.returns') }}" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Return & Refund Policy</a>
                 <span style="color: #cccccc;">|</span>
-                <a href="#" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Terms & Conditions</a>
+                <a href="{{ route('frontend.terms') }}" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Terms & Conditions</a>
                 <span style="color: #cccccc;">|</span>
-                <a href="#" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Marketplace IP Rules</a>
+                <a href="{{ route('frontend.payment_policy') }}" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Payment Policy</a>
                 <span style="color: #cccccc;">|</span>
-                <a href="#" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">IP Notice</a>
+                <a href="{{ route('frontend.about') }}" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">About Us</a>
                 <span style="color: #cccccc;">|</span>
-                <a href="#" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Imprint</a>
-                <span style="color: #cccccc;">|</span>
-                <a href="#" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Ad Choice</a>
-                <i class="fa-solid fa-location-dot" style="margin-left: 4px; color: #000000; font-size: 12px;" title="Malaysia"></i>
+                <a href="{{ route('frontend.contact') }}" style="color: #666666; text-decoration: underline;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#666'">Contact Support</a>
             </div>
         </div>
 
     </div>
 
-    <!-- FLOATING RIGHT-SIDE ACTION BUTTONS (FEEDBACK & SCROLL TO TOP) -->
-    <div style="position: fixed; right: 20px; bottom: 30px; display: flex; flex-direction: column; gap: 8px; z-index: 999;">
+    <!-- FLOATING RIGHT-SIDE ACTION BUTTONS (FEEDBACK & SCROLL TO TOP) - Positioned neatly above the chat widget -->
+    <div style="position: fixed; right: 24px; bottom: 100px; display: flex; flex-direction: column; gap: 8px; z-index: 999;">
         <!-- Survey / Feedback Button -->
-        <button type="button" onclick="showToast('Customer Feedback Survey: We value your experience!')" title="Feedback" style="width: 40px; height: 40px; background: #ffffff; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #333333; font-size: 16px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+        <button type="button" onclick="showToast('Customer Feedback Survey: We value your experience!')" title="Feedback" style="width: 38px; height: 38px; background: #ffffff; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #333333; font-size: 15px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
             <i class="fa-regular fa-comment-dots"></i>
         </button>
 
         <!-- Back to Top Button -->
-        <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Back to top" style="width: 40px; height: 40px; background: #ffffff; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #333333; font-size: 16px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+        <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Back to top" style="width: 38px; height: 38px; background: #ffffff; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #333333; font-size: 15px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
             <i class="fa-solid fa-arrow-up"></i>
         </button>
     </div>
