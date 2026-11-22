@@ -392,7 +392,7 @@ class PreOrderController extends Controller
             DB::commit();
 
             session()->flash('success', __("Pre-Order :pre_no converted to Sale Invoice :inv_no successfully! Stock deducted.", ['pre_no' => $preOrder->pre_order_no, 'inv_no' => $invoiceNo]));
-            return redirect()->route('invoice.index');
+            return redirect()->route('invoice.online.sale');
 
         } catch (\Exception $e) {
             DB::rollBack();

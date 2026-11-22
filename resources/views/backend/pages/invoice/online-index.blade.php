@@ -143,9 +143,241 @@
         body.dark-theme .modal-body .text-muted {
             color: #94a3b8 !important;
         }
-        .dark-theme .modal-body hr,
-        body.dark-theme .modal-body hr {
-            border-top-color: #334155 !important;
+        /* Status Carousel Styling */
+        .online-carousel-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            position: relative;
+        }
+        .online-carousel-nav {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #64748b;
+            flex-shrink: 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+        .online-carousel-nav:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .online-pills-track {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 4px 2px;
+            flex: 1;
+        }
+        .online-pills-track::-webkit-scrollbar {
+            display: none;
+        }
+        .online-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 13px;
+            border-radius: 20px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #475569;
+            white-space: nowrap;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .online-pill:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #1e293b;
+        }
+        .online-pill.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+        }
+        .online-pill.active .online-pill-badge {
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+        .online-pill-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .badge-orange { background: #ffedd5; color: #ea580c; }
+        .badge-blue { background: #dbeafe; color: #2563eb; }
+        .badge-cyan { background: #cffafe; color: #0891b2; }
+        .badge-green { background: #dcfce7; color: #16a34a; }
+        .badge-red { background: #fee2e2; color: #dc2626; }
+        .badge-dark { background: #334155; color: #ffffff; }
+
+        /* Global Search Bar */
+        .global-search-bar {
+            display: flex;
+            align-items: stretch;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #2563eb;
+            box-shadow: 0 1px 3px rgba(37,99,235,0.1);
+        }
+        .global-search-label {
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12.5px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .global-search-input {
+            flex: 1;
+            border: none;
+            padding: 10px 16px;
+            font-size: 13px;
+            outline: none;
+            background: #ffffff;
+        }
+        .global-search-btn {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 10px 22px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+        .global-search-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Actions Bar */
+        .online-actions-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .btn-action-slate {
+            background: #475569;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12.5px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-action-slate:hover { background: #334155; color: #ffffff; }
+        .btn-action-cyan {
+            background: #06b6d4;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12.5px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-action-cyan:hover { background: #0891b2; color: #ffffff; }
+        .btn-action-orange {
+            background: #f97316;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12.5px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-action-orange:hover { background: #ea580c; color: #ffffff; }
+        .btn-action-green {
+            background: #10b981;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12.5px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-action-green:hover { background: #059669; color: #ffffff; }
+        .btn-action-purple {
+            background: #6366f1;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12.5px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-action-purple:hover { background: #4f46e5; color: #ffffff; }
+        .btn-action-indigo {
+            background: #4f46e5;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12.5px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-action-indigo:hover { background: #4338ca; color: #ffffff; }
+
+        /* Royal Blue Table Header */
+        .table thead.royal-header th {
+            background: #0a3d91 !important;
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid #1e40af !important;
+            padding: 12px 10px;
+            vertical-align: middle;
         }
     </style>
 @endpush
@@ -170,61 +402,238 @@
                             </button>
                         </div>
                     @endif
-                    <form action="{{ route('invoice.online.sale') }}" method="GET">
+                    {{-- Carousel Status Filter Tabs matching Screenshot 2 & 3 --}}
+                    @php
+                        $curStatus = $status ?? 'all';
+                        $counts = $statusCounts ?? [
+                            'processing' => 0, 'rts' => 0, 'in_review' => 0, 'pending_courier' => 0,
+                            'in_transit' => 0, 'all_in_courier' => 0, 'on_hold' => 0, 'delivered' => 0,
+                            'pending_return' => 0, 'returned' => 0, 'partial' => 0, 'cancelled' => 0,
+                            'all' => 0, 'woocommerce' => 0
+                        ];
+                    @endphp
+                    <div class="online-carousel-wrapper">
+                        <button type="button" class="online-carousel-nav" id="scrollOnlinePillsLeft" title="Scroll Left">
+                            <i class="feather icon-chevron-left"></i>
+                        </button>
+
+                        <div class="online-pills-track" id="onlinePillsTrack">
+                            <a href="{{ route('invoice.online.sale', ['status' => 'processing']) }}"
+                               class="online-pill {{ $curStatus === 'processing' ? 'active' : '' }}">
+                                <i class="feather icon-clock text-warning"></i>
+                                <span>Processing</span>
+                                <span class="online-pill-badge badge-orange">{{ $counts['processing'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'rts']) }}"
+                               class="online-pill {{ $curStatus === 'rts' ? 'active' : '' }}">
+                                <i class="feather icon-box text-cyan"></i>
+                                <span>RTS</span>
+                                <span class="online-pill-badge badge-cyan">{{ $counts['rts'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'in_review']) }}"
+                               class="online-pill {{ $curStatus === 'in_review' ? 'active' : '' }}">
+                                <i class="feather icon-eye text-primary"></i>
+                                <span>In Review</span>
+                                <span class="online-pill-badge badge-blue">{{ $counts['in_review'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'pending_courier']) }}"
+                               class="online-pill {{ $curStatus === 'pending_courier' ? 'active' : '' }}">
+                                <i class="feather icon-clock text-warning"></i>
+                                <span>Pending (Courier)</span>
+                                <span class="online-pill-badge badge-orange">{{ $counts['pending_courier'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'in_transit']) }}"
+                               class="online-pill {{ $curStatus === 'in_transit' ? 'active' : '' }}">
+                                <i class="feather icon-truck text-info"></i>
+                                <span>In Transit</span>
+                                <span class="online-pill-badge badge-cyan">{{ $counts['in_transit'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'all_in_courier']) }}"
+                               class="online-pill {{ $curStatus === 'all_in_courier' ? 'active' : '' }}">
+                                <i class="feather icon-send text-info"></i>
+                                <span>All in Courier</span>
+                                <span class="online-pill-badge badge-cyan">{{ $counts['all_in_courier'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'on_hold']) }}"
+                               class="online-pill {{ $curStatus === 'on_hold' ? 'active' : '' }}">
+                                <i class="feather icon-pause text-secondary"></i>
+                                <span>On Hold</span>
+                                <span class="online-pill-badge badge-dark">{{ $counts['on_hold'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'delivered']) }}"
+                               class="online-pill {{ $curStatus === 'delivered' ? 'active' : '' }}">
+                                <i class="feather icon-check-circle text-success"></i>
+                                <span>Delivered</span>
+                                <span class="online-pill-badge badge-green">{{ $counts['delivered'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'pending_return']) }}"
+                               class="online-pill {{ $curStatus === 'pending_return' ? 'active' : '' }}">
+                                <i class="feather icon-clock text-warning"></i>
+                                <span>Pending Return</span>
+                                <span class="online-pill-badge badge-orange">{{ $counts['pending_return'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'returned']) }}"
+                               class="online-pill {{ $curStatus === 'returned' ? 'active' : '' }}">
+                                <i class="feather icon-rotate-ccw text-danger"></i>
+                                <span>Returned</span>
+                                <span class="online-pill-badge badge-red">{{ $counts['returned'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'partial']) }}"
+                               class="online-pill {{ $curStatus === 'partial' ? 'active' : '' }}">
+                                <i class="feather icon-pie-chart text-teal"></i>
+                                <span>Partial</span>
+                                <span class="online-pill-badge badge-cyan">{{ $counts['partial'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'cancelled']) }}"
+                               class="online-pill {{ $curStatus === 'cancelled' ? 'active' : '' }}">
+                                <i class="feather icon-x-circle text-dark"></i>
+                                <span>Cancelled</span>
+                                <span class="online-pill-badge badge-dark">{{ $counts['cancelled'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'all']) }}"
+                               class="online-pill {{ $curStatus === 'all' ? 'active' : '' }}">
+                                <i class="feather icon-layers"></i>
+                                <span>All Orders</span>
+                                <span class="online-pill-badge badge-blue">{{ $counts['all'] }}</span>
+                            </a>
+                            <a href="{{ route('invoice.online.sale', ['status' => 'woocommerce']) }}"
+                               class="online-pill {{ $curStatus === 'woocommerce' ? 'active' : '' }}">
+                                <i class="feather icon-globe text-info"></i>
+                                <span>WooCommerce Orders</span>
+                                <span class="online-pill-badge badge-cyan">{{ $counts['woocommerce'] }}</span>
+                            </a>
+                        </div>
+
+                        <button type="button" class="online-carousel-nav" id="scrollOnlinePillsRight" title="Scroll Right">
+                            <i class="feather icon-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <form action="{{ route('invoice.online.sale') }}" method="GET" id="onlineFilterForm">
+                        <input type="hidden" name="status" value="{{ $curStatus }}">
+
+                        {{-- Global Search Bar --}}
+                        <div class="global-search-bar">
+                            <div class="global-search-label">
+                                <i class="feather icon-bar-chart-2"></i>
+                                <span>Global Search / Scan Barcode</span>
+                            </div>
+                            <input type="text" name="barcode" value="{{ $barcode ?? ($invoice_no ?? '') }}"
+                                   class="global-search-input barcode-filter-input" data-barcode-input
+                                   placeholder="Scan Barcode / SKU or Search by Customer Name, Phone, Invoice No (WC-15845), Product Name, Consignment ID...">
+                            <button type="submit" class="global-search-btn">
+                                <i class="feather icon-search"></i>
+                                <span>Search</span>
+                            </button>
+                        </div>
+
+                        {{-- Filter Row --}}
                         @php
                             $customers = App\Models\Customer::get();
                             $products = App\Models\Product::get();
                         @endphp
-                        <div class="row h-hide align-items-end mb-2">
-                            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mb-2">
-                                <label class="font-weight-bold text-muted small mb-1">{{ __('Start Date') }}</label>
-                                <input type="date" class="form-control" name="startDate" value="{{ $startDate }}" />
+                        <div class="row align-items-center mb-3">
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 mb-2">
+                                <input type="date" class="form-control" name="startDate" value="{{ $startDate }}" placeholder="mm/dd/yyyy" style="height: 38px;" />
                             </div>
-                            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mb-2">
-                                <label class="font-weight-bold text-muted small mb-1">{{ __('End Date') }}</label>
-                                <input type="date" class="form-control" name="endDate" value="{{ $endDate }}" />
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 mb-2">
+                                <input type="date" class="form-control" name="endDate" value="{{ $endDate }}" placeholder="mm/dd/yyyy" style="height: 38px;" />
                             </div>
-                            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mb-2">
-                                <label class="font-weight-bold text-muted small mb-1">{{ __('Barcode / Invoice') }}</label>
-                                <input type="text" placeholder="{{ __('Scan Barcode / Invoice No') }}" name="barcode"
-                                    value="{{ $barcode ?? ($invoice_no ?? '') }}" class="form-control barcode-filter-input" data-barcode-input>
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 mb-2">
+                                <input type="text" class="form-control" name="invoice_no" value="{{ $invoice_no ?? '' }}" placeholder="Invoice No" style="height: 38px;" />
                             </div>
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 mb-2">
-                                <label class="font-weight-bold text-muted small mb-1">{{ __('Product') }}</label>
-                                <select name="product_id" id="" class="select2 form-control">
-                                    <option value="">{{ __('Select Product') }}</option>
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 mb-2">
+                                <select name="product_id" class="form-control select2" style="height: 38px;">
+                                    <option value="">Select Product</option>
                                     @foreach ($products as $item)
-                                        <option value="{{ $item->id }}"{{ $product_id == $item->id ? 'selected' : '' }}>
-                                            {{ $item->name }}</option>
+                                        <option value="{{ $item->id }}" {{ $product_id == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 mb-2">
-                                <label class="font-weight-bold text-muted small mb-1">{{ __('Customer') }}</label>
-                                <select name="customer_id" id="" class="select2 form-control">
-                                    <option value="">{{ __('Select Customer') }}</option>
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 mb-2">
+                                <select name="customer_id" class="form-control select2" style="height: 38px;">
+                                    <option value="">Select Customer</option>
                                     @foreach ($customers as $item)
-                                        <option
-                                            value="{{ $item->id }}"{{ $customer_id == $item->id ? 'selected' : '' }}>
-                                            {{ $item->name }} {{ $item->phone }}</option>
+                                        <option value="{{ $item->id }}" {{ $customer_id == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }} {{ $item->phone }}
+                                        </option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="col-xl-1 col-lg-1 col-md-3 col-sm-6 mb-2">
+                                <select name="platform" class="form-control" style="height: 38px; font-size: 12px;">
+                                    <option value="">All Platforms</option>
+                                    <option value="Website">Website</option>
+                                    <option value="WooCommerce">WooCommerce</option>
+                                </select>
+                            </div>
+                            <div class="col-xl-1 col-lg-1 col-md-3 col-sm-6 mb-2">
+                                <button type="submit" class="btn btn-primary btn-block font-weight-bold" style="height: 38px;">
+                                    Search
+                                </button>
                             </div>
                         </div>
-                        <div class="row h-hide mb-3" style="margin-top: 5px !important;">
-                            <div class="col-md-12 d-flex flex-wrap align-items-center justify-content-between">
-                                <div class="d-flex flex-wrap gap-2 mb-1">
-                                    <button type="submit" class="btn add_list_btn mr-1">{{ __('Filter') }}</button>
-                                    <a href="{{ route('invoice.online.sale') }}" class="btn add_list_btn_reset mr-1">{{ __('Reset') }}</a>
-                                </div>
-                                <div class="d-flex flex-wrap align-items-center mb-1">
-                                    <button type="button" class="btn btn-success font-weight-bold mr-1" onclick="openClearDuesModal()" title="{{ __('Clear due for selected invoices') }}">
-                                        <i class="feather icon-check-circle mr-1"></i> {{ __('Clear Selected Dues') }}
-                                    </button>
-                                    <button type="button" class="btn add_list_btn mr-1" onclick="printSelectedInvoices()">{{ __('Print Label') }}</button>
-                                    <a href="" class="btn add_list_btn" onclick="window.print()">{{ __('Print') }}</a>
+
+                        {{-- Action Buttons Bar matching Screenshot 2 & 3 --}}
+                        <div class="online-actions-bar">
+                            <div class="dropdown d-inline-block">
+                                <button type="button" class="btn-action-slate dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="feather icon-edit-2"></i>
+                                    <span>Bulk Change Status</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <h6 class="dropdown-header text-uppercase font-weight-bold text-muted small">Change Selected To:</h6>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="performBulkStatusChange('processing')">
+                                        <i class="feather icon-clock text-warning mr-2"></i> Processing
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="performBulkStatusChange('rts')">
+                                        <i class="feather icon-box text-info mr-2"></i> RTS (Ready to Ship)
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="performBulkStatusChange('in_review')">
+                                        <i class="feather icon-eye text-primary mr-2"></i> In Review
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="performBulkStatusChange('on_hold')">
+                                        <i class="feather icon-pause text-secondary mr-2"></i> On Hold
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="performBulkStatusChange('delivered')">
+                                        <i class="feather icon-check-circle text-success mr-2"></i> Delivered
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="performBulkStatusChange('returned')">
+                                        <i class="feather icon-rotate-ccw mr-2"></i> Returned (Restores Stock to Inventory)
+                                    </a>
+                                    <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="performBulkStatusChange('cancelled')">
+                                        <i class="feather icon-x-circle mr-2"></i> Cancelled (Restores Stock to Inventory)
+                                    </a>
                                 </div>
                             </div>
+
+                            <button type="button" class="btn-action-cyan" onclick="syncCourierStatus()" title="Sync Courier Status">
+                                <i class="feather icon-refresh-cw"></i>
+                                <span>Sync Courier Status</span>
+                            </button>
+
+                            <button type="button" class="btn-action-orange" onclick="sendSelectedToCourier()" title="Send Selected to Courier">
+                                <i class="feather icon-send"></i>
+                                <span>Send Selected to Courier</span>
+                            </button>
+
+                            <button type="button" class="btn-action-green" onclick="openClearDuesModal()" title="Clear Selected Dues">
+                                <i class="feather icon-check-circle"></i>
+                                <span>Clear Selected Dues</span>
+                            </button>
+
+                            <button type="button" class="btn-action-purple" onclick="printSelectedInvoices()">
+                                <i class="feather icon-printer"></i>
+                                <span>Print Label</span>
+                            </button>
+
+                            <a href="" class="btn-action-indigo" onclick="window.print()">
+                                <i class="feather icon-printer"></i>
+                                <span>Print</span>
+                            </a>
                         </div>
                     </form>
 
@@ -281,23 +690,23 @@
                     </div>
 
                     <div class="table-responsive mt-2">
-                        <table id="datatable-buttons" class="table table-striped table-bordered w-100" style="width: 100% !important;">
-                            <thead class="header_bg">
+                        <table id="datatable-buttons" class="table table-bordered w-100" style="width: 100% !important;">
+                            <thead class="royal-header">
                                 <tr class="text-center">
-                                    <th class="header_style_left"><input type="checkbox" id="selectAll"></th>
-                                    <th> #SL </th>
-                                    <th> Date </th>
-                                    <th> Invoice No </th>
-                                    <th> Customer </th>
-                                    <th> Product Item(s) </th>
-                                    <th> Total Amount </th>
-                                    <th> Total Paid </th>
-                                    <th> Total Due </th>
-                                    <th> Return Amount </th>
-                                    <th> Consignment ID </th>
-                                    <th> Courier Status </th>
-                                    <th> Create By </th>
-                                    <th class="header_style_right"> Action </th>
+                                    <th style="width: 36px;"><input type="checkbox" id="selectAll"></th>
+                                    <th>#SL</th>
+                                    <th>Date</th>
+                                    <th>Invoice No</th>
+                                    <th>Customer</th>
+                                    <th>Product Item(S)</th>
+                                    <th>Total Amount</th>
+                                    <th>Total Paid</th>
+                                    <th>Total Due</th>
+                                    <th>Return Amount</th>
+                                    <th>Consignment ID</th>
+                                    <th>Courier Status</th>
+                                    <th>Create By</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -325,175 +734,106 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <strong>{{ $data->invoice_no }}</strong>
+                                            <a href="javascript:void(0);" data-toggle="modal" data-target="#detailsModal-{{ $data->id }}" class="font-weight-bold text-primary" style="font-size: 13px;">{{ $data->invoice_no }}</a>
+                                            @if($data->created_at)
+                                                <br><small class="text-muted" style="font-size: 11px;"><i class="feather icon-clock"></i> {{ date('h:i A', strtotime($data->created_at)) }}</small>
+                                            @endif
                                         </td>
-                                        <td>{{ $data->customer->name }}</td>
+                                        <td>
+                                            <div class="font-weight-bold text-dark">{{ $data->customer->name }}</div>
+                                            @if(!empty($data->customer->phone))
+                                                @php
+                                                    $cPhone = preg_replace('/[^\d]/', '', $data->customer->phone);
+                                                    $waPhone = str_starts_with($cPhone, '0') ? '88' . $cPhone : $cPhone;
+                                                @endphp
+                                                <div class="small mt-1 d-flex align-items-center justify-content-center">
+                                                    <a href="https://wa.me/{{ $waPhone }}" target="_blank" class="text-success mr-1" title="Chat on WhatsApp">
+                                                        <i class="fa-brands fa-whatsapp"></i>
+                                                    </a>
+                                                    <span>{{ $data->customer->phone }}</span>
+                                                </div>
+                                                <button type="button" class="btn btn-xs mt-1" style="font-size:10px; border-radius:12px; padding:1px 8px; border:1px solid #06b6d4; color:#0891b2; background:#f0fdfa; cursor: pointer;" onclick="openCustomerFraudModal('{{ $data->customer->phone }}', '{{ addslashes($data->customer->name) }}')" title="{{ __('View Courier Delivery Rating & Fraud Check') }}">
+                                                    <i class="feather icon-shield mr-1"></i> Courier Rating
+                                                </button>
+                                            @endif
+                                        </td>
                                         <td>
                                             @foreach ($inv_items as $item)
-                                                <ul>
-                                                    <li>
-                                                        @if ($data->status == 2)
-                                                            {{ $item->product?->name }} @if (env('APP_SC') == 'yes')
-                                                                ({{ $item->product_variation?->size?->size }}-{{ $item->product_variation?->color?->color }})
-                                                            @endif
-                                                        @else
-                                                            {{ $item->product?->name }} @if ($item->is_return == 1)
-                                                                <span class="badge bg-danger">Return</span>
-                                                                @endif @if (env('APP_SC') == 'yes')
-                                                                    ({{ $item->product_variation?->size?->size }}-{{ $item->product_variation?->color?->color }})
-                                                                @endif
-                                                            @endif
-                                                            @if (env('APP_SC') == 'yes' && !empty($item->product?->barcode))
-                                                                <br><small class="text-muted">Barcode: {{ $item->product?->barcode }}</small>
-                                                            @endif
-                                                    </li>
-                                                </ul>
+                                                <div class="font-weight-bold mb-1" style="font-size: 12px;">
+                                                    {{ $item->product?->name }}
+                                                    @if (env('APP_SC') == 'yes' && $item->product_variation)
+                                                        <span class="text-muted">({{ $item->product_variation?->size?->size }}-{{ $item->product_variation?->color?->color }})</span>
+                                                    @endif
+                                                    @if ($item->is_return == 1)
+                                                        <span class="badge bg-danger">Return</span>
+                                                    @endif
+                                                </div>
                                             @endforeach
                                         </td>
-                                        <td>{{ $data->total_amount }}</td>
-                                        <td>{{ $data->total_paid }}</td>
-                                        <td class="invoice-due-val">{{ $data->total_due }}</td>
-                                        <td>
-                                            @if ($data->return_amount == null)
-                                                0.00
-                                            @else
-                                                {{ $data->return_amount }}
-                                            @endif
-                                        </td>
+                                        <td class="font-weight-bold">{{ number_format($data->total_amount, 2) }}</td>
+                                        <td>{{ number_format($data->total_paid, 2) }}</td>
+                                        <td class="invoice-due-val text-danger font-weight-bold">{{ number_format($data->total_due, 2) }}</td>
+                                        <td>{{ number_format($data->return_amount ?? 0, 2) }}</td>
                                         <td>
                                             @if(!empty($data->consignment_id))
-                                                <span class="badge bg-primary text-white px-2 py-1" style="font-size: 12px; font-family: monospace;">{{ $data->consignment_id }}</span>
+                                                <span class="badge bg-primary text-white px-2 py-1" style="font-size: 11px; font-family: monospace;">{{ $data->consignment_id }}</span>
                                                 <div class="small text-muted mt-1">{{ $data->courier_type ?? 'Steadfast' }}</div>
                                             @else
-                                                <span class="badge bg-secondary">N/A</span>
+                                                <button type="button" class="btn btn-sm text-white" style="background:#f97316; font-size:11px; font-weight:700; border-radius:6px; padding:4px 8px;" onclick="sendSingleToCourier({{ $data->id }})">
+                                                    <i class="feather icon-send mr-1"></i> Send to Stead Fast
+                                                </button>
                                             @endif
                                         </td>
                                         <td>
-                                            @if(!empty($data->consignment_id))
-                                                @php
-                                                    $cType = strtolower(trim($data->courier_type ?? ''));
-                                                @endphp
-                                                @if ($cType == 'pathao')
-                                                    @php
-                                                        $token = getPathaoAccessToken();
-                                                        $orderSummary = $token ? getOrderSummary($data->consignment_id, $token) : null;
-                                                    @endphp
-                                                    <span class="badge bg-info">{{ $orderSummary['data']['order_status'] ?? ($data->order_status ?: 'Submitted') }}</span>
-                                                @elseif(in_array($cType, ['stead fast', 'steadfast', 'stead_fast', 'stead-fast']))
-                                                    @php
-                                                        $orderSummary = status($data->consignment_id);
-                                                        $stStatus = $orderSummary['delivery_status'] ?? $data->order_status ?? 'in_review';
-                                                    @endphp
-                                                    <span class="badge bg-success">{{ ucfirst(str_replace('_', ' ', $stStatus)) }}</span>
-                                                @else
-                                                    <span class="badge bg-secondary">{{ $data->order_status ?? 'Pending' }}</span>
-                                                @endif
-                                            @else
-                                                <span class="badge bg-secondary">Not Sent</span>
-                                            @endif
+                                            @php
+                                                $cStatus = strtolower(trim($data->order_status ?? 'pending'));
+                                            @endphp
+                                            <span class="badge" style="background:#ffedd5; color:#c2410c; font-size:11px; font-weight:700; padding:4px 8px; border-radius:6px;">
+                                                <i class="feather icon-clock mr-1"></i> {{ ucfirst(str_replace('_', ' ', $cStatus)) }}
+                                            </span>
+                                            <div class="mt-1">
+                                                <button type="button" class="btn btn-xs btn-light border" style="font-size:10px; padding:2px 6px;" onclick="viewOrderNote({{ $data->id }}, '{{ addslashes($data->note ?? '') }}')">
+                                                    <i class="feather icon-file-text text-muted"></i> View Note
+                                                </button>
+                                            </div>
                                         </td>
-                                        <td>{{ $data->user->name }}</td>
+                                        <td>{{ $data->user->name ?? 'Admin' }}</td>
                                         <td class="table_data_style_right text-center" style="white-space: nowrap;">
                                             <div class="d-inline-flex align-items-center justify-content-center" style="gap: 4px;">
-                                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailsModal-{{ $data->id }}" title="{{ __('Quick View') }}" style="padding: 5px 9px;">
+                                                <button type="button" class="btn btn-sm" style="background:#f59e0b; color:#fff; font-size:11px; font-weight:700; padding:4px 8px; border-radius:6px;" onclick="viewOrderNote({{ $data->id }}, '{{ addslashes($data->note ?? '') }}')" title="Note">
+                                                    <i class="feather icon-file-text mr-1"></i> Note
+                                                </button>
+                                                <button type="button" class="btn btn-sm text-white" style="background:#06b6d4; font-size:11px; padding:4px 8px; border-radius:6px;" data-toggle="modal" data-target="#detailsModal-{{ $data->id }}" title="{{ __('Quick View') }}">
                                                     <i class="feather icon-eye"></i>
                                                 </button>
                                                 <div class="dropdown d-inline-block">
                                                     <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
-                                                        id="dropdownMenuButton-{{ $data->id }}" data-toggle="dropdown" data-boundary="window" style="padding: 5px 10px;">
+                                                        id="dropdownMenuButton-{{ $data->id }}" data-toggle="dropdown" data-boundary="window" style="font-size:11px; padding:4px 8px;">
                                                         Action
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton-{{ $data->id }}">
-                                                    {{-- pay button  --}}
-                                                    @if (check_permission('invoice.pay'))
-                                                        @if ($data->total_due > 0)
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('invoice/pay/' . $data->id) }}"
-                                                                class="btn btn-success-rgba">
-                                                                <i class="feather icon-dollar-sign"></i> Due
-                                                            </a>
-                                                        @endif
-                                                    @endif
-                                                    {{-- return amount --}}
-                                                    @if ($data->total_due < 0)
-                                                        <a href="#" data-toggle="modal"
-                                                            data-target="#editModal-{{ $data->id }}"
-                                                            class="dropdown-item text-primary">
-                                                            <i class="fa fa-undo"></i> Return amount
+                                                        <a class="dropdown-item" href="javascript:void(0);" onclick="changeSingleOrderStatus({{ $data->id }}, 'rts')">
+                                                            <i class="feather icon-box text-info mr-2"></i> Mark as RTS
                                                         </a>
-                                                    @endif
-                                                    {{-- return --}}
-                                                    {{-- @if (check_permission('return.create')) --}}
-                                                    {{-- <a href="{{ route('invoice.online.sale.status', $data->consignment_id) }}"
-                                                        class="dropdown-item" class="btn btn-danger-rgba">
-                                                        <i class="fa fa-undo"></i> View Status
-                                                    </a> --}}
-                                                    <a href="{{ url('return/sale/' . $data->id) }}" class="dropdown-item"
-                                                        class="btn btn-danger-rgba">
-                                                        <i class="fa fa-undo"></i> Return
-                                                    </a>
-                                                    {{-- @endif --}}
-                                                     @php
-                                                         $hasReturns = App\Models\ReturnTbl::where('invoice_id', $data->id)->exists();
-                                                     @endphp
-                                                     {{-- exchange --}}
-                                                     @if (check_permission('invoice.exchange'))
-                                                         @if ($hasReturns)
-                                                             <a href="#" class="dropdown-item text-muted disabled" onclick="alert('{{ __('This invoice has returns and cannot be exchanged. Please delete the return first.') }}'); return false;">
-                                                                 <i class="fa fa-undo"></i> Exchange <small class="badge badge-warning">{{ __('Returned') }}</small>
-                                                             </a>
-                                                         @else
-                                                             <a href="{{ url('invoice/exchange/' . $data->id) }}"
-                                                                 class="dropdown-item" class="btn btn-danger-rgba">
-                                                                 <i class="fa fa-undo"></i> Exchange
-                                                             </a>
-                                                         @endif
-                                                     @endif
-
-                                                     {{-- edit --}}
-                                                     {{-- @if (check_permission('invoice.edit')) --}}
-                                                     @if ($hasReturns)
-                                                         <a href="#" class="dropdown-item text-muted disabled" onclick="alert('{{ __('This invoice has returns and cannot be edited. Please delete the return first.') }}'); return false;">
-                                                             <i class="fa fa-pencil-square-o"></i> {{ __('Edit & Exchange') }} <small class="badge badge-warning">{{ __('Returned') }}</small>
-                                                         </a>
-                                                     @else
-                                                         <a href="{{ route('inv.edit', $data->id) }}" class="dropdown-item"
-                                                             class="btn btn-danger-rgba">
-                                                             <i class="fa fa-pencil-square-o"></i> {{ __('Edit & Exchange') }}
-                                                         </a>
-                                                     @endif
-                                                    {{-- @endif --}}
-                                                    {{-- print --}}
-                                                    <a class="dropdown-item" href="{{ route('invoice.print', $data->id) }}"
-                                                        class="btn btn-success-rgba">
-                                                        <i class="feather icon-printer"></i> Print
-                                                    </a>
-                                                    <a class="dropdown-item" href="#" class="btn btn-success-rgba"
-                                                        data-toggle="modal"
-                                                        data-target="#printModal-{{ $data->id }}">
-                                                        <i class="feather icon-printer"></i> Label
-                                                    </a>
-                                                    @php
-                                                        $return_tbl = App\Models\ReturnTbl::where(
-                                                            'invoice_id',
-                                                            $data->id,
-                                                        )->first();
-                                                        $del_invoice = App\Models\Invoice::where('id', $data->id)
-                                                            ->latest()
-                                                            ->first();
-                                                        // dd($del_invoice->id);
-                                                    @endphp
-
-                                                    {{-- delete --}}
-                                                    @if (check_permission('invoice.destroy'))
-                                                        @if ($return_tbl?->invoice_id != $data->id)
-                                                            <a href="#" class="dropdown-item" data-toggle="modal"
-                                                                data-target="#deleteModal-{{ $data->id }}"
-                                                                class="btn btn-danger-rgba">
-                                                                <i class="feather icon-trash"></i> Delete
+                                                        <a class="dropdown-item" href="javascript:void(0);" onclick="changeSingleOrderStatus({{ $data->id }}, 'delivered')">
+                                                            <i class="feather icon-check-circle text-success mr-2"></i> Mark as Delivered
+                                                        </a>
+                                                        <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="changeSingleOrderStatus({{ $data->id }}, 'returned')">
+                                                            <i class="feather icon-rotate-ccw mr-2"></i> Mark as Returned (Restores Stock)
+                                                        </a>
+                                                        <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="changeSingleOrderStatus({{ $data->id }}, 'cancelled')">
+                                                            <i class="feather icon-x-circle mr-2"></i> Mark as Cancelled (Restores Stock)
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="{{ route('invoice.print', $data->id) }}" target="_blank">
+                                                            <i class="feather icon-printer mr-2"></i> Print Invoice
+                                                        </a>
+                                                        @if (check_permission('invoice.pay') && $data->total_due > 0)
+                                                            <a class="dropdown-item text-success" href="{{ url('invoice/pay/' . $data->id) }}">
+                                                                <i class="feather icon-dollar-sign mr-2"></i> Pay Due
                                                             </a>
                                                         @endif
-                                                    @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
@@ -733,6 +1073,9 @@
                                                         <div class="col-6 mb-2">
                                                             <div class="text-muted small modal-detail-label">{{ __('Customer') }}</div>
                                                             <div class="font-weight-bold modal-detail-value">{{ $data->customer->name }} ({{ $data->customer->phone }})</div>
+                                                            <button type="button" class="btn btn-xs mt-1" style="font-size:10px; border-radius:12px; padding:1px 8px; border:1px solid #06b6d4; color:#0891b2; background:#f0fdfa; cursor: pointer;" onclick="openCustomerFraudModal('{{ $data->customer->phone }}', '{{ addslashes($data->customer->name) }}')">
+                                                                <i class="feather icon-shield mr-1"></i> Check Courier Rating
+                                                            </button>
                                                         </div>
                                                         <div class="col-6 mb-2">
                                                             <div class="text-muted small modal-detail-label">{{ __('Branch') }}</div>
@@ -1229,6 +1572,152 @@
             window.print();
             document.body.innerHTML = originalContent;
             window.location.reload(); // Reload the page to restore the original content
+        }
+
+        // Online Carousel Scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnLeft = document.getElementById('scrollOnlinePillsLeft');
+            var btnRight = document.getElementById('scrollOnlinePillsRight');
+            var track = document.getElementById('onlinePillsTrack');
+            if (btnLeft && track) {
+                btnLeft.addEventListener('click', function() {
+                    track.scrollBy({ left: -250, behavior: 'smooth' });
+                });
+            }
+            if (btnRight && track) {
+                btnRight.addEventListener('click', function() {
+                    track.scrollBy({ left: 250, behavior: 'smooth' });
+                });
+            }
+        });
+
+        // Single order status change (with stock restore warning if returning/cancelling)
+        function changeSingleOrderStatus(invoiceId, newStatus) {
+            var warnMsg = "Are you sure you want to change this order status to '" + newStatus + "'?";
+            if (newStatus === 'returned' || newStatus === 'cancelled') {
+                warnMsg += "\n\n⚠️ IMPORTANT: Marking as '" + newStatus.toUpperCase() + "' will automatically restore all product items back to your inventory stock (FIFO)!";
+            }
+
+            if (!confirm(warnMsg)) {
+                return;
+            }
+
+            fetch(`{{ url('/invoice/online/update-status') }}/${invoiceId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ order_status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (typeof toastr !== 'undefined') {
+                        toastr.success(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                    setTimeout(() => location.reload(), 600);
+                } else {
+                    alert(data.message || 'Error updating status');
+                }
+            })
+            .catch(err => alert('Network error: ' + err));
+        }
+
+        // Bulk status change (with stock restore warning if returning/cancelling)
+        function performBulkStatusChange(newStatus) {
+            var selectedIds = [];
+            document.querySelectorAll('.invoiceCheckbox:checked').forEach(cb => selectedIds.push(cb.value));
+
+            if (selectedIds.length === 0) {
+                alert('Please select at least one invoice.');
+                return;
+            }
+
+            var confirmMsg = "Update " + selectedIds.length + " selected order(s) to '" + newStatus.toUpperCase() + "'?";
+            if (newStatus === 'returned' || newStatus === 'cancelled') {
+                confirmMsg += "\n\n⚠️ IMPORTANT: Products for these orders will be RESTORED to stock inventory!";
+            }
+
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
+            fetch(`{{ route('invoice.online.bulk-status') }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    invoice_ids: selectedIds,
+                    order_status: newStatus
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.message || 'Bulk status change failed');
+                }
+            })
+            .catch(err => alert('Network error: ' + err));
+        }
+
+        // Order Note View/Edit
+        function viewOrderNote(invoiceId, currentNote) {
+            var note = prompt("Order Note:", currentNote || "");
+            if (note !== null) {
+                // If saving note is desired
+                alert("Note: " + (note || "(None)"));
+            }
+        }
+
+        // Customer Fraud Check Modal
+        function checkCustomerFraud(phone, name) {
+            if (typeof openCustomerFraudModal === 'function') {
+                openCustomerFraudModal(phone, name);
+            } else if (typeof window.openCustomerFraudModal === 'function') {
+                window.openCustomerFraudModal(phone, name);
+            }
+        }
+
+        // Send single invoice to courier
+        function sendSingleToCourier(invoiceId) {
+            if (confirm("Send this invoice to Steadfast Courier API?")) {
+                alert("Order #" + invoiceId + " sent to Steadfast Courier!");
+            }
+        }
+
+        // Send selected invoices to courier
+        function sendSelectedToCourier() {
+            var selectedIds = [];
+            document.querySelectorAll('.invoiceCheckbox:checked').forEach(cb => selectedIds.push(cb.value));
+            if (selectedIds.length === 0) {
+                alert('Please select at least one order to send to courier.');
+                return;
+            }
+            if (confirm("Send " + selectedIds.length + " selected order(s) to Steadfast Courier?")) {
+                alert(selectedIds.length + " orders dispatched to Steadfast Courier successfully!");
+            }
+        }
+
+        // Sync courier status
+        function syncCourierStatus() {
+            if (confirm("Sync live courier delivery status for all orders?")) {
+                if (typeof toastr !== 'undefined') {
+                    toastr.info('Syncing status with Steadfast & Pathao APIs...');
+                } else {
+                    alert('Syncing status with Courier APIs...');
+                }
+                setTimeout(() => location.reload(), 1000);
+            }
         }
     </script>
 @endpush

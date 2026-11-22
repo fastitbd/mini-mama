@@ -36,6 +36,9 @@ use App\Http\Controllers\Backend\WarrantyDeliveryController;
 use App\Http\Controllers\Backend\SupplierClaimController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\SubCategoryController;
+use App\Http\Controllers\Backend\BannerController;
+use App\Http\Controllers\Backend\StoreSectionController;
+use App\Http\Controllers\Backend\WebsiteOrderController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DiscountGroupController;
 use App\Http\Controllers\Backend\EmployeeController;
@@ -69,9 +72,17 @@ use App\Http\Controllers\Backend\PreOrderController;
 use App\Http\Controllers\Backend\LoyaltySettingController;
 
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [\App\Http\Controllers\Frontend\HomeController::class, 'index'])->name('frontend.home');
+Route::get('/c/{slug?}', [\App\Http\Controllers\Frontend\HomeController::class, 'category'])->name('frontend.category');
+Route::get('/product/{id}', [\App\Http\Controllers\Frontend\HomeController::class, 'product'])->whereNumber('id')->name('frontend.product');
+Route::get('/search', [\App\Http\Controllers\Frontend\HomeController::class, 'search'])->name('frontend.search');
+Route::get('/cart', [\App\Http\Controllers\Frontend\HomeController::class, 'cart'])->name('frontend.cart');
+Route::get('/wishlist', [\App\Http\Controllers\Frontend\HomeController::class, 'wishlist'])->name('frontend.wishlist');
+Route::get('/checkout', [\App\Http\Controllers\Frontend\HomeController::class, 'checkout'])->name('frontend.checkout');
+Route::post('/checkout/place-order', [\App\Http\Controllers\Frontend\HomeController::class, 'placeOrder'])->name('frontend.place_order');
+Route::get('/order-confirmation/{order_number?}', [\App\Http\Controllers\Frontend\HomeController::class, 'orderConfirmation'])->name('frontend.order_confirmation');
+Route::get('/customer-login', [\App\Http\Controllers\Frontend\HomeController::class, 'authPage'])->name('frontend.login');
+Route::get('/shein-login', fn() => redirect()->route('frontend.login'));
 
 // CLear
 Route::get('/clear', function () {
@@ -134,6 +145,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::post('/invoice/exchange/update', 'updateExchangeInvoice')->name('invoice.ex.update');
         Route::get('/invoice/online/sale', 'onlineSale')->name('invoice.online.sale');
         Route::post('/invoice/online/clear-selected-dues', 'clearSelectedDues')->name('invoice.online.clear-selected-dues');
+        Route::post('/invoice/online/update-status/{id}', 'updateOrderStatus')->name('invoice.online.update-status');
+        Route::post('/invoice/online/bulk-status', 'bulkChangeStatus')->name('invoice.online.bulk-status');
         Route::get('/invoice/offline-data', 'getOfflineData')->name('invoice.offline-data');
         // POS Hold System
         Route::post('/invoice/hold/store', 'holdStore')->name('invoice.hold.store');
@@ -144,6 +157,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     });
     Route::resource('invoice', InvoiceController::class);
+
+    // --------------------> Website Orders System -------------------->
+    Route::controller(WebsiteOrderController::class)->group(function () {
+        Route::get('/website-orders', 'index')->name('website-orders.index');
+        Route::post('/website-orders/{id}/status', 'updateStatus')->name('website-orders.status');
+        Route::post('/website-orders/{id}/note', 'updateNote')->name('website-orders.note');
+        Route::post('/website-orders/bulk-action', 'bulkAction')->name('website-orders.bulk-action');
+        Route::post('/website-orders/dispatch-courier', 'dispatchCourier')->name('website-orders.dispatch-courier');
+        Route::get('/website-orders/{id}/check-stock', 'checkStock')->name('website-orders.check-stock');
+    });
 
     // --------------------> Pre-Order System (APP_ONLINE == 'yes') <--------------------
     Route::controller(PreOrderController::class)->group(function () {
@@ -301,6 +324,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/get-subcategories-by-category', [SubCategoryController::class, 'getByCategory'])->name('sub-category.by-category');
     Route::resource('sub-category', SubCategoryController::class)->except(['show', 'edit', 'create']);
 
+    // --------------------> banners <--------------------
+    Route::post('/banner/{id}/toggle-status', [BannerController::class, 'toggleStatus'])->name('banner.toggle-status');
+    Route::resource('banner', BannerController::class)->except(['show', 'edit', 'create']);
+
     // --------------------> color <--------------------
     Route::resource('color', ColorController::class);
     Route::post('/color/ajax-store', [ColorController::class, 'ajaxStore'])->name('color.ajaxStore');
@@ -353,7 +380,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/multiple/barcode', 'multipleBarcode')->name('multiple.barcode');
         Route::post('/multiple/barcode/print', 'print')->name('multiple.barcode-print')->withoutMiddleware('permission');
         Route::post('/product/update-description/{id}', 'updateDescription')->name('product.update-description');
+        Route::post('/product/bulk-section', 'bulkSection')->name('product.bulk-section');
     });
+
+    Route::post('store-section/seed-demo', [StoreSectionController::class, 'seedDemoData'])->name('store-section.seed-demo');
+    Route::resource('store-section', StoreSectionController::class)->except(['show', 'edit', 'create']);
 
     // --------------------> Service controller <--------------------
     Route::resource('service', ServiceController::class);

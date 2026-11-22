@@ -218,6 +218,9 @@
     @if(!request()->routeIs('invoice.create'))
         @include('backend.layouts.includes.chatbot')
     @endif
+
+    <!-- Customer Courier Fraud & Rating Modal -->
+    @include('backend.layouts.includes.customer-fraud-modal')
     @stack('js')
 </body>
 

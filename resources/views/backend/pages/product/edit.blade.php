@@ -267,13 +267,28 @@
                                 </div>
                             </div>
                             {{-- status --}}
-                            <div class="col-md-6 mt-2" style="margin-right: -6px">
+                            <div class="col-md-4 mt-2">
                                 <label for="status" class="form-label fw-bold">Status *</label>
                                 <select class="select2" name="status">
                                     <option value="1" {{ $data->status == 1 ? 'selected' : '' }}>Active</option>
                                     <option value="0" {{ $data->status == 0 ? 'selected' : '' }}>Deactive</option>
                                 </select>
                                 <div class="errors">{{ $errors->has('status') ? $errors->first('status') : '' }}</div>
+                            </div>
+
+                            <div class="col-md-4 mt-2">
+                                <label for="section" class="form-label fw-bold">Store Section</label>
+                                <select class="form-control select2" name="section">
+                                    <option value="" {{ empty($data->section) ? 'selected' : '' }}>None / Regular Product</option>
+                                    <option value="super_deals" {{ $data->section == 'super_deals' ? 'selected' : '' }}>🔥 Super Deals (Home Left)</option>
+                                    <option value="trends" {{ $data->section == 'trends' ? 'selected' : '' }}>✨ Trends (Home Right)</option>
+                                    <option value="featured" {{ $data->section == 'featured' ? 'selected' : '' }}>⭐ Featured / Category Feed</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 mt-2">
+                                <label for="badge" class="form-label fw-bold">Badge / Tag</label>
+                                <input type="text" class="form-control" name="badge" value="{{ $data->badge }}" placeholder="e.g. Flash Sale, #SummerOutfit">
                             </div>
 
                             @if (env('APP_IMEI') == 'yes')

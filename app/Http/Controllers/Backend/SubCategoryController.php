@@ -13,7 +13,7 @@ class SubCategoryController extends Controller
     {
         $categories = Category::orderBy('name', 'asc')->get();
         
-        $query = SubCategory::with('category')->orderBy('id', 'desc');
+        $query = SubCategory::with('category')->orderBy('order_num', 'asc')->orderBy('id', 'desc');
 
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
@@ -29,11 +29,23 @@ class SubCategoryController extends Controller
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:4096',
+            'order_num' => 'nullable|integer',
         ]);
 
         $subCategory = new SubCategory();
         $subCategory->category_id = $request->category_id;
         $subCategory->name = $request->name;
+        $subCategory->slug = $request->slug ? \Illuminate\Support\Str::slug($request->slug) : \Illuminate\Support\Str::slug($request->name);
+        $subCategory->order_num = $request->order_num ?? 0;
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '_' . rand(1000, 9999) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/subcategories'), $fileName);
+            $subCategory->image = $fileName;
+        }
+
         $subCategory->save();
 
         if ($request->ajax()) {
@@ -53,11 +65,26 @@ class SubCategoryController extends Controller
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:4096',
+            'order_num' => 'nullable|integer',
         ]);
 
         $subCategory = SubCategory::findOrFail($id);
         $subCategory->category_id = $request->category_id;
         $subCategory->name = $request->name;
+        $subCategory->slug = $request->slug ? \Illuminate\Support\Str::slug($request->slug) : \Illuminate\Support\Str::slug($request->name);
+        $subCategory->order_num = $request->order_num ?? $subCategory->order_num ?? 0;
+
+        if ($request->hasFile('image')) {
+            if (!empty($subCategory->image) && file_exists(public_path('uploads/subcategories/' . $subCategory->image))) {
+                @unlink(public_path('uploads/subcategories/' . $subCategory->image));
+            }
+            $file = $request->file('image');
+            $fileName = time() . '_' . rand(1000, 9999) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/subcategories'), $fileName);
+            $subCategory->image = $fileName;
+        }
+
         $subCategory->save();
 
         session()->flash('success', __('Subcategory updated successfully'));
@@ -67,6 +94,9 @@ class SubCategoryController extends Controller
     public function destroy(string $id)
     {
         $subCategory = SubCategory::findOrFail($id);
+        if (!empty($subCategory->image) && file_exists(public_path('uploads/subcategories/' . $subCategory->image))) {
+            @unlink(public_path('uploads/subcategories/' . $subCategory->image));
+        }
         $subCategory->delete();
 
         session()->flash('success', __('Subcategory deleted successfully'));

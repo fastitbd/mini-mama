@@ -239,7 +239,7 @@ if (!function_exists('invoiced_qty')) {
         if ($product->is_service == 0) {
             $userBranchId = auth()->user()->branch_id;
             $filterBranchId = session('branch_filter_id', auth()->user()->branch_id);
-            if ($product->unit->related_unit  == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 $query = InvoiceItem::with('invoice')
                     ->where('product_id', $product->id);
 
@@ -253,7 +253,7 @@ if (!function_exists('invoiced_qty')) {
                 
                 $inv_stock = InvoiceItem::filterByFakeSale($query)->sum('actual_main');
                 $total_stock = $inv_stock;
-                $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
             } else {
                 //invoice
                 $query = InvoiceItem::with('invoice')
@@ -277,11 +277,11 @@ if (!function_exists('invoiced_qty')) {
                 $total_stock = $inv_total_stock;
                 $check = $total_stock / $product->unit->related_value;
                 if (is_integer($check)) {
-                    $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
                 } else {
                     $main_value = floor($check) * $product->unit->related_value;
                     $sub_value = $total_stock - $main_value;
-                    $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
                 }
             }
             return $data['stock_qty'];
@@ -292,11 +292,11 @@ if (!function_exists('invoiced_qty')) {
 if (!function_exists('used_qty')) {
     function used_qty($product)
     {
-        if ($product->unit->related_unit  == null) {
+        if (!$product->unit || $product->unit->related_unit == null) {
             $inv_stock = UsedItem::where('product_id', $product->id)
                 ->sum('main_qty');
             $total_stock = $inv_stock;
-            $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+            $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
         } else {
             //invoice
             $inv_stock_main = UsedItem::with('invoice')
@@ -310,11 +310,11 @@ if (!function_exists('used_qty')) {
             $total_stock = $inv_total_stock;
             $check = $total_stock / $product->unit->related_value;
             if (is_integer($check)) {
-                $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
             } else {
                 $main_value = floor($check) * $product->unit->related_value;
                 $sub_value = $total_stock - $main_value;
-                $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
             }
         }
         return $data['stock_qty'];
@@ -340,10 +340,10 @@ if (!function_exists('returned_qty')) {
                 $query->where('branch_id', $userBranchId);
             }
 
-            if ($product->unit->related_unit  == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 $inv_stock = ReturnItem::filterByFakeSale($query)->sum('main_qty');
                 $total_stock = $inv_stock;
-                $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
             } else {
                 //return
                 $filteredItems = ReturnItem::filterByFakeSale($query);
@@ -355,11 +355,11 @@ if (!function_exists('returned_qty')) {
                 $total_stock = $inv_total_stock;
                 $check = $total_stock / $product->unit->related_value;
                 if (is_integer($check)) {
-                    $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
                 } else {
                     $main_value = floor($check) * $product->unit->related_value;
                     $sub_value = $total_stock - $main_value;
-                    $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
                 }
             }
             return $data['stock_qty'];
@@ -374,7 +374,7 @@ if (!function_exists('return_pur_qty')) {
 
             $userBranchId = auth()->user()->branch_id;
             $filterBranchId = session('branch_filter_id', auth()->user()->branch_id);
-            if ($product->unit->related_unit  == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 if ($userBranchId == 1) {
                     if ($filterBranchId) {
                         $pur_stock = ReturnPurchaseItem::where('branch_id', $filterBranchId)->where('product_id', $product->id)
@@ -388,7 +388,7 @@ if (!function_exists('return_pur_qty')) {
                         ->sum('main_qty');
                 }
                 $total_stock = $pur_stock;
-                $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
             } else {
                 if ($userBranchId == 1) {
                     if ($filterBranchId) {
@@ -415,11 +415,11 @@ if (!function_exists('return_pur_qty')) {
                 $total_stock = $inv_total_stock;
                 $check = $total_stock / $product->unit->related_value;
                 if (is_integer($check)) {
-                    $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
                 } else {
                     $main_value = floor($check) * $product->unit->related_value;
                     $sub_value = $total_stock - $main_value;
-                    $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
                 }
             }
             return $data['stock_qty'];
@@ -436,7 +436,7 @@ if (!function_exists('stock_transfer_qty')) {
             $userBranchId = auth()->user()->branch_id;
             $filterBranchId = session('branch_filter_id', auth()->user()->branch_id);
 
-            if ($product->unit->related_unit  == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 if ($userBranchId == 1) {
                     if ($filterBranchId) {
                         $transfer_stock = TransferItem::where('from_branch_id', $filterBranchId)->where('product_id', $product->id)
@@ -450,7 +450,7 @@ if (!function_exists('stock_transfer_qty')) {
                         ->sum('main_qty');
                 }
                 $total_stock = $transfer_stock;
-                $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
             } else {
                 if ($userBranchId == 1) {
                     if ($filterBranchId) {
@@ -477,11 +477,11 @@ if (!function_exists('stock_transfer_qty')) {
                 $total_stock = $inv_total_stock;
                 $check = $total_stock / $product->unit->related_value;
                 if (is_integer($check)) {
-                    $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
                 } else {
                     $main_value = floor($check) * $product->unit->related_value;
                     $sub_value = $total_stock - $main_value;
-                    $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
                 }
             }
             return $data['stock_qty'];
@@ -498,7 +498,7 @@ if (!function_exists('stock_receive_qty')) {
             $userBranchId = auth()->user()->branch_id;
             $filterBranchId = session('branch_filter_id', auth()->user()->branch_id);
 
-            if ($product->unit->related_unit  == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 if ($userBranchId == 1) {
                     if ($filterBranchId) {
                         $transfer_stock = TransferItem::where('status', 1)->where('to_branch_id', $filterBranchId)->where('product_id', $product->id)
@@ -512,7 +512,7 @@ if (!function_exists('stock_receive_qty')) {
                         ->sum('main_qty');
                 }
                 $total_stock = $transfer_stock;
-                $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
             } else {
                 if ($userBranchId == 1) {
                     if ($filterBranchId) {
@@ -539,11 +539,11 @@ if (!function_exists('stock_receive_qty')) {
                 $total_stock = $inv_total_stock;
                 $check = $total_stock / $product->unit->related_value;
                 if (is_integer($check)) {
-                    $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
                 } else {
                     $main_value = floor($check) * $product->unit->related_value;
                     $sub_value = $total_stock - $main_value;
-                    $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
                 }
             }
             return $data['stock_qty'];
@@ -560,7 +560,7 @@ if (!function_exists('damaged_qty')) {
             $userBranchId = auth()->user()->branch_id;
             $filterBranchId = session('branch_filter_id', auth()->user()->branch_id);
 
-            if ($product->unit->related_unit  == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
 
                 if ($userBranchId == 1) {
                     if ($filterBranchId) {
@@ -577,7 +577,7 @@ if (!function_exists('damaged_qty')) {
 
 
                 $total_stock = $damage_stock;
-                $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
             } else {
 
                 if ($userBranchId == 1) {
@@ -604,11 +604,11 @@ if (!function_exists('damaged_qty')) {
                 $total_stock = $inv_total_stock;
                 $check = $total_stock / $product->unit->related_value;
                 if (is_integer($check)) {
-                    $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
                 } else {
                     $main_value = floor($check) * $product->unit->related_value;
                     $sub_value = $total_stock - $main_value;
-                    $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
                 }
             }
             return $data['stock_qty'];
@@ -634,10 +634,10 @@ if (!function_exists('adjust_in')) {
                 $query->where('branch_id', $filterBranchId);
             }
 
-            if ($product->unit->related_unit == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 // Sub unit নেই → normal
                 $total_stock = $query->sum('main_qty');
-                $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
             } else {
                 // Sub unit আছে → main + sub convert
                 $damage_stock_main = $query->sum('main_qty');
@@ -649,11 +649,11 @@ if (!function_exists('adjust_in')) {
                 $check = $total_qty / $product->unit->related_value;
 
                 if (is_integer($check)) {
-                    $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
                 } else {
                     $main_value = floor($check) * $product->unit->related_value;
                     $sub_value = $total_qty - $main_value;
-                    $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
                 }
             }
 
@@ -681,10 +681,10 @@ if (!function_exists('adjust_out')) {
                 $query->where('branch_id', $filterBranchId);
             }
 
-            if ($product->unit->related_unit == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 // Sub unit নেই → normal
                 $total_stock_out = $query->sum('main_qty');
-                $data['stock_qty'] = $total_stock_out . ' ' . $product->unit->name;
+                $data['stock_qty'] = $total_stock_out . ' ' . ($product->unit->name ?? 'pcs');
             } else {
                 // Sub unit আছে → main + sub convert
                 $total_main = $query->sum('main_qty') * $product->unit->related_value;
@@ -694,11 +694,11 @@ if (!function_exists('adjust_out')) {
                 $check = $total_qty / $product->unit->related_value;
 
                 if (is_integer($check)) {
-                    $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
                 } else {
                     $main_value = floor($check) * $product->unit->related_value;
                     $sub_value = $total_qty - $main_value;
-                    $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
                 }
             }
 
@@ -716,7 +716,7 @@ if (!function_exists('purchased_qty')) {
             $userBranchId = auth()->user()->branch_id;
             $filterBranchId = session('branch_filter_id', auth()->user()->branch_id);
 
-            if ($product->unit->related_unit  == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 if ($userBranchId == 1) {
                     if ($filterBranchId) {
                         $pur_stock = PurchaseItem::whereHas('purchase', function ($q) {
@@ -728,7 +728,7 @@ if (!function_exists('purchased_qty')) {
                             ->where('product_id', $product->id)
                             ->sum('main_qty');
                         $total_stock = (float)($pur_stock);
-                        $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                        $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
                     } else {
                         $pur_stock = PurchaseItem::whereHas('purchase', function ($q) {
                                 $q->where(function ($sub) {
@@ -738,7 +738,7 @@ if (!function_exists('purchased_qty')) {
                             ->where('product_id', $product->id)
                             ->sum('main_qty');
                         $total_stock = (float)($pur_stock);
-                        $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                        $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
                     }
                 } else {
                     $pur_stock = PurchaseItem::whereHas('purchase', function ($q) {
@@ -750,7 +750,7 @@ if (!function_exists('purchased_qty')) {
                         ->where('product_id', $product->id)
                         ->sum('main_qty');
                     $total_stock = (float)($pur_stock);
-                    $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+                    $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
                 }
             } else {
                 if ($userBranchId == 1) {
@@ -813,23 +813,23 @@ if (!function_exists('purchased_qty')) {
                 $total_stock = $pur_total_stock;
                 $check = $total_stock / $product->unit->related_value;
                 if (is_integer($check)) {
-                    $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
                 } else {
                     $main_value = floor($check) * $product->unit->related_value;
                     $sub_value = $total_stock - $main_value;
-                    $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                    $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
                 }
             }
             return $data['stock_qty'];
         }
         // if ($product->is_service == 0) {
-        //     if ($product->unit->related_unit  == null) {
+        //     if (!$product->unit || $product->unit->related_unit == null) {
         //         $pur_stock = PurchaseItem::with('purchase')
         //             ->where('product_id', $product->id)
         //             ->sum('main_qty');
         //         // $open_pro_stock = Product::where('id', $product->id)->first()->main_qty;
         //         $total_stock = $pur_stock;
-        //         $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+        //         $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
         //     } else {
         //         //purchase
         //         $pur_stock_main = PurchaseItem::with('purchase')
@@ -846,11 +846,11 @@ if (!function_exists('purchased_qty')) {
         //         $total_stock = $pur_total_stock;
         //         $check = $total_stock / $product->unit->related_value;
         //         if (is_integer($check)) {
-        //             $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+        //             $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
         //         } else {
         //             $main_value = floor($check) * $product->unit->related_value;
         //             $sub_value = $total_stock - $main_value;
-        //             $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+        //             $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
         //         }
         //     }
         //     return $data['stock_qty'];
@@ -862,11 +862,11 @@ if (!function_exists('purchased_qty')) {
 if (!function_exists('used_purchased_qty')) {
     function used_purchased_qty($product)
     {
-        if ($product->unit->related_unit  == null) {
+        if (!$product->unit || $product->unit->related_unit == null) {
             $pur_stock = UsedPurchaseItem::where('product_id', $product->id)
                 ->sum('main_qty');
             $total_stock = $pur_stock;
-            $data['stock_qty'] = $total_stock . ' ' . $product->unit->name;
+            $data['stock_qty'] = $total_stock . ' ' . ($product->unit->name ?? 'pcs');
         } else {
             $pur_stock_main = UsedPurchaseItem::where('product_id', $product->id)
                 ->sum('main_qty');
@@ -878,11 +878,11 @@ if (!function_exists('used_purchased_qty')) {
             $total_stock = $pur_total_stock;
             $check = $total_stock / $product->unit->related_value;
             if (is_integer($check)) {
-                $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+                $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
             } else {
                 $main_value = floor($check) * $product->unit->related_value;
                 $sub_value = $total_stock - $main_value;
-                $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+                $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
             }
         }
         return $data['stock_qty'];
@@ -909,9 +909,9 @@ if (!function_exists('product_stock')) {
         $sub_qty  = fmod($fakeStock, $factor);
 
         if ($sub_qty == 0) {
-            return $main_qty . ' ' . $product->unit->name;
+            return $main_qty . ' ' . ($product->unit->name ?? 'pcs');
         } else {
-            return $main_qty . ' ' . $product->unit->name . ' ' .
+            return $main_qty . ' ' . ($product->unit->name ?? 'pcs') . ' ' .
                 $sub_qty . ' ' . $product->unit->related_unit->name;
         }
     }
@@ -1031,7 +1031,7 @@ if (!function_exists('product_purchase_unit_cost')) {
 //             $userBranchId = auth()->user()->branch_id;
 //             $filterBranchId = session('branch_filter_id', auth()->user()->branch_id);
 
-//             if ($product->unit->related_unit  == null) {
+//             if (!$product->unit || $product->unit->related_unit == null) {
 //                 if ($userBranchId == 1) {
 //                     if ($filterBranchId) {
 //                         $pur_stock = App\Models\PurchaseItem::with('purchase')->where('branch_id', $filterBranchId)
@@ -1229,11 +1229,11 @@ if (!function_exists('product_purchase_unit_cost')) {
 
 //                 $check = $total_stock / $product->unit->related_value;
 //                 if (is_integer($check)) {
-//                     $data['stock_qty'] = $check . ' ' . $product->unit->name . ' 0 ' . $product->unit->related_unit->name;
+//                     $data['stock_qty'] = $check . ' ' . ($product->unit->name ?? 'pcs') . ' 0 ' . $product->unit->related_unit->name;
 //                 } else {
 //                     $main_value = floor($check) * $product->unit->related_value;
 //                     $sub_value = $total_stock - $main_value;
-//                     $data['stock_qty'] = floor($check) . ' ' . $product->unit->name . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
+//                     $data['stock_qty'] = floor($check) . ' ' . ($product->unit->name ?? 'pcs') . ' ' . $sub_value . ' ' . $product->unit->related_unit->name;
 //                 }
 //             }
 
@@ -1277,9 +1277,9 @@ if (!function_exists('product_stock_check')) {
         $sub_qty  = $totalStock % $factor;
 
         if ($sub_qty == 0) {
-            return $main_qty . ' ' . $product->unit->name;
+            return $main_qty . ' ' . ($product->unit->name ?? 'pcs');
         } else {
-            return $main_qty . ' ' . $product->unit->name . ' ' .
+            return $main_qty . ' ' . ($product->unit->name ?? 'pcs') . ' ' .
                 $sub_qty . ' ' . $product->unit->related_unit->name;
         }
     }
@@ -1295,7 +1295,7 @@ if (!function_exists('product_stock_check_sub')) {
             $filterBranchId = session('branch_filter_id', auth()->user()->branch_id);
 
             // যদি sub unit না থাকে → normal হিসাব
-            if ($product->unit->related_unit  == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 if ($userBranchId == 1) {
                     if ($filterBranchId) {
                         $pur_stock = App\Models\PurchaseItem::with('purchase')
@@ -1459,7 +1459,7 @@ if (!function_exists('product_stock_check_sub')) {
 if (!function_exists('used_product_stock_check')) {
     function used_product_stock_check($product)
     {
-        if ($product->unit->related_unit  == null) {
+        if (!$product->unit || $product->unit->related_unit == null) {
             $use_stock = App\Models\UsedItem::where('product_id', $product->id)
                 ->sum('main_qty');
             $buy_stock = App\Models\UsedPurchaseItem::where('product_id', $product->id)
@@ -1516,7 +1516,7 @@ if (!function_exists('product_stock_balance')) {
     function product_stock_balance($product)
     {
         if ($product->is_service == 0) {
-            if ($product->unit->related_unit  == null) {
+            if (!$product->unit || $product->unit->related_unit == null) {
                 $pur_stock = App\Models\PurchaseItem::with('purchase')
                     ->where('product_id', $product->id)
                     ->sum('stock_qty');
@@ -1694,7 +1694,7 @@ function rtn_profit($returns)
             ->first();
         $purchase = PurchaseItem::where('product_id', $product->id)->first();
 
-        if ($product->unit->related_unit == null) {
+        if (!$product->unit || $product->unit->related_unit == null) {
             $inv_stock = $returnItem->main_qty;
             $purchase_price = $inv_stock * $purchase?->rate;
             $selling_price = $inv_stock * $returnItem->rate;
@@ -1948,7 +1948,7 @@ function calculateUnitPriceUsingFIFO($productId, $requiredQty, $variationId = nu
 //             $item->update(['stock_qty' => $availableQty - $usedQty]);
 
 //             // 🔹 Unit-wise conversion
-//             if ($product->unit->related_unit == null) {
+//             if (!$product->unit || $product->unit->related_unit == null) {
 //                 $totalCost += $usedQty * $item->rate;
 //             } else {
 //                 $totalCost += ($usedQty / $product->unit->related_value) * $item->rate;
@@ -2057,7 +2057,7 @@ function restoreToFIFO($productId, $qtyToRestore, $variationId = null, $branchId
 
 //             $item->update(['stock_qty' => $quantity]);
 
-//             if ($product->unit->related_unit == null) {
+//             if (!$product->unit || $product->unit->related_unit == null) {
 //                 $totalCost += $usedQty * $item->rate;
 //             } else {
 //                 $totalCost += ($usedQty / $product->unit->related_value) * $item->rate;
@@ -2562,7 +2562,7 @@ function recalculateInvoiceProfit($productId, $branchId)
 
     $factor = ($product->unit && $product->unit->related_value) ? $product->unit->related_value : 1;
     foreach ($purchaseItems as $pi) {
-        if ($product->unit && $product->unit->related_unit == null) {
+        if ($product->unit && !$product->unit || $product->unit->related_unit == null) {
             $pi->temp_qty = $pi->main_qty;
         } else {
             $pi->temp_qty = ($pi->main_qty * $factor) + $pi->sub_qty;
@@ -2576,7 +2576,7 @@ function recalculateInvoiceProfit($productId, $branchId)
         ->get();
 
     foreach ($invoiceItems as $ii) {
-        if ($product->unit && $product->unit->related_unit == null) {
+        if ($product->unit && !$product->unit || $product->unit->related_unit == null) {
             $saleQty = $ii->main_qty;
         } else {
             $saleQty = ($ii->main_qty * $factor) + ($ii->sub_qty ?? 0);
@@ -2593,7 +2593,7 @@ function recalculateInvoiceProfit($productId, $branchId)
 
             $usedQty = min($remainingQty, $availableQty);
             
-            if ($product->unit && $product->unit->related_unit == null) {
+            if ($product->unit && !$product->unit || $product->unit->related_unit == null) {
                 $totalCost += $usedQty * $pi->rate;
             } else {
                 $totalCost += ($usedQty / $factor) * $pi->rate;
@@ -2605,7 +2605,7 @@ function recalculateInvoiceProfit($productId, $branchId)
 
         if ($remainingQty > 0 && $purchaseItems->isNotEmpty()) {
             $lastPi = $purchaseItems->last();
-            if ($product->unit && $product->unit->related_unit == null) {
+            if ($product->unit && !$product->unit || $product->unit->related_unit == null) {
                 $totalCost += $remainingQty * $lastPi->rate;
             } else {
                 $totalCost += ($remainingQty / $factor) * $lastPi->rate;
@@ -3187,5 +3187,65 @@ if (!function_exists('loyalty_min_redeem_points')) {
     }
 }
 
+if (!function_exists('get_welcome_popup_deals')) {
+    /**
+     * Dynamic Special Deals Welcome Popup Coupons
+     * Reads from BusinessSetting or provides Shein Malaysia default vouchers
+     *
+     * @return array
+     */
+    function get_welcome_popup_deals()
+    {
+        $custom = function_exists('get_setting') ? get_setting('welcome_popup_deals') : null;
+        if (!empty($custom)) {
+            $decoded = json_decode($custom, true);
+            if (is_array($decoded) && count($decoded) > 0) {
+                return $decoded;
+            }
+        }
 
-
+        return [
+            [
+                'id' => 'deal1',
+                'tag' => 'New User',
+                'discount' => '29',
+                'unit' => '%OFF',
+                'condition' => 'No Min. Buy',
+                'title' => 'Product Coupon',
+                'cap' => 'Capped at RM16.35',
+                'timer' => 'Time-limited',
+                'code' => 'NEW29',
+                'rate' => 0.29,
+                'max_discount' => 16.35
+            ],
+            [
+                'id' => 'deal2',
+                'tag' => 'New User',
+                'discount' => '36',
+                'unit' => '%OFF',
+                'condition' => 'Orders RM27.39+',
+                'title' => 'Product Coupon',
+                'cap' => 'Capped at RM26.57',
+                'timer' => 'Time-limited',
+                'code' => 'NEW36',
+                'rate' => 0.36,
+                'min_spend' => 27.39,
+                'max_discount' => 26.57
+            ],
+            [
+                'id' => 'deal3',
+                'tag' => 'New User',
+                'discount' => '38',
+                'unit' => '%OFF',
+                'condition' => 'Orders RM35.00+',
+                'title' => 'Product Coupon',
+                'cap' => 'Capped at RM34.75',
+                'timer' => 'Time-limited',
+                'code' => 'NEW38',
+                'rate' => 0.38,
+                'min_spend' => 35.00,
+                'max_discount' => 34.75
+            ],
+        ];
+    }
+}

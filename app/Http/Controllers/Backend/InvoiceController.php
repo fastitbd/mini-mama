@@ -51,7 +51,11 @@ class InvoiceController extends Controller
         $userBranchId = auth()->user()->branch_id ?? null;
         $filterBranchId = session('branch_filter_id', null);
 
-        $query = Invoice::with('customer', 'user');
+        $query = Invoice::with('customer', 'user')
+            ->where(function ($q) {
+                $q->where('sale_type', '!=', 'Online')
+                  ->orWhereNull('sale_type');
+            });
         $custQuery = Customer::orderByRaw("CASE WHEN id = 1 THEN 0 ELSE 1 END")->orderBy('name', 'asc');
         if (!($userBranchId == 1 && !$filterBranchId)) {
             $custActiveBranchId = ($userBranchId == 1 && $filterBranchId) ? $filterBranchId : $userBranchId;
@@ -167,8 +171,10 @@ class InvoiceController extends Controller
             'invoice_no' => $request->invoice_no,
             'product_id' => $request->product_id,
         ]);
-        $invoicessss = Invoice::orderBy('created_at', 'desc')->get();  // Get all invoices
-        $latestInvoice = $invoicessss->first();
+        $latestInvoice = Invoice::where(function ($q) {
+            $q->where('sale_type', '!=', 'Online')
+              ->orWhereNull('sale_type');
+        })->orderBy('created_at', 'desc')->first();
 
 
         return view('backend.pages.invoice.index', $data, compact('latestInvoice'));
@@ -177,6 +183,8 @@ class InvoiceController extends Controller
     public function onlineSale(Request $request)
     {
         $barcode = $request->barcode ?? $request->invoice_no;
+        $status = $request->get('status', 'all');
+        $data['status'] = $status;
         $data['barcode'] = $barcode;
         $data['invoice_no'] = $request->invoice_no;
         $data['customer_id'] = $request->customer_id;
@@ -186,7 +194,49 @@ class InvoiceController extends Controller
         $sdate = $request->startDate ? Carbon::createFromDate($request->startDate)->toDateString() : null;
         $edate = $request->endDate ? Carbon::createFromDate($request->endDate)->toDateString() : null;
 
-        $query = Invoice::with('customer', 'user')->where('sale_type', 'Online');
+        // Calculate tab counts for Online Sale List
+        $baseOnline = Invoice::where('sale_type', 'Online');
+        $data['statusCounts'] = [
+            'processing' => (clone $baseOnline)->where('order_status', 'processing')->count(),
+            'rts' => (clone $baseOnline)->where('order_status', 'rts')->count(),
+            'in_review' => (clone $baseOnline)->where('order_status', 'in_review')->count(),
+            'pending_courier' => (clone $baseOnline)->whereIn('order_status', ['pending', 'pending_courier'])->count(),
+            'in_transit' => (clone $baseOnline)->where('order_status', 'in_transit')->count(),
+            'all_in_courier' => (clone $baseOnline)->whereNotNull('consignment_id')->count(),
+            'on_hold' => (clone $baseOnline)->where('order_status', 'on_hold')->count(),
+            'delivered' => (clone $baseOnline)->where('order_status', 'delivered')->count(),
+            'pending_return' => (clone $baseOnline)->where('order_status', 'pending_return')->count(),
+            'returned' => (clone $baseOnline)->where('order_status', 'returned')->count(),
+            'partial' => (clone $baseOnline)->where('order_status', 'partial')->count(),
+            'cancelled' => (clone $baseOnline)->where('order_status', 'cancelled')->count(),
+            'all' => (clone $baseOnline)->count(),
+            'woocommerce' => (clone $baseOnline)->whereNotNull('source_link')->count(),
+        ];
+
+        $query = Invoice::with(['customer', 'user', 'invoiceItems.product'])->where('sale_type', 'Online');
+
+        // Status tab filtering
+        if (!empty($status) && $status !== 'all') {
+            if ($status === 'pending_courier') {
+                $query->whereIn('order_status', ['pending', 'pending_courier']);
+            } elseif ($status === 'all_in_courier') {
+                $query->whereNotNull('consignment_id')->where('consignment_id', '!=', '');
+            } elseif ($status === 'woocommerce') {
+                $query->whereNotNull('source_link');
+            } elseif ($status === 'on_hold') {
+                $query->whereIn('order_status', ['on_hold', 'hold']);
+            } elseif ($status === 'partial') {
+                $query->whereIn('order_status', ['partial', 'partial_delivered']);
+            } elseif ($status === 'returned') {
+                $query->where(function($q) {
+                    $q->where('status', 2)->orWhereIn('order_status', ['returned']);
+                });
+            } elseif ($status === 'cancelled') {
+                $query->whereIn('order_status', ['cancelled', 'cancelled_approval_pending']);
+            } else {
+                $query->where('order_status', $status);
+            }
+        }
 
         if ($sdate && $edate) {
             $query->whereBetween('date', [$sdate, $edate]);
@@ -196,6 +246,12 @@ class InvoiceController extends Controller
             $barcodeVal = trim($barcode);
             $query->where(function($q) use ($barcodeVal) {
                 $q->where('invoice_no', 'like', "%{$barcodeVal}%")
+                  ->orWhere('consignment_id', 'like', "%{$barcodeVal}%")
+                  ->orWhere('source_link', 'like', "%{$barcodeVal}%")
+                  ->orWhereHas('customer', function($cq) use ($barcodeVal) {
+                      $cq->where('name', 'like', "%{$barcodeVal}%")
+                         ->orWhere('phone', 'like', "%{$barcodeVal}%");
+                  })
                   ->orWhereHas('invoiceItems.product', function ($subQ) use ($barcodeVal) {
                       $subQ->where('barcode', $barcodeVal)
                            ->orWhere('barcode', 'like', "%{$barcodeVal}%")
@@ -225,10 +281,105 @@ class InvoiceController extends Controller
         $data['invoices'] = $query->orderBy('created_at', 'DESC')->paginate(20)->appends($request->all());
         $data['bankAccounts'] = BankAccount::where('status', 1)->orderBy('id', 'asc')->get();
 
-        $invoices = Invoice::orderBy('created_at', 'desc')->get();  // Get all invoices
-        $latestInvoice = $invoices->first();
+        $latestInvoice = (clone $query)->first();
 
-        return view('backend.pages.invoice.online-index', $data, compact('invoices'));
+        return view('backend.pages.invoice.online-index', $data, compact('latestInvoice'));
+    }
+
+    /**
+     * Update order status with automatic FIFO stock restoration on return or cancel.
+     */
+    public function updateOrderStatus(Request $request, $id)
+    {
+        $invoice = Invoice::with('invoiceItems.product')->findOrFail($id);
+        $oldStatus = strtolower(trim($invoice->order_status ?? ''));
+        $newStatus = strtolower(trim($request->input('order_status', '')));
+
+        if (empty($newStatus)) {
+            return response()->json(['success' => false, 'message' => 'Status is required.'], 400);
+        }
+
+        $isOldReturnedOrCancelled = in_array($oldStatus, ['returned', 'cancelled']);
+        $isNewReturnedOrCancelled = in_array($newStatus, ['returned', 'cancelled']);
+
+        // Case 1: Status changing TO Returned or Cancelled -> RESTORE STOCK TO INVENTORY via restoreToFIFO
+        if (!$isOldReturnedOrCancelled && $isNewReturnedOrCancelled) {
+            foreach ($invoice->invoiceItems as $item) {
+                $prod = $item->product;
+                if ($prod && $prod->is_service == 0) {
+                    restoreToFIFO($item->product_id, $item->main_qty, $item->product_variation_id, $item->branch_id);
+                }
+            }
+            \Log::info("Stock restored to inventory for invoice #{$invoice->invoice_no} because order status changed to {$newStatus}");
+        }
+
+        // Case 2: Status changing FROM Returned/Cancelled back to active -> DEDUCT STOCK
+        if ($isOldReturnedOrCancelled && !$isNewReturnedOrCancelled) {
+            foreach ($invoice->invoiceItems as $item) {
+                $prod = $item->product;
+                if ($prod && $prod->is_service == 0) {
+                    calculateUnitPriceUsingFIFO($item->product_id, $item->main_qty, $item->product_variation_id, $item->branch_id);
+                }
+            }
+            \Log::info("Stock re-deducted for invoice #{$invoice->invoice_no} because order status changed from {$oldStatus} to {$newStatus}");
+        }
+
+        $invoice->order_status = $newStatus;
+        $invoice->save();
+
+        $statusLabels = [
+            'processing' => 'Processing',
+            'rts' => 'RTS (Ready to Ship)',
+            'in_review' => 'In Review',
+            'pending' => 'Pending (Courier)',
+            'pending_courier' => 'Pending (Courier)',
+            'in_transit' => 'In Transit',
+            'on_hold' => 'On Hold',
+            'delivered' => 'Delivered',
+            'pending_return' => 'Pending Return',
+            'returned' => 'Returned',
+            'partial' => 'Partial',
+            'cancelled' => 'Cancelled',
+        ];
+        $label = $statusLabels[$newStatus] ?? ucfirst($newStatus);
+
+        $msg = "Order status updated to '{$label}'." . ($isNewReturnedOrCancelled ? " Product stock has been restored to inventory." : "");
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $msg,
+                'order_status' => $newStatus,
+            ]);
+        }
+
+        return redirect()->back()->with('success', $msg);
+    }
+
+    /**
+     * Bulk update online invoice statuses with stock management.
+     */
+    public function bulkChangeStatus(Request $request)
+    {
+        $rawIds = $request->input('invoice_ids');
+        $newStatus = strtolower(trim($request->input('order_status', '')));
+
+        $ids = is_array($rawIds) ? $rawIds : json_decode($rawIds, true);
+        if (empty($ids) || empty($newStatus)) {
+            return response()->json(['success' => false, 'message' => 'Please select orders and a target status.'], 400);
+        }
+
+        $updatedCount = 0;
+        foreach ($ids as $id) {
+            $subReq = new Request(['order_status' => $newStatus]);
+            $this->updateOrderStatus($subReq, $id);
+            $updatedCount++;
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "{$updatedCount} orders updated to " . ucfirst($newStatus) . " successfully."
+        ]);
     }
 
     public function clearSelectedDues(Request $request)
@@ -907,7 +1058,9 @@ class InvoiceController extends Controller
                 $preOrder->save();
             }
             session()->flash('success', __('Pre-Order converted to Sale successfully! Invoice #:no created.', ['no' => $invoice->invoice_no]));
-            return redirect()->route('invoice.index');
+            return $invoice->sale_type === 'Online'
+                ? redirect()->route('invoice.online.sale')
+                : redirect()->route('invoice.index');
         }
 
         return redirect()->route('invoice.print', $invoice->id);

@@ -22,6 +22,9 @@ class CourierFraudCheckerService
         $customer = null;
         $phone = null;
 
+        $rawDigits = preg_replace('/[^\d]/', '', (string)$identifier);
+        $last8 = strlen($rawDigits) >= 8 ? substr($rawDigits, -8) : $rawDigits;
+
         if (is_numeric($identifier) && strlen((string)$identifier) < 10) {
             $customer = Customer::find($identifier);
             if ($customer) {
@@ -30,12 +33,22 @@ class CourierFraudCheckerService
         } else {
             $phone = (string)$identifier;
             $customer = Customer::where('phone', $phone)
-                ->orWhere('phone', 'LIKE', '%' . substr($phone, -10))
+                ->orWhere('phone', $rawDigits)
+                ->orWhere('phone', 'LIKE', '%' . $last8 . '%')
                 ->first();
         }
 
         // Clean & normalize phone number
         $cleanPhone = $this->normalizePhone($phone ?? $identifier);
+
+        // Fallback customer name from WebsiteOrder if customer not registered in POS yet
+        $customerName = $customer?->name;
+        if (empty($customerName) && !empty($last8)) {
+            $wbOrder = \App\Models\WebsiteOrder::where('customer_phone', 'LIKE', '%' . $last8 . '%')->first();
+            if ($wbOrder) {
+                $customerName = $wbOrder->customer_name;
+            }
+        }
 
         // 1. Fetch Internal POS History
         $internalStats = $this->getInternalStats($customer, $cleanPhone);
@@ -46,23 +59,35 @@ class CourierFraudCheckerService
         // 3. Fetch Pathao Courier Fraud Data (API + Local DB)
         $pathaoStats = $this->getPathaoFraudData($cleanPhone, $customer);
 
-        // 4. Fetch General / Multi-Courier Aggregator Data (Fallback)
+        // 4. Fetch RedX Courier Data
+        $redxStats = $this->getRedxFraudData($cleanPhone, $customer);
+
+        // 5. Fetch CarryBee Courier Data
+        $carrybeeStats = $this->getCarryBeeFraudData($cleanPhone, $customer);
+
+        // 6. Fetch General / Multi-Courier Aggregator Data (Fallback)
         $aggregatorStats = $this->getAggregatorFraudData($cleanPhone);
 
         // Aggregate All Data
         $totalOrders = $internalStats['total_orders'] 
             + ($steadfastStats['total_parcels'] ?? 0) 
             + ($pathaoStats['total_parcels'] ?? 0) 
+            + ($redxStats['total_parcels'] ?? 0)
+            + ($carrybeeStats['total_parcels'] ?? 0)
             + ($aggregatorStats['total_parcels'] ?? 0);
 
         $totalDelivered = $internalStats['delivered'] 
             + ($steadfastStats['delivered'] ?? 0) 
             + ($pathaoStats['delivered'] ?? 0) 
+            + ($redxStats['delivered'] ?? 0)
+            + ($carrybeeStats['delivered'] ?? 0)
             + ($aggregatorStats['delivered'] ?? 0);
 
         $totalCancelled = $internalStats['returned'] 
             + ($steadfastStats['cancelled'] ?? 0) 
             + ($pathaoStats['cancelled'] ?? 0) 
+            + ($redxStats['cancelled'] ?? 0)
+            + ($carrybeeStats['cancelled'] ?? 0)
             + ($aggregatorStats['cancelled'] ?? 0);
 
         // Calculate Overall Success Rate
@@ -75,7 +100,7 @@ class CourierFraudCheckerService
             'success'               => true,
             'phone'                 => $cleanPhone,
             'customer_id'           => $customer?->id,
-            'customer_name'         => $customer?->name ?? 'Customer (' . $cleanPhone . ')',
+            'customer_name'         => $customerName ?? 'Customer (' . $cleanPhone . ')',
             'risk_level'            => $riskEvaluation['level'],       // low_risk, medium_risk, high_risk, new_customer
             'risk_label'            => $riskEvaluation['label'],       // Safe, Moderate Risk, High Risk (Fraud Alert!)
             'badge_class'           => $riskEvaluation['badge_class'], // success, warning, danger, secondary
@@ -86,10 +111,12 @@ class CourierFraudCheckerService
             'total_cancelled'       => $totalCancelled,
             'warning_message'       => $riskEvaluation['warning_message'],
             'sources'               => [
-                'internal'  => $internalStats,
-                'steadfast' => $steadfastStats,
-                'pathao'    => $pathaoStats,
-                'courier_api' => $aggregatorStats,
+                'steadfast'   => array_merge($steadfastStats, ['name' => 'Steadfast Courier']),
+                'pathao'      => array_merge($pathaoStats, ['name' => 'Pathao Courier']),
+                'redx'        => array_merge($redxStats, ['name' => 'RedX Courier']),
+                'carrybee'    => array_merge($carrybeeStats, ['name' => 'CarryBee Courier']),
+                'internal'    => array_merge($internalStats, ['name' => 'Internal POS Orders']),
+                'courier_api' => array_merge($aggregatorStats, ['name' => 'Aggregator Courier API']),
             ]
         ];
     }
@@ -183,17 +210,15 @@ class CourierFraudCheckerService
                     if ($apiKey && $secretKey) {
                         $headers['Api-Key'] = $apiKey;
                         $headers['Secret-Key'] = $secretKey;
-                    }
 
-                    $urls = [
-                        "https://portal.packzy.com/api/v1/fraud_check/{$phone}",
-                        "https://packzy.com/api/v1/fraud_check/{$phone}",
-                        "https://portal.steadfast.com.bd/api/v1/fraud_check/{$phone}"
-                    ];
+                        $urls = [
+                            "https://portal.steadfast.com.bd/api/v1/fraud_check/{$phone}",
+                            "https://portal.packzy.com/api/v1/fraud_check/{$phone}",
+                        ];
 
-                    foreach ($urls as $url) {
-                        try {
-                            $response = Http::withHeaders($headers)->timeout(5)->get($url);
+                        foreach ($urls as $url) {
+                            try {
+                                $response = Http::withHeaders($headers)->timeout(2)->get($url);
                             if ($response->successful()) {
                                 $data = $response->json();
                                 if (isset($data['total_parcels']) || isset($data['data'])) {
@@ -210,11 +235,10 @@ class CourierFraudCheckerService
                                         'total_cancelled' => $apiCancelled,
                                     ], 3600);
 
-                                    break;
+                                    }
                                 }
+                            } catch (\Exception $ex) {
                             }
-                        } catch (\Exception $ex) {
-                            continue;
                         }
                     }
                 } catch (\Exception $e) {
@@ -350,6 +374,79 @@ class CourierFraudCheckerService
             'total_parcels' => $total,
             'delivered'     => $delivered,
             'cancelled'     => $cancelled,
+            'success_rate'  => $successRate,
+        ];
+    }
+
+    /**
+     * RedX Courier Fraud / History
+     */
+    protected function getRedxFraudData($phone, $customer = null)
+    {
+        $localTotal = 0;
+        $localDelivered = 0;
+        $localCancelled = 0;
+
+        if ($customer) {
+            $redxInvoices = Invoice::where('customer_id', $customer->id)
+                ->where('courier_type', 'LIKE', '%redx%')
+                ->get();
+
+            $localTotal = $redxInvoices->count();
+            foreach ($redxInvoices as $inv) {
+                if (in_array(strtolower((string)$inv->order_status), ['returned', 'cancelled', 'return', 'failed'])) {
+                    $localCancelled++;
+                } else {
+                    $localDelivered++;
+                }
+            }
+        }
+
+        $successRate = $localTotal > 0 ? round(($localDelivered / $localTotal) * 100, 1) : null;
+
+        return [
+            'available'     => $localTotal > 0,
+            'total_parcels' => $localTotal,
+            'delivered'     => $localDelivered,
+            'cancelled'     => $localCancelled,
+            'success_rate'  => $successRate,
+        ];
+    }
+
+    /**
+     * CarryBee Courier Fraud / History
+     */
+    protected function getCarryBeeFraudData($phone, $customer = null)
+    {
+        $localTotal = 0;
+        $localDelivered = 0;
+        $localCancelled = 0;
+
+        if ($customer) {
+            $cbInvoices = Invoice::where('customer_id', $customer->id)
+                ->where(function($q) {
+                    $q->where('courier_type', 'LIKE', '%carry%')
+                      ->orWhere('courier_type', 'LIKE', '%bee%');
+                })
+                ->get();
+
+            $localTotal = $cbInvoices->count();
+            foreach ($cbInvoices as $inv) {
+                if (in_array(strtolower((string)$inv->order_status), ['returned', 'cancelled', 'return', 'failed'])) {
+                    $localCancelled++;
+                } else {
+                    $localDelivered++;
+                }
+            }
+        }
+
+        $successRate = $localTotal > 0 ? round(($localDelivered / $localTotal) * 100, 1) : null;
+
+        return [
+            'available'     => $localTotal > 0,
+            'total_parcels' => $localTotal,
+            'delivered'     => $localDelivered,
+            'cancelled'     => $localCancelled,
             'success_rate'  => $successRate,
         ];
     }

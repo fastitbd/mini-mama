@@ -61,34 +61,24 @@
         $return_purchase = $return_purchase_query->sum('total_return');
         $currency = '৳';
 
-        // Order Summary Counts
-        $total_orders_count = (clone $baseQuery)->count();
-        
-        $pending_orders_count = (clone $baseQuery)
-            ->whereIn('order_status', ['pending', 'in_review', 'hold', 'unknown'])->count();
-            
-        $cancelled_orders_count = (clone $baseQuery)
-            ->whereIn('order_status', ['cancelled', 'cancelled_approval_pending'])->count();
-            
-        $completed_delivered_count = (clone $baseQuery)
-            ->whereIn('order_status', ['delivered', 'partial_delivered', 'delivered_approval_pending'])->count();
-        
-        $shipped_orders_count = (clone $baseQuery)
-            ->whereNotNull('consignment_id')->where('consignment_id', '!=', '')
-            ->whereNotIn('order_status', [
-                'pending', 'in_review', 'hold', 'unknown', 
-                'delivered', 'partial_delivered', 'delivered_approval_pending', 
-                'cancelled', 'cancelled_approval_pending', 
-                'returned'
-            ])->count();
-            
-        $courier_pending_count = (clone $baseQuery)
-            ->where('order_status', 'Failed to place order')->count();
-            
-        $returned_orders_count = (clone $baseQuery)
-            ->where(function($q) {
+        // Online Sale Order Summary Counts matching Online Sale List statuses
+        $online_order_counts = [
+            'all'             => (clone $baseQuery)->count(),
+            'processing'      => (clone $baseQuery)->where('order_status', 'processing')->count(),
+            'rts'             => (clone $baseQuery)->where('order_status', 'rts')->count(),
+            'in_review'       => (clone $baseQuery)->where('order_status', 'in_review')->count(),
+            'pending_courier' => (clone $baseQuery)->whereIn('order_status', ['pending', 'pending_courier'])->count(),
+            'in_transit'      => (clone $baseQuery)->where('order_status', 'in_transit')->count(),
+            'all_in_courier'  => (clone $baseQuery)->whereNotNull('consignment_id')->where('consignment_id', '!=', '')->count(),
+            'on_hold'         => (clone $baseQuery)->whereIn('order_status', ['on_hold', 'hold'])->count(),
+            'delivered'       => (clone $baseQuery)->where('order_status', 'delivered')->count(),
+            'partial'         => (clone $baseQuery)->whereIn('order_status', ['partial', 'partial_delivered'])->count(),
+            'pending_return'  => (clone $baseQuery)->where('order_status', 'pending_return')->count(),
+            'returned'        => (clone $baseQuery)->where(function($q) {
                 $q->where('status', 2)->orWhereIn('order_status', ['returned']);
-            })->count();
+            })->count(),
+            'cancelled'       => (clone $baseQuery)->whereIn('order_status', ['cancelled', 'cancelled_approval_pending'])->count(),
+        ];
 
         // Top Selling Products Query
         $top_selling_products = $top_selling_query->groupBy('product_id')
@@ -280,51 +270,136 @@
 
         @if (env('APP_ONLINE') == 'yes')
         <!-- Order Summary Section -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden mb-6">
-            <div class="p-6">
-                <h3 class="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                    <i class="fas fa-boxes-packing text-[10px]"></i> {{ __('Order Summary') }}
-                </h3>
-                
-                <!-- Row 1 -->
-                <div class="grid grid-cols-4 gap-4 mb-6">
-                    <div class="p-4 rounded-lg bg-indigo-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('Total Order') }}</span>
-                        <span class="text-2xl font-black text-slate-800 dark:text-white mt-2">{{ $total_orders_count }}</span>
-                    </div>
-
-                    <div class="p-4 rounded-lg bg-amber-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('Pending') }}</span>
-                        <span class="text-2xl font-black text-amber-600 dark:text-amber-500 mt-2">{{ $pending_orders_count }}</span>
-                    </div>
-
-                    <div class="p-4 rounded-lg bg-rose-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('Cancelled') }}</span>
-                        <span class="text-2xl font-black text-rose-600 dark:text-rose-500 mt-2">{{ $cancelled_orders_count }}</span>
-                    </div>
-
-                    <div class="p-4 rounded-lg bg-emerald-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('Delivered') }}</span>
-                        <span class="text-2xl font-black text-emerald-600 dark:text-emerald-500 mt-2">{{ $completed_delivered_count }}</span>
-                    </div>
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden mb-6" style="background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 24px;">
+            <div class="p-6" style="padding: 24px;">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 class="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2" style="font-size: 11px; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 0.15em; margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-boxes-packing text-[10px]"></i> {{ __('Order Summary') }}
+                    </h3>
+                    <a href="{{ route('invoice.online.sale') }}" class="text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-1.5 transition" style="font-size: 12px; font-weight: 700; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+                        <span>{{ __('View Online Sale List') }}</span>
+                        <i class="fas fa-arrow-right text-[10px]"></i>
+                    </a>
                 </div>
+                
+                @php
+                    $online_summary_cards = [
+                        [
+                            'label'  => 'Total Order',
+                            'count'  => $online_order_counts['all'],
+                            'color'  => '#1e293b',
+                            'bg'     => '#f8fafc',
+                            'border' => '#e2e8f0',
+                            'status' => 'all',
+                        ],
+                        [
+                            'label'  => 'Processing',
+                            'count'  => $online_order_counts['processing'],
+                            'color'  => '#d97706',
+                            'bg'     => '#fffbeb',
+                            'border' => '#fef3c7',
+                            'status' => 'processing',
+                        ],
+                        [
+                            'label'  => 'RTS',
+                            'count'  => $online_order_counts['rts'],
+                            'color'  => '#0891b2',
+                            'bg'     => '#ecfeff',
+                            'border' => '#cffafe',
+                            'status' => 'rts',
+                        ],
+                        [
+                            'label'  => 'In Review',
+                            'count'  => $online_order_counts['in_review'],
+                            'color'  => '#2563eb',
+                            'bg'     => '#eff6ff',
+                            'border' => '#dbeafe',
+                            'status' => 'in_review',
+                        ],
+                        [
+                            'label'  => 'Pending (Courier)',
+                            'count'  => $online_order_counts['pending_courier'],
+                            'color'  => '#ea580c',
+                            'bg'     => '#fff7ed',
+                            'border' => '#ffedd5',
+                            'status' => 'pending_courier',
+                        ],
+                        [
+                            'label'  => 'In Transit',
+                            'count'  => $online_order_counts['in_transit'],
+                            'color'  => '#0284c7',
+                            'bg'     => '#f0f9ff',
+                            'border' => '#e0f2fe',
+                            'status' => 'in_transit',
+                        ],
+                        [
+                            'label'  => 'All in Courier',
+                            'count'  => $online_order_counts['all_in_courier'],
+                            'color'  => '#4f46e5',
+                            'bg'     => '#eef2ff',
+                            'border' => '#e0e7ff',
+                            'status' => 'all_in_courier',
+                        ],
+                        [
+                            'label'  => 'On Hold',
+                            'count'  => $online_order_counts['on_hold'],
+                            'color'  => '#475569',
+                            'bg'     => '#f1f5f9',
+                            'border' => '#e2e8f0',
+                            'status' => 'on_hold',
+                        ],
+                        [
+                            'label'  => 'Delivered',
+                            'count'  => $online_order_counts['delivered'],
+                            'color'  => '#059669',
+                            'bg'     => '#ecfdf5',
+                            'border' => '#d1fae5',
+                            'status' => 'delivered',
+                        ],
+                        [
+                            'label'  => 'Partial Delivered',
+                            'count'  => $online_order_counts['partial'],
+                            'color'  => '#0d9488',
+                            'bg'     => '#f0fdfa',
+                            'border' => '#ccfbf1',
+                            'status' => 'partial',
+                        ],
+                        [
+                            'label'  => 'Pending Return',
+                            'count'  => $online_order_counts['pending_return'],
+                            'color'  => '#b45309',
+                            'bg'     => '#fffbeb',
+                            'border' => '#fde68a',
+                            'status' => 'pending_return',
+                        ],
+                        [
+                            'label'  => 'Return',
+                            'count'  => $online_order_counts['returned'],
+                            'color'  => '#dc2626',
+                            'bg'     => '#fef2f2',
+                            'border' => '#fee2e2',
+                            'status' => 'returned',
+                        ],
+                        [
+                            'label'  => 'Cancelled',
+                            'count'  => $online_order_counts['cancelled'],
+                            'color'  => '#e11d48',
+                            'bg'     => '#fff1f2',
+                            'border' => '#ffe4e6',
+                            'status' => 'cancelled',
+                        ],
+                    ];
+                @endphp
 
-                <!-- Row 2 -->
-                <div class="grid grid-cols-4 gap-4">
-                    <div class="p-4 rounded-lg bg-blue-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('Shipped') }}</span>
-                        <span class="text-2xl font-black text-blue-600 dark:text-blue-500 mt-2">{{ $shipped_orders_count }}</span>
-                    </div>
-
-                    <div class="p-4 rounded-lg bg-orange-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('Courier Failed') }}</span>
-                        <span class="text-2xl font-black text-orange-600 dark:text-orange-500 mt-2">{{ $courier_pending_count }}</span>
-                    </div>
-
-                    <div class="p-4 rounded-lg bg-red-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('Return') }}</span>
-                        <span class="text-2xl font-black text-red-600 dark:text-red-500 mt-2">{{ $returned_orders_count }}</span>
-                    </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
+                    @foreach ($online_summary_cards as $card)
+                        <a href="{{ route('invoice.online.sale', ['status' => $card['status']]) }}" class="block group transition-all duration-200 hover:-translate-y-0.5" style="text-decoration: none; display: block;">
+                            <div class="p-4 rounded-lg flex flex-col justify-between h-full shadow-sm hover:shadow transition" style="background: {{ $card['bg'] }}; border: 1px solid {{ $card['border'] }}; border-radius: 10px; padding: 16px; min-height: 90px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <span class="text-xs font-bold uppercase tracking-wider" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">{{ __($card['label']) }}</span>
+                                <span class="text-2xl font-black mt-2" style="font-size: 26px; font-weight: 900; color: {{ $card['color'] }}; margin-top: 8px; line-height: 1;">{{ $card['count'] }}</span>
+                            </div>
+                        </a>
+                    @endforeach
                 </div>
             </div>
         </div>

@@ -20,4 +20,15 @@ class SubCategory extends Model
     {
         return $this->hasMany(Product::class, 'sub_category_id');
     }
+
+    public function getImageUrlAttribute()
+    {
+        if (empty($this->image)) {
+            return asset('frontend/images/placeholder.png');
+        }
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://') || str_starts_with($this->image, '//')) {
+            return $this->image;
+        }
+        return asset('uploads/subcategories/' . $this->image);
+    }
 }

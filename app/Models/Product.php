@@ -42,7 +42,12 @@ class Product extends Model
 
     public function unit()
     {
-        return $this->belongsTo(Unit::class);
+        return $this->belongsTo(Unit::class)->withDefault([
+            'id' => 1,
+            'name' => 'pcs',
+            'related_unit' => null,
+            'related_value' => 1,
+        ]);
     }
 
     public function category()
@@ -87,5 +92,51 @@ class Product extends Model
                \App\Models\UsedPurchaseItem::where('product_id', $this->id)->exists() ||
                \App\Models\UsedItem::where('product_id', $this->id)->exists() ||
                \App\Models\DamageItem::where('product_id', $this->id)->exists();
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if (!empty($this->images)) {
+            if (str_starts_with($this->images, '//')) {
+                return 'https:' . $this->images;
+            }
+            if (str_starts_with($this->images, 'http://img.ltwebstatic.com')) {
+                return str_replace('http://', 'https://', $this->images);
+            }
+            if (str_starts_with($this->images, 'https://')) {
+                return $this->images;
+            }
+            if (file_exists(public_path('uploads/products/' . $this->images))) {
+                return asset('uploads/products/' . $this->images);
+            }
+            if (file_exists(public_path('public/uploads/products/' . $this->images))) {
+                return asset('public/uploads/products/' . $this->images);
+            }
+            if (file_exists(base_path('uploads/products/' . $this->images))) {
+                return asset('uploads/products/' . $this->images);
+            }
+            return asset('uploads/products/' . $this->images);
+        }
+        return 'https://img.ltwebstatic.com/images3_pi/2025/03/20/82/1742462671a1240a0a25a837d2e0819b6910605858_thumbnail_405x552.jpg';
+    }
+
+    public function scopeSuperDeals($query)
+    {
+        return $query->where('section', 'super_deals');
+    }
+
+    public function scopeTrends($query)
+    {
+        return $query->where('section', 'trends');
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('section', 'featured');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
     }
 }

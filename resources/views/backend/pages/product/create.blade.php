@@ -206,13 +206,26 @@
                                 </div>
                             </div>
                             {{-- status --}}
-                            <div class="col-md-6 mt-2" style="margin-right: -6px">
+                            <div class="col-md-4 mt-2">
                                 <label for="status" class="form-label fw-bold">{{ __('Status *') }}</label>
                                 <select class="select2" name="status">
                                     <option value="1">{{ __('Active') }}</option>
                                     <option value="0">{{ __('Deactive') }}</option>
                                 </select>
                                 <div class="errors">{{ $errors->has('status') ? $errors->first('status') : '' }}</div>
+                            </div>
+                            <div class="col-md-4 mt-2">
+                                <label for="section" class="form-label fw-bold">{{ __('Store Section') }}</label>
+                                <select class="form-control select2" name="section">
+                                    <option value="">{{ __('None / Regular Product') }}</option>
+                                    <option value="super_deals">🔥 {{ __('Super Deals (Home Left)') }}</option>
+                                    <option value="trends">✨ {{ __('Trends (Home Right)') }}</option>
+                                    <option value="featured">⭐ {{ __('Featured / Category Feed') }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mt-2">
+                                <label for="badge" class="form-label fw-bold">{{ __('Badge / Tag') }}</label>
+                                <input type="text" class="form-control" name="badge" placeholder="e.g. Flash Sale, #SummerOutfit">
                             </div>
                             @if (env('APP_IMEI') == 'yes')
                             <div class="mt-2 col-md-6  ">

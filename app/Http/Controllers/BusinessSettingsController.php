@@ -18,12 +18,13 @@ class BusinessSettingsController extends Controller
     {
         foreach ($request->types as $key => $type) {
             $business_settings = BusinessSetting::where('type', $type)->first();
+            $val = is_array($request[$type]) ? json_encode($request[$type]) : $request[$type];
             if ($business_settings != null) {
-                $business_settings->value = $request[$type];
+                $business_settings->value = $val;
             } else {
                 $business_settings = new BusinessSetting;
                 $business_settings->type = $type;
-                $business_settings->value = $request[$type];
+                $business_settings->value = $val;
             }
             $business_settings->save();
         }

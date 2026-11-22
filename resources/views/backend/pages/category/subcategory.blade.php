@@ -21,6 +21,7 @@
                             <thead class="header_bg">
                                 <tr>
                                     <th class="header_style_left">{{ __('#') }}</th>
+                                    <th>{{ __('Image') }}</th>
                                     <th>{{ __('Category') }}</th>
                                     <th>{{ __('Sub Category Name') }}</th>
                                     <th>{{ __('Total Products') }}</th>
@@ -34,6 +35,9 @@
                                     @endphp
                                     <tr>
                                         <td class="table_data_style_left">{{ $loop->index + 1 }}</td>
+                                        <td>
+                                            <img src="{{ $data->image_url }}" alt="{{ $data->name }}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid #eee; background: #fafafa;">
+                                        </td>
                                         <td>
                                             <span class="badge badge-primary" style="font-size: 13px; padding: 5px 10px;">
                                                 {{ $data->category?->name ?? '-' }}
@@ -85,7 +89,7 @@
                     {{-- Loop for edit/delete modals --}}
                     @foreach ($subCategories as $data)
                         {{-- Edit Modal --}}
-                        <form action="{{ route('sub-category.update', $data->id) }}" method="POST">
+                        <form action="{{ route('sub-category.update', $data->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <x-edit-modal title="{{ __('Edit Sub Category') }}" id="{{ $data->id }}">
@@ -104,6 +108,20 @@
                                     <label class="form-label font-weight-bold">{{ __('Sub Category Name *') }}</label>
                                     <input type="text" class="form-control" name="name" placeholder="{{ __('Enter Subcategory Name') }}"
                                         required value="{{ $data->name }}">
+                                </div>
+                                <div class="mb-3 col-md-12 text-left">
+                                    <label class="form-label font-weight-bold">{{ __('Order Priority') }}</label>
+                                    <input type="number" class="form-control" name="order_num" placeholder="0" value="{{ $data->order_num ?? 0 }}">
+                                </div>
+                                <div class="mb-3 col-md-12 text-left">
+                                    <label class="form-label font-weight-bold">{{ __('Subcategory Circular Image') }}</label>
+                                    @if($data->image)
+                                        <div class="mb-2">
+                                            <img src="{{ $data->image_url }}" alt="Preview" style="width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 1px solid #ddd;">
+                                        </div>
+                                    @endif
+                                    <input type="file" class="form-control-file border p-1 rounded" name="image" accept="image/*">
+                                    <small class="text-muted">{{ __('Recommended square image (will be shown in circle, e.g. 240x240 px)') }}</small>
                                 </div>
                             </x-edit-modal>
                         </form>
@@ -125,7 +143,7 @@
     </div>
 
     {{-- Add Modal --}}
-    <form action="{{ route('sub-category.store') }}" method="POST">
+    <form action="{{ route('sub-category.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <x-add-modal title="{{ __('Add Sub Category') }}">
             <div class="mb-3 col-md-12 text-left">
@@ -140,6 +158,15 @@
             <div class="mb-3 col-md-12 text-left">
                 <label class="form-label font-weight-bold">{{ __('Sub Category Name *') }}</label>
                 <input type="text" class="form-control" name="name" placeholder="{{ __('Enter Subcategory Name') }}" required>
+            </div>
+            <div class="mb-3 col-md-12 text-left">
+                <label class="form-label font-weight-bold">{{ __('Order Priority') }}</label>
+                <input type="number" class="form-control" name="order_num" placeholder="0" value="0">
+            </div>
+            <div class="mb-3 col-md-12 text-left">
+                <label class="form-label font-weight-bold">{{ __('Subcategory Circular Image') }}</label>
+                <input type="file" class="form-control-file border p-1 rounded" name="image" accept="image/*">
+                <small class="text-muted">{{ __('Recommended square image (will be shown in circle, e.g. 240x240 px)') }}</small>
             </div>
         </x-add-modal>
     </form>

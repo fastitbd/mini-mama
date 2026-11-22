@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use App\Models\BranchProduct;
 use App\Models\BranchCategory;
 use App\Models\BusinessSetting;
+use App\Models\StoreSection;
 use App\Models\ProductVariation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -87,12 +88,19 @@ class ProductController extends Controller
         if ($request->sub_category_id != null) {
             $query->where('sub_category_id', $request->sub_category_id);
         }
-        if ($request->category_id != null && $request->product_id != null) {
-            $query->where('category_id', $request->category_id)->where('id', $request->product_id);
+        if ($request->filled('section')) {
+            if ($request->section === 'none') {
+                $query->whereNull('section');
+            } else {
+                $query->where('section', $request->section);
+            }
         }
+        $data['section'] = $request->section;
+        $data['storeSections'] = StoreSection::ordered()->get();
+        $data['storeSectionsMap'] = $data['storeSections']->keyBy('key');
         $data['products'] = $query
             ->orderBy('created_at', 'DESC')
-            ->paginate(10)->appends($request->all());
+            ->paginate(15)->appends($request->all());
 
         return view('backend.pages.product.index', $data);
     }
@@ -204,6 +212,8 @@ class ProductController extends Controller
         $product->discount = $discount;
         $product->selling_price = $request->selling_price !== null ? (float) $request->selling_price : ($dis_selling_price - $discount);
         $product->status = $request->status;
+        $product->section = $request->section;
+        $product->badge = $request->badge;
         $product->description = $request->description;
         $product->imei = $request->imei;
 
@@ -479,6 +489,8 @@ class ProductController extends Controller
         $product->dis_selling_price = $dis_selling_price;
         $product->selling_price = $request->selling_price !== null ? (float) $request->selling_price : ($dis_selling_price - $discount);
         $product->status = $request->status;
+        $product->section = $request->section;
+        $product->badge = $request->badge;
         $product->description = $request->description;
         $product->imei = $request->imei;
 
@@ -774,5 +786,39 @@ class ProductController extends Controller
             'message' => __('Product description updated successfully'),
             'description' => $product->description
         ]);
+    }
+
+    public function bulkSection(Request $request)
+    {
+        $request->validate([
+            'product_ids' => 'required|array',
+            'product_ids.*' => 'integer',
+            'section' => 'nullable|string',
+            'badge' => 'nullable|string|max:100',
+        ]);
+
+        $section = $request->section === 'none' ? null : $request->section;
+        $badge = $request->filled('badge') ? $request->badge : null;
+
+        $updateData = ['section' => $section];
+        if ($request->has('badge') && $request->filled('badge')) {
+            $updateData['badge'] = $badge;
+        } elseif ($request->section === 'none') {
+            $updateData['badge'] = null;
+        }
+
+        Product::whereIn('id', $request->product_ids)->update($updateData);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('Successfully updated ' . count($request->product_ids) . ' products section.'),
+                'count' => count($request->product_ids),
+                'section' => $section,
+            ]);
+        }
+
+        session()->flash('success', __('Successfully updated products section.'));
+        return back();
     }
 }

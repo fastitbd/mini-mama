@@ -1,0 +1,957 @@
+/* ==========================================================================
+   SHEIN COMPLETE DESIGN SYSTEM & COMPONENT STYLESHEET
+   1:1 Authentic Reconstitution of SHEIN Malaysia (my.shein.com)
+   ========================================================================== */
+
+/* --- 1. CORE LAYOUT & CONTAINER --- */
+.shein-container, .shein-wrap {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* --- 2. HERO BANNER CAROUSEL --- */
+.hero-carousel {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    overflow: hidden;
+    background-color: #f7f7f7;
+    margin-bottom: 24px;
+}
+
+.hero-carousel .carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease-in-out, visibility 0.6s;
+    display: flex;
+    align-items: center;
+}
+
+.hero-carousel .carousel-slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+}
+
+.hero-carousel .slide-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.hero-carousel .slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.05) 100%);
+    z-index: 2;
+}
+
+.hero-carousel .slide-content {
+    position: relative;
+    z-index: 3;
+    max-width: 580px;
+    color: #ffffff;
+    padding: 40px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-carousel .slide-tag {
+    display: inline-block;
+    background: #FA2C19;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    border-radius: 2px;
+}
+
+.hero-carousel .slide-title {
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 0 0 10px 0;
+}
+
+.hero-carousel .slide-subtitle {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 18px 0;
+    color: #f0f0f0;
+}
+
+.hero-carousel .slide-code-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px dashed #ffffff;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 22px;
+}
+
+.hero-carousel .slide-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 28px;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    text-shadow: none;
+}
+
+.hero-carousel .slide-cta-btn:hover {
+    background: #000000;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.hero-carousel .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    border-radius: 50%;
+    color: #222222;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.hero-carousel .carousel-arrow:hover {
+    background: #ffffff;
+    color: #FA2C19;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.hero-carousel .carousel-arrow.prev { left: 24px; }
+.hero-carousel .carousel-arrow.next { right: 24px; }
+
+.hero-carousel .carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.hero-carousel .carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.hero-carousel .carousel-dot.active {
+    background: #ffffff;
+    width: 28px;
+    border-radius: 6px;
+}
+
+/* --- 3. INTERACTIVE VOUCHERS STRIP --- */
+.voucher-strip {
+    background: #FFF7F5;
+    padding: 18px 0;
+    border-top: 1px solid #FFE4DE;
+    border-bottom: 1px solid #FFE4DE;
+    margin-bottom: 28px;
+}
+
+.voucher-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.voucher-card {
+    background: #ffffff;
+    border: 1px dashed #FA2C19;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(250, 44, 25, 0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.voucher-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(250, 44, 25, 0.12);
+}
+
+.voucher-info .v-discount {
+    font-size: 18px;
+    font-weight: 900;
+    color: #FA2C19;
+    line-height: 1.2;
+}
+
+.voucher-info .v-cond {
+    font-size: 12px;
+    font-weight: 600;
+    color: #222222;
+    margin-top: 2px;
+}
+
+.voucher-info .v-code {
+    font-size: 11px;
+    color: #767676;
+    margin-top: 2px;
+}
+
+.voucher-collect-btn {
+    background: #000000;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 8px 14px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.voucher-collect-btn:hover {
+    background: #FA2C19;
+}
+
+/* --- 4. 31 CIRCULAR CATEGORY NAVIGATION --- */
+.circular-categories {
+    padding: 12px 0 28px;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 30px;
+}
+
+.circle-cats-wrapper {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    padding: 8px 4px 14px;
+    scrollbar-width: thin;
+    scrollbar-color: #cccccc transparent;
+}
+
+.circle-cats-wrapper::-webkit-scrollbar {
+    height: 5px;
+}
+
+.circle-cats-wrapper::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 3px;
+}
+
+.circle-cat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 82px;
+    text-align: center;
+    transition: transform 0.2s;
+    text-decoration: none;
+    color: #222222;
+}
+
+.circle-cat-item:hover {
+    transform: translateY(-4px);
+    color: #FA2C19;
+}
+
+.circle-img-box {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #F6F6F6;
+    border: 1px solid #ECECEC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.circle-cat-item:hover .circle-img-box {
+    border-color: #FA2C19;
+    box-shadow: 0 4px 12px rgba(250, 44, 25, 0.15);
+}
+
+.circle-img-box img {
+    width: 85%;
+    height: 85%;
+    object-fit: contain;
+    transition: transform 0.25s ease;
+}
+
+.circle-cat-item:hover .circle-img-box img {
+    transform: scale(1.08);
+}
+
+.circle-cat-name {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.25;
+    max-width: 82px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* --- 5. FLASH SALE & SUPER DEALS --- */
+.flash-sale-section {
+    background: #ffffff;
+    border-radius: 4px;
+    margin-bottom: 36px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #222222;
+    padding-bottom: 10px;
+}
+
+.flash-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.flash-title-badge {
+    font-size: 20px;
+    font-weight: 900;
+    color: #FA2C19;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.countdown-timer-box {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #222222;
+}
+
+.countdown-timer-box .time-box {
+    background: #000000;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 3px 6px;
+    border-radius: 3px;
+    min-width: 22px;
+    text-align: center;
+}
+
+.view-all-link {
+    font-size: 13px;
+    font-weight: 700;
+    color: #222222;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s;
+}
+
+.view-all-link:hover {
+    color: #FA2C19;
+}
+
+.flash-products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.sold-progress-box {
+    margin-top: 8px;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: #FFE4DE;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: #FA2C19;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+.progress-text {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FA2C19;
+}
+
+/* --- 6. PROMOTIONAL 4-QUAD SECTION --- */
+.promo-quad-section {
+    margin-bottom: 36px;
+}
+
+.promo-quad-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.quad-card {
+    position: relative;
+    height: 220px;
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.quad-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.quad-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.quad-card:hover img {
+    transform: scale(1.05);
+}
+
+.quad-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%);
+    padding: 20px 16px 14px;
+    color: #ffffff;
+}
+
+.quad-tag {
+    display: inline-block;
+    background: #FA2C19;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.quad-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 0 2px 0;
+    text-transform: uppercase;
+}
+
+.quad-sub {
+    font-size: 12px;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+/* --- 7. TABBED DISCOVERY FEED --- */
+.discovery-section {
+    margin-bottom: 48px;
+}
+
+.discovery-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.discovery-header h2 {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+}
+
+.discovery-header p {
+    font-size: 13px;
+    color: #767676;
+    margin: 0;
+}
+
+.feed-tabs-bar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+.feed-tab-btn {
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666666;
+    border: none;
+    background: none;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    transition: color 0.15s;
+}
+
+.feed-tab-btn:hover {
+    color: #000000;
+}
+
+.feed-tab-btn.active {
+    color: #000000;
+    font-weight: 900;
+}
+
+.feed-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 14px;
+    right: 14px;
+    height: 3px;
+    background: #000000;
+}
+
+/* --- 8. SHEIN PRODUCT CARD (3:4 RATIO & HOVER MAGIC) --- */
+.shein-product-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+}
+
+.product-card {
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.product-image-box {
+    position: relative;
+    width: 100%;
+    padding-top: 133.33%; /* SHEIN 3:4 aspect ratio */
+    background: #f7f7f7;
+    overflow: hidden;
+}
+
+.product-image-box a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.product-image-box img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.35s ease, transform 0.4s ease;
+}
+
+.product-image-box .img-hover {
+    opacity: 0;
+}
+
+.product-card:hover .product-image-box .img-primary {
+    opacity: 0;
+}
+
+.product-card:hover .product-image-box .img-hover {
+    opacity: 1;
+    transform: scale(1.02);
+}
+
+.wishlist-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333333;
+    font-size: 15px;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.wishlist-btn:hover, .wishlist-btn.active {
+    background: #ffffff;
+    color: #FA2C19;
+}
+
+.discount-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #FA2C19;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 6px;
+    border-radius: 2px;
+    z-index: 5;
+    line-height: 1;
+}
+
+.style-tag-badge {
+    position: absolute;
+    top: 32px;
+    left: 8px;
+    background: #000000;
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 5px;
+    border-radius: 2px;
+    z-index: 5;
+    text-transform: uppercase;
+}
+
+.quick-add-trigger {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    padding: 9px 0;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.2s ease;
+    z-index: 6;
+    cursor: pointer;
+}
+
+.product-card:hover .quick-add-trigger {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.product-info-box {
+    padding: 10px 6px 8px;
+}
+
+.color-swatches {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.color-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid #cccccc;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+.color-dot:hover {
+    transform: scale(1.3);
+}
+
+.product-brand {
+    font-size: 10px;
+    font-weight: 800;
+    color: #999999;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.product-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: #222222;
+    line-height: 1.35;
+    height: 32px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-bottom: 6px;
+    text-decoration: none;
+}
+
+.product-title:hover {
+    color: #FA2C19;
+}
+
+.product-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.current-price {
+    font-size: 14px;
+    font-weight: 800;
+    color: #222222;
+}
+
+.current-price.is-sale-price {
+    color: #FA2C19;
+}
+
+.original-price {
+    font-size: 11px;
+    color: #999999;
+    text-decoration: line-through;
+}
+
+.pct-discount {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FA2C19;
+}
+
+.product-social-proof {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #767676;
+}
+
+.star-rating {
+    color: #FFB800;
+    font-size: 10px;
+}
+
+/* --- 9. INSTAGRAM #SHEINstyle GALLERY --- */
+.ugc-section {
+    padding: 30px 0 50px;
+    border-top: 1px solid #eeeeee;
+}
+
+.ugc-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+}
+
+.ugc-card {
+    position: relative;
+    padding-top: 100%; /* Square */
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+}
+
+.ugc-card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.ugc-hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.ugc-card:hover .ugc-hover-overlay {
+    opacity: 1;
+}
+
+.ugc-card:hover img {
+    transform: scale(1.08);
+}
+
+/* --- 10. CATEGORY FILTER SIDEBAR & PILLS --- */
+.size-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.size-pill-btn {
+    border: 1px solid #dddddd;
+    background: #ffffff;
+    color: #222222;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.size-pill-btn:hover, .size-pill-btn.active {
+    border-color: #000000;
+    background: #000000;
+    color: #ffffff;
+}
+
+.shein-btn-primary {
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.shein-btn-primary:hover {
+    background: #333333;
+}
+
+/* --- 11. CART & QUANTITY CONTROLS --- */
+.cart-qty-ctrl {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+}
+
+.cart-qty-ctrl .qty-btn {
+    width: 28px;
+    height: 100%;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cart-qty-ctrl .qty-val {
+    width: 32px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* --- 12. RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 1200px) {
+    .shein-product-grid { grid-template-columns: repeat(4, 1fr); }
+    .flash-products-grid { grid-template-columns: repeat(3, 1fr); }
+    .promo-quad-grid { grid-template-columns: repeat(2, 1fr); }
+    .voucher-grid { grid-template-columns: repeat(2, 1fr); }
+    .ugc-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 900px) {
+    .hero-carousel { height: 360px; }
+    .hero-carousel .slide-title { font-size: 30px; }
+    .flash-products-grid { grid-template-columns: repeat(2, 1fr); }
+    .shein-product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 640px) {
+    .hero-carousel { height: 260px; }
+    .hero-carousel .slide-title { font-size: 22px; }
+    .hero-carousel .slide-content { padding: 20px; }
+    .voucher-grid { grid-template-columns: 1fr; }
+    .promo-quad-grid { grid-template-columns: 1fr; }
+    .shein-product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .ugc-grid { grid-template-columns: repeat(3, 1fr); }
+}

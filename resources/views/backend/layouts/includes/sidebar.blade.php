@@ -372,7 +372,7 @@
             <p class="sidebar-label text-xs font-bold uppercase tracking-wider text-orange-400/80">{{ __('Sale & Purchase') }}</p>
         </div>
 
-        {{-- POS --}}
+        {{-- Outlet Sale --}}
         @if(!in_array('pos', $hiddenModules))
         <a href="{{ route('invoice.create') }}"
             onclick="if(window.requestFullscreen) { document.documentElement.requestFullscreen(); }"
@@ -382,9 +382,20 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
             </span>
-            <span class="sidebar-label">{{ __('New Sale') }}</span>
+            <span class="sidebar-label">{{ __('Outlet Sale') }}</span>
         </a>
         @endif
+
+        {{-- Online Sale --}}
+        <a href="{{ route('invoice.create') }}?type=online"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ request()->get('type') === 'online' ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+            <span class="flex-shrink-0 w-[22px] h-[22px]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                </svg>
+            </span>
+            <span class="sidebar-label">{{ __('Online Sale') }}</span>
+        </a>
 
         {{-- Sale List --}}
         @if(!in_array('sale_list', $hiddenModules))
@@ -399,9 +410,39 @@
                     </span>
                     <span class="sidebar-label">{{ __('Sale List') }}</span>
                 </a>
+            @endif
         @endif
         @endif
-        @endif
+
+        {{-- Website Orders --}}
+        @php
+            $websiteOrdersProcessingCount = \App\Models\WebsiteOrder::where('status', 'processing')->count();
+        @endphp
+        <a href="{{ route('website-orders.index') }}"
+            class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ $currentRoute === 'website-orders.index' ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+            <div class="flex items-center gap-3">
+                <span class="flex-shrink-0 w-[22px] h-[22px] text-orange-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                    </svg>
+                </span>
+                <span class="sidebar-label">{{ __('Website Orders') }}</span>
+            </div>
+            @if($websiteOrdersProcessingCount > 0)
+                <span class="sidebar-label px-2 py-0.5 text-xs font-bold text-white bg-orange-500 rounded-full shadow-sm">{{ $websiteOrdersProcessingCount }}</span>
+            @endif
+        </a>
+
+        {{-- Online Sale List --}}
+        <a href="{{ route('invoice.online.sale') }}"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ $currentRoute === 'invoice.online.sale' ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+            <span class="flex-shrink-0 w-[22px] h-[22px]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                </svg>
+            </span>
+            <span class="sidebar-label">{{ __('Online Sale List') }}</span>
+        </a>
 
         {{-- Quotation --}}
         @if(env('APP_AUTOMOBILE') == 'yes')
@@ -479,21 +520,10 @@
         @endif
         @endif
 
-        {{-- Online Sale --}}
+        {{-- Pre-Order List --}}
         @if(!in_array('online_sale', $hiddenModules))
         @if (main_menu_permission('invoice'))
             @if (env('APP_ONLINE') == 'yes')
-                @if (check_permission('invoice.online.sale'))
-                    <a href="{{ route('invoice.online.sale') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ $currentRoute === 'invoice.online.sale' ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
-                        <span class="flex-shrink-0 w-[22px] h-[22px]">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
-                            </svg>
-                        </span>
-                        <span class="sidebar-label">{{ __('Online Sale') }}</span>
-                    </a>
-                @endif
                 <a href="{{ route('pre-orders.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ $currentRoute === 'pre-orders.index' ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
                     <span class="flex-shrink-0 w-[22px] h-[22px] text-orange-400">
@@ -751,6 +781,9 @@
                         <i class="fa fa-barcode"></i> {{ __('Barcode') }}
                     </a>
                 @endif
+                <a href="{{ route('store-section.index') }}" class="{{ $currentRoute === 'store-section.index' ? 'active-sub' : '' }}">
+                    <i class="feather icon-grid"></i> {{ __('Store Sections') }}
+                </a>
             </div>
         </div>
         @endif
@@ -868,6 +901,19 @@
             </a>
         @endif
         @endif
+        @endif
+
+        {{-- Banner --}}
+        @if(!in_array('banner', $hiddenModules))
+            <a href="{{ route('banner.index') }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14.5px] font-medium transition-all duration-200 mb-0.5 {{ str_starts_with($currentRoute, 'banner.') ? 'active' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white' }}">
+                <span class="flex-shrink-0 w-[22px] h-[22px]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                    </svg>
+                </span>
+                <span class="sidebar-label">{{ __('Banner') }}</span>
+            </a>
         @endif
 
         {{-- Brand --}}
