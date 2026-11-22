@@ -128,42 +128,40 @@
         }
     @endphp
 
-    <div class="category-recommend-wrapper" style="background:#F6F6F6; padding: 22px 0 16px; margin-top: 14px;" data-component-name="CATEGORY_RECOMMEND_COMPONENT_1">
+    <div class="category-recommend-wrapper" style="background:#F6F6F6; padding: 22px 0 18px; margin-top: 14px; overflow: hidden;" data-component-name="CATEGORY_RECOMMEND_COMPONENT_1">
         <div class="shein-wrap" style="max-width: 1440px; margin: 0 auto; padding: 0 16px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                 <div>
-                    <h2 style="font-size: 19px; font-weight: 900; text-transform: uppercase; color: #111111; letter-spacing: 0.5px; margin: 0;">
-                        🔥 Featured Categories
+                    <h2 style="font-size: 19px; font-weight: 900; text-transform: uppercase; color: #111111; letter-spacing: 0.5px; margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span>🔥</span> Featured Categories
                     </h2>
-                    <p style="font-size: 12px; color: #767676; margin: 2px 0 0;">Explore our top curated styles & collections</p>
+                    <p style="font-size: 12px; color: #767676; margin: 3px 0 0;">Explore our top curated styles & collections</p>
                 </div>
                 <a href="{{ route('frontend.category', 'all') }}" style="font-size: 12px; font-weight: 700; color: #FA2C19; text-decoration: none; display: flex; align-items: center; gap: 4px;">
                     View All Categories <i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i>
                 </a>
             </div>
 
-            <div style="position:relative;">
-                <button type="button" class="category-swiper-btn-prev" onclick="document.querySelector('.category-recommend-dynamic__swiper').swiper.slidePrev()" style="position:absolute; left:-12px; top:50%; transform:translateY(-50%); width:32px; height:32px; background:#fff; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.15); z-index:10; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fa-solid fa-chevron-left" style="font-size:12px;"></i></button>
-                <button type="button" class="category-swiper-btn-next" onclick="document.querySelector('.category-recommend-dynamic__swiper').swiper.slideNext()" style="position:absolute; right:-12px; top:50%; transform:translateY(-50%); width:32px; height:32px; background:#fff; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.15); z-index:10; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fa-solid fa-chevron-right" style="font-size:12px;"></i></button>
+            <div style="position: relative;">
+                <button type="button" class="category-swiper-btn-prev" onclick="document.querySelector('.category-recommend-dynamic__swiper').swiper.slidePrev()" style="position: absolute; left: -10px; top: 38%; transform: translateY(-50%); width: 34px; height: 34px; background: #fff; border-radius: 50%; box-shadow: 0 3px 10px rgba(0,0,0,0.18); z-index: 10; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #eee;"><i class="fa-solid fa-chevron-left" style="font-size: 12px; color: #111;"></i></button>
+                <button type="button" class="category-swiper-btn-next" onclick="document.querySelector('.category-recommend-dynamic__swiper').swiper.slideNext()" style="position: absolute; right: -10px; top: 38%; transform: translateY(-50%); width: 34px; height: 34px; background: #fff; border-radius: 50%; box-shadow: 0 3px 10px rgba(0,0,0,0.18); z-index: 10; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #eee;"><i class="fa-solid fa-chevron-right" style="font-size: 12px; color: #111;"></i></button>
                 
-                <swiper-container class-name="linear-mode" class="category-recommend-dynamic__swiper" slides-per-view="auto" space-between="12" observer="true">
-                    @foreach($displayItems->chunk(3) as $catChunk)
-                        <swiper-slide class="category-recommend-dynamic__slide">
-                            @foreach($catChunk as $index => $cItem)
-                                @php
-                                    $targetUrl = ($cItem instanceof \App\Models\SubCategory)
-                                        ? (route('frontend.category', $cItem->category_id) . '?subcategory=' . $cItem->id)
-                                        : route('frontend.category', $cItem->slug ?: $cItem->id);
-                                @endphp
-                                <div class="category-recommend-dynamic__img_wrapper a11y-focus" da-rid="category_{{ $index }}" role="link" tabindex="0" aria-label="{{ $cItem->name }}">
-                                    <div class="base-img category-recommend-dynamic__img" style="background-color:#F0EEEC;">
-                                        <a href="{{ $targetUrl }}" style="padding-bottom:100.00%;" class="base-img__href" aria-hidden="true" tabindex="-1">
-                                            <img style="object-position:initial;" class="base-img__cover fsp__category-recommend-placeholder base-img__inner fsp-element" src="{{ $cItem->image_url }}" alt="{{ $cItem->name }}" fetchpriority="auto">
-                                        </a>
-                                    </div>
-                                    <div style="color:#000000;" class="category-recommend-dynamic__name">{{ $cItem->name }}</div>
+                <swiper-container class="category-recommend-dynamic__swiper" slides-per-view="auto" space-between="16" observer="true" style="width: 100%; overflow: hidden;">
+                    @foreach($displayItems as $cItem)
+                        @php
+                            $targetUrl = ($cItem instanceof \App\Models\SubCategory)
+                                ? (route('frontend.category', $cItem->category_id) . '?subcategory=' . $cItem->id)
+                                : route('frontend.category', $cItem->slug ?: $cItem->id);
+                        @endphp
+                        <swiper-slide style="width: 86px !important; flex-shrink: 0;">
+                            <a href="{{ $targetUrl }}" class="cat-circle-card" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; width: 86px; text-align: center; cursor: pointer;">
+                                <div style="width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: #ffffff; border: 2px solid #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; margin: 0 auto;" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 4px 14px rgba(250,44,25,0.25)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+                                    <img src="{{ $cItem->image_url }}" alt="{{ $cItem->name }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
-                            @endforeach
+                                <span style="font-size: 11px; font-weight: 700; color: #222222; margin-top: 8px; line-height: 1.25; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 80px;">
+                                    {{ $cItem->name }}
+                                </span>
+                            </a>
                         </swiper-slide>
                     @endforeach
                 </swiper-container>

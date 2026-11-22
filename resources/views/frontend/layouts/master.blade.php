@@ -38,6 +38,17 @@
             --shein-font: 'Jost', 'Mulish', -apple-system, system-ui, 'Helvetica Neue', Arial, sans-serif;
         }
 
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            max-width: 100vw !important;
+            width: 100% !important;
+            overflow-x: hidden !important;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: var(--shein-font) !important;
             color: var(--shein-text);
@@ -46,7 +57,6 @@
             padding: 0;
             font-size: 13px;
             line-height: 1.4;
-            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -54,6 +64,11 @@
         a:hover { color: var(--shein-red); text-decoration: none; }
         button { font-family: inherit; cursor: pointer; border: none; outline: none; background: transparent; }
         img { max-width: 100%; height: auto; display: block; }
+
+        .product-card img, .super-deal-card img, .trend-deal-card img, .shein-product-item img {
+            object-fit: cover !important;
+            object-position: top center !important;
+        }
 
         .shein-wrap {
             max-width: 1440px;

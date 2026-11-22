@@ -279,11 +279,11 @@
         <h3 style="font-size: 20px; font-weight: 800; text-transform: uppercase; margin-bottom: 20px;">
             YOU MAY ALSO LIKE (RELATED PRODUCTS)
         </h3>
-        <div class="shein-product-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;" class="related-grid">
+        <div class="shein-product-grid related-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;">
             @foreach($relatedProducts as $rel)
                 <div class="product-card" style="display: flex; flex-direction: column; background: #fff;">
-                    <div style="position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden; background: #f6f6f6; cursor: pointer;" onclick="window.location='{{ route('frontend.product', $rel['id']) }}'">
-                        <img src="{{ $rel['image_primary'] }}" alt="{{ $rel['name'] }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden; background: #f6f6f6; cursor: pointer; border-radius: 3px;" onclick="window.location='{{ route('frontend.product', $rel['id']) }}'">
+                        <img src="{{ $rel['image_primary'] }}" alt="{{ $rel['name'] }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
                         @if(isset($rel['discount']) && $rel['discount'] > 0)
                             <span style="position: absolute; top: 6px; left: 6px; background: #FA2C19; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 2px;">
                                 -{{ $rel['discount'] }}%
