@@ -86,26 +86,48 @@ class HomeController extends Controller
     protected function formatProductModel($dbProduct)
     {
         $catSlug = $dbProduct->category ? ($dbProduct->category->slug ?: strtolower(str_replace(' ', '-', $dbProduct->category->name))) : 'clothing';
-        $brandName = $dbProduct->brand?->name ?: (function_exists('get_setting') && get_setting('com_name') ? get_setting('com_name') : 'FAST IT');
+        $brandName = $dbProduct->brand?->name ?: (function_exists('get_setting') && get_setting('com_name') ? get_setting('com_name') : 'Mini Mama');
         
+        $stockQty = isset($dbProduct->main_qty) ? (float)$dbProduct->main_qty : 35;
+        $inStock = $stockQty > 0;
+        $sku = $dbProduct->barcode ?: ('MM-' . str_pad($dbProduct->id, 5, '0', STR_PAD_LEFT));
+
+        $sizes = ['XS', 'S', 'M', 'L', 'XL'];
+        if ($dbProduct->relationLoaded('variations') || $dbProduct->relationLoaded('product_variations')) {
+            $varSizes = $dbProduct->variations->map(fn($v) => $v->size?->name)->filter()->unique()->values()->all();
+            if (!empty($varSizes)) $sizes = $varSizes;
+        }
+
+        $colors = ['#111111', '#E8DFD8', '#FA2C19', '#2B547E'];
+
+        $sellingPrice = (float)$dbProduct->selling_price;
+        $originalPrice = (float)($dbProduct->dis_selling_price ?: round($sellingPrice * 1.4, 2));
+        $discount = $dbProduct->discount ? (int)$dbProduct->discount : ($originalPrice > $sellingPrice ? round((($originalPrice - $sellingPrice) / $originalPrice) * 100) : 0);
+
         return [
             'id' => $dbProduct->id,
             'name' => $dbProduct->name,
+            'sku' => $sku,
+            'barcode' => $dbProduct->barcode,
+            'stock_qty' => $stockQty,
+            'in_stock' => $inStock,
             'category' => $catSlug,
+            'category_name' => $dbProduct->category?->name ?? 'Clothing',
             'category_id' => $dbProduct->category_id,
             'brand' => $brandName,
-            'price' => (float)$dbProduct->selling_price,
-            'original_price' => (float)($dbProduct->dis_selling_price ?: round($dbProduct->selling_price * 1.35, 2)),
-            'discount' => $dbProduct->discount ? (int)$dbProduct->discount : 20,
+            'price' => $sellingPrice,
+            'original_price' => $originalPrice,
+            'discount' => $discount,
             'rating' => 4.90,
             'reviews_count' => 1250,
             'sold_count' => '5.2k',
             'claimed_pct' => 65,
             'image_primary' => $dbProduct->image_url,
             'image_hover' => $dbProduct->image_url,
-            'colors' => ['#111111', '#e8dfd8'],
-            'sizes' => ['S', 'M', 'L', 'XL'],
-            'description' => $dbProduct->description ?: 'Premium quality stylish apparel designed for modern fashion elegance.',
+            'colors' => $colors,
+            'sizes' => $sizes,
+            'designs' => ['Standard Fit', 'Relaxed Chic', 'Slim Tailored'],
+            'description' => $dbProduct->description ?: 'Designed for modern sophistication and effortless day-to-night elegance. Crafted from premium breathable fabric with tailored drape and reinforced seams. Features versatile styling adaptability suitable for both formal occasions and casual outings.',
         ];
     }
 
@@ -151,6 +173,8 @@ class HomeController extends Controller
             $filtered = $filtered->sortByDesc('price');
         } elseif ($sort === 'rating') {
             $filtered = $filtered->sortByDesc('rating');
+        } elseif ($sort === 'newest') {
+            $filtered = $filtered->sortByDesc('id');
         }
 
         $products = $filtered->values()->all();
